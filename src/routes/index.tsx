@@ -102,29 +102,29 @@ function Index() {
       </div>
 
       {/* Top nav */}
-      <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-6 py-5 sm:px-12 bg-gradient-to-b from-black/85 via-black/35 to-transparent backdrop-blur-[1px]">
+      <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-6 py-4 sm:px-12 bg-black/60 backdrop-blur-md border-b border-blush-pink/10 transition-all duration-300">
         <div>
-          <p className="font-display text-xl tracking-wide text-foreground text-shadow-luxe">
-            Grace<span className="text-gold">AndGo</span>
+          <p className="font-display text-xl tracking-wide text-white text-shadow-tight">
+            Grace<span className="text-blush">AndGo</span>
           </p>
-          <p className="text-[0.55rem] tracking-[0.4em] uppercase text-muted-foreground text-shadow-luxe">
+          <p className="text-[0.55rem] tracking-[0.4em] uppercase text-white/80 text-shadow-tight">
             Your Beauty, Our Passion
           </p>
         </div>
-        <nav className="hidden items-center gap-8 text-[0.65rem] tracking-[0.35em] uppercase text-muted-foreground sm:flex text-shadow-luxe">
-          <a className="transition hover:text-gold" href="#tour">
+        <nav className="hidden items-center gap-8 text-[0.65rem] tracking-[0.35em] uppercase text-white/80 sm:flex text-shadow-tight">
+          <a className="transition hover:text-blush" href="#tour">
             Tour
           </a>
-          <a className="transition hover:text-gold" href="#services">
+          <a className="transition hover:text-blush" href="#services">
             Services
           </a>
-          <a className="transition hover:text-gold" href="#apothecary">
+          <a className="transition hover:text-blush" href="#apothecary">
             Apothecary
           </a>
         </nav>
         <button
           onClick={() => setOpen("facial")}
-          className="rounded-sm border border-blush-pink/50 px-4 py-2 text-[0.65rem] tracking-[0.35em] uppercase text-blush transition hover:bg-blush-pink/10"
+          className="rounded-sm border border-blush-pink/60 px-4 py-2 text-[0.65rem] tracking-[0.35em] uppercase text-white text-shadow-tight transition hover:bg-blush-pink/20 bg-black/40"
         >
           Reserve
         </button>
@@ -135,20 +135,20 @@ function Index() {
         {/* HERO */}
         <section className="relative flex min-h-screen items-center justify-center text-center px-6 pb-16 sm:px-16">
           <div className="max-w-2xl flex flex-col items-center">
-            <p className="text-[0.65rem] tracking-[0.5em] uppercase text-blush reveal-instant text-shadow-luxe font-semibold">
+            <p className="text-[0.65rem] tracking-[0.5em] uppercase text-white reveal-instant text-shadow-tight font-semibold">
               GraceAndGo Salon
             </p>
             <h1 className="mt-6 font-display text-6xl leading-[1.05] sm:text-8xl reveal-instant delay-instant-100 text-shadow-luxe tracking-[0.05em]">
               GRACE <span className="italic text-blush-gold-gradient">&</span>{" "}
               GO
             </h1>
-            <p className="mt-4 text-[0.7rem] tracking-[0.6em] uppercase text-muted-foreground reveal-instant delay-instant-200 text-shadow-luxe font-medium">
-              PARIS · TOKYO · NEW YORK
+            <p className="mt-4 text-[0.7rem] tracking-[0.5em] uppercase text-white reveal-instant delay-instant-200 text-shadow-tight font-bold">
+              BANGLORE · MUMBAI · DELHI
             </p>
             <div className="mt-12 reveal-instant delay-instant-300">
               <a
                 href="#tour"
-                className="group inline-flex items-center justify-center gap-2 rounded-full border border-blush-pink/60 bg-black/40 hover:bg-blush-pink/15 px-8 py-3.5 text-xs font-semibold tracking-[0.4em] uppercase text-blush shadow-luxe transition-all duration-300 hover:scale-105"
+                className="group inline-flex items-center justify-center gap-2 rounded-full border border-blush-pink/60 bg-black/45 hover:bg-blush-pink/15 px-8 py-3.5 text-xs font-semibold tracking-[0.4em] uppercase text-white text-shadow-tight shadow-luxe transition-all duration-300 hover:scale-105"
               >
                 STEP INSIDE
                 <span className="transition-transform duration-300 group-hover:translate-y-0.5">
@@ -161,7 +161,7 @@ function Index() {
           {/* scroll cue */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center">
             <div className="mx-auto h-12 w-px bg-gradient-to-b from-transparent via-blush-pink to-transparent" />
-            <p className="mt-3 text-[0.55rem] tracking-[0.4em] uppercase text-muted-foreground text-shadow-luxe">
+            <p className="mt-3 text-[0.55rem] tracking-[0.4em] uppercase text-white/90 text-shadow-tight font-semibold">
               Scroll to enter
             </p>
           </div>
@@ -174,14 +174,14 @@ function Index() {
               key={c.title}
               className={`flex min-h-screen items-center px-6 sm:px-16 ${i % 2 === 0 ? "justify-start" : "justify-end"}`}
             >
-              <div className="max-w-sm rounded-sm border border-blush-pink/25 bg-[oklch(0.12_0.005_60)]/85 p-8 backdrop-blur-md shadow-luxe reveal">
+              <div className="max-w-xs sm:max-w-sm rounded-sm border border-blush-pink/20 bg-[oklch(0.12_0.005_60)]/90 p-6 sm:p-8 backdrop-blur-md shadow-luxe reveal">
                 <p className="text-[0.6rem] tracking-[0.4em] uppercase text-gold">
                   {c.eyebrow}
                 </p>
                 <h2 className="mt-3 font-display text-4xl text-foreground">
                   {c.title}
                 </h2>
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-4 text-xs sm:text-sm leading-relaxed text-foreground/85">
                   {c.body}
                 </p>
                 <div className="hairline mt-6 pt-4 text-[0.6rem] tracking-[0.35em] uppercase text-muted-foreground">

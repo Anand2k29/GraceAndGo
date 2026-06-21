@@ -126,37 +126,138 @@ function CeilingRingLight({
 function Door({ left, angle }: { left: boolean; angle: number }) {
   const xPos = left ? -1.25 : 1.25;
   const pivotOffset = left ? 0.625 : -0.625;
+
+  // High-fidelity gold material definition
+  const goldMaterial = (
+    <meshStandardMaterial color="#ffd1dc" metalness={0.9} roughness={0.1} />
+  );
+
   return (
     <group position={[xPos, 0, 9.8]} rotation={[0, angle, 0]}>
       {/* Door Frame/Wood Pane */}
       <mesh position={[pivotOffset, 1.8, 0]} castShadow>
         <boxGeometry args={[1.25, 3.6, 0.08]} />
-        <meshStandardMaterial color="#f4c2c2" roughness={0.8} />
+        <meshStandardMaterial
+          color="#b76e79"
+          roughness={0.5}
+          metalness={0.15}
+        />
       </mesh>
+
       {/* Glass Panel Insert */}
       <mesh position={[pivotOffset, 2.2, 0.01]}>
         <planeGeometry args={[0.95, 2.2]} />
         <meshPhysicalMaterial
-          color="#f4c2c2"
+          color="#ffd1dc"
           transmission={0.85}
-          opacity={0.3}
+          opacity={0.35}
           transparent
           roughness={0.1}
         />
       </mesh>
+
+      {/* Gold Border Inlays around Glass Panel */}
+      <mesh position={[pivotOffset, 3.3, 0.041]} castShadow>
+        <boxGeometry args={[0.95, 0.025, 0.02]} />
+        {goldMaterial}
+      </mesh>
+      <mesh position={[pivotOffset, 1.1, 0.041]} castShadow>
+        <boxGeometry args={[0.95, 0.025, 0.02]} />
+        {goldMaterial}
+      </mesh>
+      <mesh position={[pivotOffset - 0.475, 2.2, 0.041]} castShadow>
+        <boxGeometry args={[0.025, 2.2, 0.02]} />
+        {goldMaterial}
+      </mesh>
+      <mesh position={[pivotOffset + 0.475, 2.2, 0.041]} castShadow>
+        <boxGeometry args={[0.025, 2.2, 0.02]} />
+        {goldMaterial}
+      </mesh>
+
       {/* Lower decorative panel */}
       <mesh position={[pivotOffset, 0.6, 0.05]} castShadow>
         <boxGeometry args={[0.95, 0.8, 0.02]} />
-        <meshStandardMaterial color="#f4c2c2" roughness={0.8} />
+        <meshStandardMaterial color="#b76e79" roughness={0.5} />
       </mesh>
       <mesh position={[pivotOffset, 0.6, 0.061]}>
         <boxGeometry args={[0.8, 0.6, 0.01]} />
-        <meshStandardMaterial color="#b76e79" metalness={1} roughness={0.25} />
+        <meshStandardMaterial
+          color="#f4c2c2"
+          metalness={0.05}
+          roughness={0.6}
+        />
       </mesh>
-      {/* Door Handle */}
-      <mesh position={[left ? 1.1 : -1.1, 1.8, 0.06]} castShadow>
-        <cylinderGeometry args={[0.02, 0.02, 0.4, 8]} />
-        <meshStandardMaterial color="#b76e79" metalness={1} roughness={0.2} />
+
+      {/* Gold Border Inlays around Lower Panel */}
+      <mesh position={[pivotOffset, 0.9, 0.071]} castShadow>
+        <boxGeometry args={[0.8, 0.02, 0.01]} />
+        {goldMaterial}
+      </mesh>
+      <mesh position={[pivotOffset, 0.3, 0.071]} castShadow>
+        <boxGeometry args={[0.8, 0.02, 0.01]} />
+        {goldMaterial}
+      </mesh>
+      <mesh position={[pivotOffset - 0.4, 0.6, 0.071]} castShadow>
+        <boxGeometry args={[0.02, 0.6, 0.01]} />
+        {goldMaterial}
+      </mesh>
+      <mesh position={[pivotOffset + 0.4, 0.6, 0.071]} castShadow>
+        <boxGeometry args={[0.02, 0.6, 0.01]} />
+        {goldMaterial}
+      </mesh>
+
+      {/* Central Split Emblem Half (joins in center at x=0 when closed) */}
+      <mesh
+        position={[left ? 1.25 : -1.25, 1.8, 0.042]}
+        rotation={[Math.PI / 2, 0, 0]}
+        castShadow
+      >
+        <cylinderGeometry
+          args={[
+            0.15,
+            0.15,
+            0.015,
+            32,
+            1,
+            false,
+            left ? -Math.PI / 2 : Math.PI / 2,
+            Math.PI,
+          ]}
+        />
+        {goldMaterial}
+      </mesh>
+
+      {/* Detailed Bracket Handles */}
+      {/* Handle Bar */}
+      <mesh position={[left ? 1.15 : -1.15, 1.8, 0.08]} castShadow>
+        <cylinderGeometry args={[0.02, 0.02, 0.7, 16]} />
+        <meshStandardMaterial color="#ffd1dc" metalness={0.9} roughness={0.1} />
+      </mesh>
+      {/* Upper bracket */}
+      <mesh
+        position={[left ? 1.15 : -1.15, 2.1, 0.04]}
+        rotation={[Math.PI / 2, 0, 0]}
+        castShadow
+      >
+        <cylinderGeometry args={[0.015, 0.015, 0.08, 8]} />
+        <meshStandardMaterial
+          color="#b76e79"
+          metalness={0.8}
+          roughness={0.15}
+        />
+      </mesh>
+      {/* Lower bracket */}
+      <mesh
+        position={[left ? 1.15 : -1.15, 1.5, 0.04]}
+        rotation={[Math.PI / 2, 0, 0]}
+        castShadow
+      >
+        <cylinderGeometry args={[0.015, 0.015, 0.08, 8]} />
+        <meshStandardMaterial
+          color="#b76e79"
+          metalness={0.8}
+          roughness={0.15}
+        />
       </mesh>
     </group>
   );
@@ -302,26 +403,32 @@ function CorridorArch({
       )}
 
       {/* Floating 3D Price/Service Card (shows up on door hover/active state or proximity autoOpen) */}
-      {id && previewServices && (autoOpen || hovered || active) && (
+      {id && previewServices && (
         <Html
-          position={[0.2, 1.8, 0.25]}
+          position={[1.3, 1.8, 0.15]}
           center
-          distanceFactor={6}
+          distanceFactor={11}
           zIndexRange={[20, 10]}
         >
-          <div className="w-52 bg-black/90 backdrop-blur-md rounded-sm border border-blush-pink/40 p-4 shadow-luxe animate-[fade-in_0.3s_ease-out] text-left space-y-2">
-            <p className="text-[0.55rem] tracking-[0.25em] text-blush uppercase font-bold">
+          <div
+            className={`w-48 bg-black/95 backdrop-blur-md rounded-sm border border-blush-pink/40 p-3 shadow-luxe transition-all duration-500 ease-out text-left space-y-2 select-none ${
+              autoOpen || hovered || active
+                ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+                : "opacity-0 scale-95 translate-y-2 pointer-events-none"
+            }`}
+          >
+            <p className="text-[0.5rem] tracking-[0.25em] text-blush uppercase font-bold">
               GraceAndGo
             </p>
-            <h4 className="font-display text-sm text-foreground">{label}</h4>
+            <h4 className="font-display text-xs text-foreground">{label}</h4>
             <div className="h-px bg-blush-pink/20 my-1" />
-            <div className="space-y-1 pt-1">
+            <div className="space-y-1 pt-0.5">
               {previewServices.map((s) => (
                 <div
                   key={s.name}
-                  className="flex justify-between items-baseline text-[0.6rem] gap-2"
+                  className="flex justify-between items-baseline text-[0.55rem] gap-2"
                 >
-                  <span className="text-muted-foreground truncate max-w-[120px]">
+                  <span className="text-muted-foreground truncate max-w-[110px]">
                     {s.name}
                   </span>
                   <span className="text-blush font-semibold flex-shrink-0">
@@ -335,7 +442,7 @@ function CorridorArch({
                 e.stopPropagation();
                 if (onSelect) onSelect();
               }}
-              className="w-full mt-3 bg-blush-gold-gradient py-2 rounded-sm text-[0.55rem] font-semibold tracking-[0.25em] text-[oklch(0.14_0.005_60)] uppercase hover:brightness-110 shadow-soft transition-all duration-300"
+              className="w-full mt-2 bg-blush-gold-gradient py-1.5 rounded-sm text-[0.5rem] font-semibold tracking-[0.25em] text-[oklch(0.14_0.005_60)] uppercase hover:brightness-110 shadow-soft transition-all duration-300"
             >
               Book Atelier
             </button>
@@ -629,31 +736,22 @@ function CameraRig({
   const { camera } = useThree();
   const target = useRef(new THREE.Vector3(0, 1.5, 0));
 
-  // Path: Street outside -> gliding straight through corridor -> looking at ateliers -> arriving at Lounge at end
+  // Path: Smooth, linear cinematic glide down the center of the corridor looking straight ahead
   const waypoints = useMemo<{ p: THREE.Vector3; l: THREE.Vector3 }[]>(
     () => [
       { p: new THREE.Vector3(0, 2.0, 13.0), l: new THREE.Vector3(0, 1.9, 8.0) }, // 0: Street outside doors
-      { p: new THREE.Vector3(0, 1.9, 10.5), l: new THREE.Vector3(0, 1.8, 6.0) }, // 1: Approaching doors
-      { p: new THREE.Vector3(0, 1.8, 8.5), l: new THREE.Vector3(0, 1.7, 4.0) }, // 2: Passing doors
+      { p: new THREE.Vector3(0, 1.9, 10.5), l: new THREE.Vector3(0, 1.8, 5.0) }, // 1: Approaching doors
+      { p: new THREE.Vector3(0, 1.8, 8.5), l: new THREE.Vector3(0, 1.7, 3.0) }, // 2: Passing doors
+      { p: new THREE.Vector3(0, 1.8, 6.5), l: new THREE.Vector3(0, 1.7, 1.0) }, // 3: Hair/Nails segment (arches at z=6.5)
+      { p: new THREE.Vector3(0, 1.8, 3.5), l: new THREE.Vector3(0, 1.7, -2.0) }, // 4: Middle corridor
+      { p: new THREE.Vector3(0, 1.8, 0.5), l: new THREE.Vector3(0, 1.7, -5.0) }, // 5: Facial/Apothecary segment (arches at z=0.5)
       {
-        p: new THREE.Vector3(-0.4, 1.75, 6.5),
-        l: new THREE.Vector3(-4.0, 1.5, 6.5),
-      }, // 3: Hair arch
-      {
-        p: new THREE.Vector3(0.4, 1.75, 4.5),
-        l: new THREE.Vector3(4.0, 1.5, 4.5),
-      }, // 4: Nails arch
-      {
-        p: new THREE.Vector3(-0.4, 1.75, 0.5),
-        l: new THREE.Vector3(-4.0, 1.5, 0.5),
-      }, // 5: Facial arch
-      {
-        p: new THREE.Vector3(0.4, 1.75, -1.5),
-        l: new THREE.Vector3(4.0, 1.5, -1.5),
-      }, // 6: Apothecary arch
+        p: new THREE.Vector3(0, 1.8, -2.5),
+        l: new THREE.Vector3(0, 1.7, -8.0),
+      }, // 6: Approaching lounge
       {
         p: new THREE.Vector3(0, 1.7, -4.5),
-        l: new THREE.Vector3(0, 1.6, -8.0),
+        l: new THREE.Vector3(0, 1.6, -9.0),
       }, // 7: Lounge end
     ],
     [],
@@ -753,10 +851,18 @@ export default function SalonScene({
         />
         {/* Front-facing facade light to illuminate the pink storefront and doors */}
         <directionalLight
-          position={[0, 5, 15]}
-          intensity={1.8}
+          position={[0, 2.0, 15.0]}
+          intensity={2.2}
           color="#ffeef0"
           castShadow
+        />
+        {/* Close-up point light right in front of the storefront for a rich luxury glow */}
+        <pointLight
+          position={[0, 2.0, 11.0]}
+          intensity={3.0}
+          color="#ffeef0"
+          distance={6}
+          decay={1}
         />
 
         <MarbleFloor />
