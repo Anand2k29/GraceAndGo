@@ -131,18 +131,18 @@ function Index() {
         {/* HERO */}
         <section className="relative flex min-h-screen items-end px-6 pb-28 sm:px-16">
           <div className="max-w-xl">
-            <p className="text-[0.7rem] tracking-[0.5em] uppercase text-gold reveal text-shadow-luxe">
+            <p className="text-[0.7rem] tracking-[0.5em] uppercase text-gold reveal-instant text-shadow-luxe">
               A Virtual Salon
             </p>
-            <h1 className="mt-6 font-display text-5xl leading-[1.05] sm:text-7xl reveal delay-100 text-shadow-luxe">
+            <h1 className="mt-6 font-display text-5xl leading-[1.05] sm:text-7xl reveal-instant delay-instant-100 text-shadow-luxe">
               An hour inside{" "}
               <span className="italic text-gold-gradient">GraceAndGo</span>.
             </h1>
-            <p className="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base reveal delay-200 text-shadow-luxe">
+            <p className="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base reveal-instant delay-instant-200 text-shadow-luxe">
               Step from the street into our atelier. Wander the floor, meet the
               artisans, and reserve your ritual — all without leaving your seat.
             </p>
-            <div className="mt-10 flex flex-wrap items-center gap-4 reveal delay-300">
+            <div className="mt-10 flex flex-wrap items-center gap-4 reveal-instant delay-instant-300">
               <a
                 href="#tour"
                 className="group inline-flex items-center gap-3 rounded-sm bg-gold-gradient px-6 py-3 text-xs tracking-[0.35em] uppercase text-[oklch(0.14_0.005_60)] shadow-soft transition hover:brightness-110"
