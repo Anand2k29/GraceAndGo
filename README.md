@@ -21,6 +21,8 @@
 | 🎥 **3D Virtual Tour**      | Scroll-driven camera rig navigates through a complete salon scene built with React Three Fiber & Drei |
 | 💫 **Cinematic Animations** | Scroll-reveal transitions, staggered fades, and a gentle camera sway for a premium feel               |
 | 💇 **Four Ateliers**        | Hair Atelier · Nails Bar · Facial Suite · Apothecary — each with curated service menus                |
+| 🖱️ **3D Interaction**       | Fully interactive buttons and "Book Atelier" CTAs directly on the 3D price cards                      |
+| ↔️ **Alternating Layout**   | Scroll-driven passage chapters automatically sit opposite their corresponding 3D room to avoid crowding|
 | 📋 **Multi-Step Booking**   | Select a service → pick date, time & artisan card (with roles & specialties) → confirm booking        |
 | ✍️ **Guest Ledger Reviews** | Interactive testimonials section to read reflections or submit custom star-rated reviews              |
 | 🚪 **Symmetric Facade**    | Real salon doors matching photorealistic reference details with G monogram medallion, columns, and transoms |

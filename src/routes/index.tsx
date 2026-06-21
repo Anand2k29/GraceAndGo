@@ -72,6 +72,18 @@ const CHAPTERS = [
   },
 ];
 
+const IS_CARD_ON_RIGHT = [
+  false, // Chapter I: Entrance -> Left
+  true,  // Chapter II: Passage -> Right
+  true,  // Chapter III: Hair (Left room) -> Right
+  false, // Chapter IV: Nails (Right room) -> Left
+  true,  // Chapter V: Facial (Left room) -> Right
+  false, // Chapter VI: Apothecary (Right room) -> Left
+  true,  // Chapter VII: Therapy (Left room) -> Right
+  false, // Chapter VIII: VIP (Right room) -> Left
+  true   // Chapter IX: Lounge -> Right
+];
+
 function Index() {
   const { global: globalScroll, camera: cameraScroll } = useScrollProgress();
   const [open, setOpen] = useState<HotspotId | null>(null);
@@ -282,7 +294,7 @@ function Index() {
           {CHAPTERS.map((c, i) => (
             <div
               key={c.title}
-              className={`flex min-h-screen items-center px-6 sm:px-16 ${i % 2 === 0 ? "justify-start" : "justify-end"}`}
+              className={`flex min-h-screen items-center px-6 sm:px-16 ${IS_CARD_ON_RIGHT[i] ? "justify-end" : "justify-start"}`}
             >
               <div className="max-w-xs sm:max-w-sm rounded-sm border border-blush-pink/20 bg-[oklch(0.12_0.005_60)]/90 p-6 sm:p-8 backdrop-blur-md shadow-luxe reveal pointer-events-auto">
                 <p className="text-[0.6rem] tracking-[0.4em] uppercase text-gold">

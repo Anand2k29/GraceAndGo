@@ -151,7 +151,7 @@ function Door({ left, angle }: { left: boolean; angle: number }) {
 
   // Rich rose-pink door material matching the landing page door top gradient pink
   const blushPinkMaterial = (
-    <meshStandardMaterial color="#f5b0bc" metalness={0.15} roughness={0.35} />
+    <meshStandardMaterial color="#eb97a7" metalness={0.15} roughness={0.35} />
   );
 
   return (
@@ -405,16 +405,16 @@ function CorridorArch({
       {/* Side Pillars */}
       <mesh position={[-1.1, 1.8, 0]} castShadow>
         <boxGeometry args={[0.15, 3.6, 0.15]} />
-        <meshStandardMaterial color="#f4c2c2" roughness={0.8} />
+        <meshStandardMaterial color="#eb97a7" roughness={0.8} />
       </mesh>
       <mesh position={[1.1, 1.8, 0]} castShadow>
         <boxGeometry args={[0.15, 3.6, 0.15]} />
-        <meshStandardMaterial color="#f4c2c2" roughness={0.8} />
+        <meshStandardMaterial color="#eb97a7" roughness={0.8} />
       </mesh>
       {/* Arch Top Lintel */}
       <mesh position={[0, 3.6, 0]} castShadow>
         <boxGeometry args={[2.35, 0.15, 0.15]} />
-        <meshStandardMaterial color="#f4c2c2" roughness={0.8} />
+        <meshStandardMaterial color="#eb97a7" roughness={0.8} />
       </mesh>
       {/* Arch Rose Gold Accent Trim */}
       <mesh position={[0, 1.8, 0.08]}>
@@ -454,7 +454,7 @@ function CorridorArch({
         <mesh position={[1.0, 1.8, 0]}>
           <planeGeometry args={[2.0, 3.4]} />
           <meshPhysicalMaterial
-            color="#f4c2c2"
+            color="#eb97a7"
             transmission={0.8}
             opacity={0.35}
             transparent
@@ -543,7 +543,7 @@ function RoomChamber({
   const [rx, ry, rz] = position;
   const centerOffset = left ? -1.75 : 1.75;
   const backWallX = left ? rx - 3.5 : rx + 3.5;
-  const wallMat = <meshStandardMaterial color="#f4c2c2" roughness={0.8} />;
+  const wallMat = <meshStandardMaterial color="#eb97a7" roughness={0.8} />;
   const carpetMat = <meshStandardMaterial color="#ebdcd8" roughness={0.9} />;
 
   return (
@@ -605,12 +605,12 @@ function LoungeSofa({
       {/* Seat base cushion */}
       <mesh position={[0, 0.45, 0]} castShadow>
         <boxGeometry args={[2.4, 0.35, 0.9]} />
-        <meshStandardMaterial color="#f4c2c2" roughness={0.9} />
+        <meshStandardMaterial color="#eb97a7" roughness={0.9} />
       </mesh>
       {/* Backrest panel */}
       <mesh position={[0, 1.15, -0.38]} castShadow>
         <boxGeometry args={[2.4, 1.05, 0.18]} />
-        <meshStandardMaterial color="#f4c2c2" roughness={0.9} />
+        <meshStandardMaterial color="#eb97a7" roughness={0.9} />
       </mesh>
       {/* Side armrests */}
       <mesh position={[-1.25, 0.7, 0]} castShadow>
@@ -747,7 +747,7 @@ function HoloProduct({ position }: { position: [number, number, number] }) {
             transmission={0.85}
             thickness={0.5}
             ior={1.4}
-            attenuationColor="#f4c2c2"
+            attenuationColor="#eb97a7"
             attenuationDistance={0.6}
           />
         </mesh>
@@ -1001,7 +1001,7 @@ export default function SalonScene({
         {/* Archway headers above doors */}
         <mesh position={[0, 4.0, 9.8]} castShadow receiveShadow>
           <boxGeometry args={[2.7, 0.8, 0.3]} />
-          <meshStandardMaterial color="#f4c2c2" roughness={0.8} />
+          <meshStandardMaterial color="#eb97a7" roughness={0.8} />
         </mesh>
         {/* 3D Storefront Branding */}
         <Html position={[0, 4.0, 9.96]} center distanceFactor={6}>
@@ -1149,7 +1149,7 @@ export default function SalonScene({
         <VelvetChair
           position={[4.0, 0, 6.5]}
           rotation={-Math.PI / 2}
-          color="#f4c2c2"
+          color="#eb97a7"
         />
 
         {/* Facial Suite Room Details (Left side Arch 2) */}
@@ -1159,7 +1159,7 @@ export default function SalonScene({
         </mesh>
         <mesh position={[-4.8, 0.85, 0.5]} castShadow>
           <boxGeometry args={[1.0, 0.2, 2.2]} />
-          <meshStandardMaterial color="#f4c2c2" roughness={0.9} />
+          <meshStandardMaterial color="#eb97a7" roughness={0.9} />
         </mesh>
         <mesh position={[-4.8, 0.97, 0.2]} castShadow>
           <boxGeometry args={[0.7, 0.05, 0.2]} />
@@ -1177,7 +1177,7 @@ export default function SalonScene({
         </mesh>
         <mesh position={[-4.8, 0.85, -5.5]} castShadow>
           <boxGeometry args={[1.0, 0.2, 2.0]} />
-          <meshStandardMaterial color="#f4c2c2" roughness={0.8} />
+          <meshStandardMaterial color="#eb97a7" roughness={0.8} />
         </mesh>
 
         {/* VIP Cabin Room Details (Right side Arch 3) */}
