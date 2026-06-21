@@ -200,9 +200,11 @@ const getNextSevenDays = () => {
 export default function ServiceOverlay({
   id,
   onClose,
+  initialServiceName,
 }: {
   id: HotspotId | null;
   onClose: () => void;
+  initialServiceName?: string | null;
 }) {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [bookingStep, setBookingStep] = useState<
@@ -225,8 +227,24 @@ export default function ServiceOverlay({
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Reset steps on change of hotspot ID
+  // Reset steps on change of hotspot ID or pre-selected service
   useEffect(() => {
+    if (id && initialServiceName && DATA[id]) {
+      const found = DATA[id].services.find(
+        (s) => s.name === initialServiceName || s.name.toLowerCase().includes(initialServiceName.toLowerCase())
+      );
+      if (found) {
+        const localDays = getNextSevenDays();
+        const localArtisans = ARTISANS[id] || [];
+        setSelectedService(found);
+        setSelectedDate(localDays[0]?.raw || "");
+        setSelectedTime(TIME_SLOTS[0] || "");
+        setSelectedArtisan(localArtisans[0] || "");
+        setBookingStep("details");
+        return;
+      }
+    }
+
     setSelectedService(null);
     setBookingStep("select");
     setSelectedDate("");
@@ -234,7 +252,7 @@ export default function ServiceOverlay({
     setClientName("");
     setClientEmail("");
     setClientPhone("");
-  }, [id]);
+  }, [id, initialServiceName]);
 
   if (!id) return null;
   const d = DATA[id];

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import ServiceOverlay from "@/components/salon/ServiceOverlay";
+import StorefrontOverlay from "@/components/salon/StorefrontOverlay";
 
 import { useScrollProgress } from "@/components/salon/useScrollProgress";
 import type { HotspotId } from "@/components/salon/SalonScene";
@@ -73,6 +74,34 @@ const CHAPTERS = [
 function Index() {
   const { global: globalScroll, camera: cameraScroll } = useScrollProgress();
   const [open, setOpen] = useState<HotspotId | null>(null);
+  const [initialService, setInitialService] = useState<string | null>(null);
+  const [isStorefrontOpen, setIsStorefrontOpen] = useState(false);
+  const [hasEntered, setHasEntered] = useState(false);
+
+  const handleEnter = () => {
+    setIsStorefrontOpen(true);
+    // Lock scrolling during the entrance transition animation
+    document.body.style.overflow = "hidden";
+
+    // After the door animation completes, unlock scroll and navigate to the tour
+    setTimeout(() => {
+      setHasEntered(true);
+      document.body.style.overflow = "";
+      // Scroll AFTER overflow is restored so the browser can actually scroll
+      requestAnimationFrame(() => {
+        document.getElementById("tour")?.scrollIntoView({ behavior: "smooth" });
+      });
+    }, 1800);
+  };
+
+  const handleOpenComplete = useCallback(() => {
+    document.getElementById("tour")?.scrollIntoView({ behavior: "smooth" });
+  }, []);
+
+  const handleOpenRoom = (id: HotspotId, serviceName?: string) => {
+    setInitialService(serviceName || null);
+    setOpen(id);
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -95,7 +124,7 @@ function Index() {
   }, []);
 
   return (
-    <div className="relative bg-background text-foreground">
+    <div className={`relative bg-background text-foreground ${!hasEntered ? "h-screen overflow-hidden" : ""}`}>
       {/* Fixed 3D stage */}
       <div className="fixed inset-0 z-0">
         <Suspense
@@ -108,7 +137,8 @@ function Index() {
           <SalonScene
             scroll={cameraScroll}
             activeRoom={open}
-            onHotspot={setOpen}
+            onHotspot={(id) => handleOpenRoom(id)}
+            onSelectService={(id, sName) => handleOpenRoom(id, sName)}
           />
         </Suspense>
         {/* Soft centered vignette and subtle top/bottom gradients for contrast */}
@@ -117,7 +147,9 @@ function Index() {
       </div>
 
       {/* Top nav */}
-      <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-6 py-4 sm:px-12 bg-black/60 backdrop-blur-md border-b border-blush-pink/10 transition-all duration-300">
+      <header className={`fixed inset-x-0 top-0 z-40 flex items-center justify-between px-6 py-4 sm:px-12 bg-black/60 backdrop-blur-md border-b border-blush-pink/10 transition-all duration-1000 ${
+        hasEntered ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+      }`}>
         <div>
           <p className="font-display text-xl tracking-wide text-white text-shadow-tight">
             Grace<span className="text-blush">AndGo</span>
@@ -148,7 +180,7 @@ function Index() {
       {/* Scroll content overlays */}
       <main className="relative z-10">
         {/* HERO */}
-        <section className="relative flex min-h-screen items-center justify-center text-center px-6 pb-16 sm:px-16">
+        <section className={`relative flex min-h-screen items-center justify-center text-center px-6 pb-16 sm:px-16 transition-all duration-700 ${hasEntered ? "hidden" : ""}`}>
           <div className="max-w-2xl flex flex-col items-center">
             <p className="text-[0.65rem] tracking-[0.5em] uppercase text-white reveal-instant text-shadow-tight font-semibold">
               GraceAndGo Salon
@@ -386,7 +418,9 @@ function Index() {
       </main>
 
       {/* Progress rail */}
-      <div className="pointer-events-none fixed right-6 top-1/2 z-30 hidden -translate-y-1/2 sm:block">
+      <div className={`pointer-events-none fixed right-6 top-1/2 z-30 hidden -translate-y-1/2 sm:block transition-opacity duration-1000 ${
+        hasEntered ? "opacity-100" : "opacity-0"
+      }`}>
         <div className="relative h-64 w-px bg-blush-pink/20">
           <div
             className="absolute left-0 top-0 w-px bg-gold-gradient transition-[height] duration-150"
@@ -395,7 +429,20 @@ function Index() {
         </div>
       </div>
 
-      <ServiceOverlay id={open} onClose={() => setOpen(null)} />
+      <StorefrontOverlay
+        isOpen={isStorefrontOpen}
+        onOpen={handleEnter}
+        onOpenComplete={handleOpenComplete}
+      />
+
+      <ServiceOverlay
+        id={open}
+        initialServiceName={initialService}
+        onClose={() => {
+          setOpen(null);
+          setInitialService(null);
+        }}
+      />
     </div>
   );
 }

@@ -22,6 +22,7 @@ interface SalonSceneProps {
   scroll: number; // 0..1
   activeRoom: HotspotId | null;
   onHotspot: (id: HotspotId) => void;
+  onSelectService?: (id: HotspotId, serviceName: string) => void;
 }
 
 const HOTSPOTS: {
@@ -70,7 +71,7 @@ function MarbleFloor() {
       <planeGeometry args={[40, 40]} />
       <MeshReflectorMaterial
         blur={[300, 100]}
-        resolution={1024}
+        resolution={512}
         mixBlur={1}
         mixStrength={40}
         roughness={0.7}
@@ -143,138 +144,122 @@ function Door({ left, angle }: { left: boolean; angle: number }) {
   const xPos = left ? -1.25 : 1.25;
   const pivotOffset = left ? 0.625 : -0.625;
 
-  // High-fidelity gold material definition
+  // Rich luxury gold material
   const goldMaterial = (
-    <meshStandardMaterial color="#ffd1dc" metalness={0.9} roughness={0.1} />
+    <meshStandardMaterial color="#ffd700" metalness={0.95} roughness={0.05} />
+  );
+
+  // Rich rose-pink door material with satin sheen
+  const blushPinkMaterial = (
+    <meshStandardMaterial color="#d4707b" metalness={0.15} roughness={0.35} />
   );
 
   return (
     <group position={[xPos, 0, 9.8]} rotation={[0, angle, 0]}>
-      {/* Door Frame/Wood Pane */}
+      {/* Main Door Slab (Blush Pink Wood) */}
       <mesh position={[pivotOffset, 1.8, 0]} castShadow>
         <boxGeometry args={[1.25, 3.6, 0.08]} />
-        <meshStandardMaterial
-          color="#b76e79"
-          roughness={0.5}
-          metalness={0.15}
-        />
+        {blushPinkMaterial}
       </mesh>
 
-      {/* Glass Panel Insert */}
-      <mesh position={[pivotOffset, 2.2, 0.01]}>
-        <planeGeometry args={[0.95, 2.2]} />
-        <meshPhysicalMaterial
-          color="#ffd1dc"
-          transmission={0.85}
-          opacity={0.35}
-          transparent
-          roughness={0.1}
-        />
+      {/* Ornate Upper Panel Moulding (Raised Blush Pink Box) */}
+      <mesh position={[pivotOffset, 2.3, 0.045]} castShadow>
+        <boxGeometry args={[0.95, 2.0, 0.02]} />
+        {blushPinkMaterial}
       </mesh>
 
-      {/* Gold Border Inlays around Glass Panel */}
-      <mesh position={[pivotOffset, 3.3, 0.041]} castShadow>
-        <boxGeometry args={[0.95, 0.025, 0.02]} />
+      {/* Ornate Upper Panel Gold Border Frame */}
+      {/* Top border */}
+      <mesh position={[pivotOffset, 3.3, 0.056]}>
+        <boxGeometry args={[0.95, 0.03, 0.01]} />
         {goldMaterial}
       </mesh>
-      <mesh position={[pivotOffset, 1.1, 0.041]} castShadow>
-        <boxGeometry args={[0.95, 0.025, 0.02]} />
+      {/* Bottom border */}
+      <mesh position={[pivotOffset, 1.3, 0.056]}>
+        <boxGeometry args={[0.95, 0.03, 0.01]} />
         {goldMaterial}
       </mesh>
-      <mesh position={[pivotOffset - 0.475, 2.2, 0.041]} castShadow>
-        <boxGeometry args={[0.025, 2.2, 0.02]} />
+      {/* Left border */}
+      <mesh position={[pivotOffset - 0.47, 2.3, 0.056]}>
+        <boxGeometry args={[0.03, 2.05, 0.01]} />
         {goldMaterial}
       </mesh>
-      <mesh position={[pivotOffset + 0.475, 2.2, 0.041]} castShadow>
-        <boxGeometry args={[0.025, 2.2, 0.02]} />
+      {/* Right border */}
+      <mesh position={[pivotOffset + 0.47, 2.3, 0.056]}>
+        <boxGeometry args={[0.03, 2.05, 0.01]} />
         {goldMaterial}
       </mesh>
 
-      {/* Lower decorative panel */}
-      <mesh position={[pivotOffset, 0.6, 0.05]} castShadow>
+      {/* Ornate Lower Panel Moulding (Raised Blush Pink Box) */}
+      <mesh position={[pivotOffset, 0.6, 0.045]} castShadow>
         <boxGeometry args={[0.95, 0.8, 0.02]} />
-        <meshStandardMaterial color="#b76e79" roughness={0.5} />
-      </mesh>
-      <mesh position={[pivotOffset, 0.6, 0.061]}>
-        <boxGeometry args={[0.8, 0.6, 0.01]} />
-        <meshStandardMaterial
-          color="#f4c2c2"
-          metalness={0.05}
-          roughness={0.6}
-        />
+        {blushPinkMaterial}
       </mesh>
 
-      {/* Gold Border Inlays around Lower Panel */}
-      <mesh position={[pivotOffset, 0.9, 0.071]} castShadow>
-        <boxGeometry args={[0.8, 0.02, 0.01]} />
+      {/* Ornate Lower Panel Gold Border Frame */}
+      <mesh position={[pivotOffset, 1.0, 0.056]}>
+        <boxGeometry args={[0.95, 0.02, 0.01]} />
         {goldMaterial}
       </mesh>
-      <mesh position={[pivotOffset, 0.3, 0.071]} castShadow>
-        <boxGeometry args={[0.8, 0.02, 0.01]} />
+      <mesh position={[pivotOffset, 0.2, 0.056]}>
+        <boxGeometry args={[0.95, 0.02, 0.01]} />
         {goldMaterial}
       </mesh>
-      <mesh position={[pivotOffset - 0.4, 0.6, 0.071]} castShadow>
-        <boxGeometry args={[0.02, 0.6, 0.01]} />
+      <mesh position={[pivotOffset - 0.47, 0.6, 0.056]}>
+        <boxGeometry args={[0.02, 0.82, 0.01]} />
         {goldMaterial}
       </mesh>
-      <mesh position={[pivotOffset + 0.4, 0.6, 0.071]} castShadow>
-        <boxGeometry args={[0.02, 0.6, 0.01]} />
+      <mesh position={[pivotOffset + 0.47, 0.6, 0.056]}>
+        <boxGeometry args={[0.02, 0.82, 0.01]} />
         {goldMaterial}
       </mesh>
 
-      {/* Central Split Emblem Half (joins in center at x=0 when closed) */}
-      <mesh
-        position={[left ? 1.25 : -1.25, 1.8, 0.042]}
-        rotation={[Math.PI / 2, 0, 0]}
-        castShadow
-      >
-        <cylinderGeometry
-          args={[
-            0.15,
-            0.15,
-            0.015,
-            32,
-            1,
-            false,
-            left ? -Math.PI / 2 : Math.PI / 2,
-            Math.PI,
-          ]}
-        />
+      {/* Ornate Gold Medallion / Center Scroll (placed at the bottom of the upper panel) */}
+      <mesh position={[pivotOffset, 1.3, 0.062]}>
+        <boxGeometry args={[0.3, 0.1, 0.01]} />
+        {goldMaterial}
+      </mesh>
+      <mesh position={[pivotOffset, 1.3, 0.067]} rotation={[0, 0, Math.PI / 4]}>
+        <boxGeometry args={[0.12, 0.12, 0.01]} />
         {goldMaterial}
       </mesh>
 
-      {/* Detailed Bracket Handles */}
-      {/* Handle Bar */}
+      {/* Gold Handles */}
       <mesh position={[left ? 1.15 : -1.15, 1.8, 0.08]} castShadow>
         <cylinderGeometry args={[0.02, 0.02, 0.7, 16]} />
-        <meshStandardMaterial color="#ffd1dc" metalness={0.9} roughness={0.1} />
+        {goldMaterial}
       </mesh>
-      {/* Upper bracket */}
-      <mesh
-        position={[left ? 1.15 : -1.15, 2.1, 0.04]}
-        rotation={[Math.PI / 2, 0, 0]}
-        castShadow
-      >
+      {/* Handle brackets */}
+      <mesh position={[left ? 1.15 : -1.15, 2.1, 0.045]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[0.015, 0.015, 0.08, 8]} />
-        <meshStandardMaterial
-          color="#b76e79"
-          metalness={0.8}
-          roughness={0.15}
-        />
+        {goldMaterial}
       </mesh>
-      {/* Lower bracket */}
-      <mesh
-        position={[left ? 1.15 : -1.15, 1.5, 0.04]}
-        rotation={[Math.PI / 2, 0, 0]}
-        castShadow
-      >
+      <mesh position={[left ? 1.15 : -1.15, 1.5, 0.045]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[0.015, 0.015, 0.08, 8]} />
-        <meshStandardMaterial
-          color="#b76e79"
-          metalness={0.8}
-          roughness={0.15}
-        />
+        {goldMaterial}
       </mesh>
+
+      {/* "GRACE" or "& GO" Gold Metallic Text in the center of the upper panel */}
+      <Html
+        position={[pivotOffset, 2.4, 0.065]}
+        transform
+        occlude
+        pointerEvents="none"
+        distanceFactor={1.5}
+      >
+        <div 
+          className="font-display select-none font-bold tracking-[0.15em] text-center"
+          style={{
+            color: "#d4af37",
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: "24px",
+            textShadow: "1px 1px 2px rgba(0,0,0,0.35), 0 0 8px rgba(212,175,55,0.45)",
+            whiteSpace: "nowrap"
+          }}
+        >
+          {left ? "GRACE" : "& GO"}
+        </div>
+      </Html>
     </group>
   );
 }
@@ -286,6 +271,7 @@ function CorridorArch({
   id,
   active,
   onSelect,
+  onSelectService,
 }: {
   position: [number, number, number];
   left: boolean;
@@ -293,8 +279,11 @@ function CorridorArch({
   id?: HotspotId;
   active?: boolean;
   onSelect?: () => void;
+  onSelectService?: (id: HotspotId, serviceName: string) => void;
 }) {
   const [hovered, setHovered] = useState(false);
+  const [cardHovered, setCardHovered] = useState(false);
+  const [isHoveredActive, setIsHoveredActive] = useState(false);
   const [autoOpen, setAutoOpen] = useState(false);
   const [showSignage, setShowSignage] = useState(false);
   const rotationY = left ? Math.PI / 2 : -Math.PI / 2;
@@ -303,12 +292,25 @@ function CorridorArch({
   // Set mouse cursor to pointer on hover
   useEffect(() => {
     if (id) {
-      document.body.style.cursor = hovered ? "pointer" : "auto";
+      document.body.style.cursor = (hovered || cardHovered) ? "pointer" : "auto";
     }
     return () => {
       document.body.style.cursor = "auto";
     };
-  }, [hovered, id]);
+  }, [hovered, cardHovered, id]);
+
+  // Handle debounced combined hover state to prevent door from closing
+  // when cursor moves between the door mesh and the floating HTML card
+  useEffect(() => {
+    if (hovered || cardHovered) {
+      setIsHoveredActive(true);
+    } else {
+      const timer = setTimeout(() => {
+        setIsHoveredActive(false);
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [hovered, cardHovered]);
 
   useFrame((state, dt) => {
     // 1. Calculate distance on X-Z plane from camera to this archway
@@ -324,7 +326,7 @@ function CorridorArch({
     // Auto open door and show card if camera is within 3.3 units, inside the corridor, and looking at this arch
     const isNear =
       distXZ < 3.3 && state.camera.position.z < 9.5 && isLookingCorrectWay;
-    const shouldOpen = hovered || active || isNear;
+    const shouldOpen = isHoveredActive || active || isNear;
 
     if (doorRef.current) {
       const targetAngle = shouldOpen
@@ -433,30 +435,40 @@ function CorridorArch({
           zIndexRange={[20, 10]}
         >
           <div
-            className={`w-44 bg-black/95 backdrop-blur-md rounded-sm border border-blush-pink/30 p-3.5 shadow-luxe transition-all duration-700 ease-out text-left space-y-2.5 select-none premium-card-anim ${
-              autoOpen || hovered || active
+            onMouseEnter={() => setCardHovered(true)}
+            onMouseLeave={() => setCardHovered(false)}
+            className={`w-40 bg-black/95 backdrop-blur-md rounded-sm border border-blush-pink/30 p-3 shadow-luxe transition-all duration-700 ease-out text-left space-y-2 select-none premium-card-anim ${
+              autoOpen || isHoveredActive || active
                 ? "opacity-100 [transform:perspective(600px)_rotateY(0deg)_scale(1)_translateY(0)] pointer-events-auto"
                 : "opacity-0 [transform:perspective(600px)_rotateY(-15deg)_scale(0.95)_translateY(10px)] pointer-events-none"
             }`}
           >
-            <p className="text-[0.5rem] tracking-[0.25em] text-blush uppercase font-bold">
+            <p className="text-[0.45rem] tracking-[0.2em] text-blush uppercase font-bold">
               GraceAndGo
             </p>
-            <h4 className="font-display text-xs text-foreground">{label}</h4>
+            <h4 className="font-display text-[0.65rem] text-foreground">{label}</h4>
             <div className="h-px bg-blush-pink/20 my-1" />
             <div className="space-y-1 pt-0.5">
               {previewServices.map((s) => (
-                <div
+                <button
                   key={s.name}
-                  className="flex justify-between items-baseline text-[0.55rem] gap-2"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (id && onSelectService) {
+                      onSelectService(id, s.name);
+                    } else if (onSelect) {
+                      onSelect();
+                    }
+                  }}
+                  className="w-full flex justify-between items-baseline text-[0.5rem] gap-1.5 py-0.5 px-1 rounded-xs hover:bg-blush-pink/10 hover:text-gold transition-all duration-200 text-left group/item cursor-pointer"
                 >
-                  <span className="text-muted-foreground truncate max-w-[110px]">
+                  <span className="text-muted-foreground group-hover/item:text-foreground truncate max-w-[105px]">
                     {s.name}
                   </span>
-                  <span className="text-blush font-semibold flex-shrink-0">
+                  <span className="text-blush font-semibold flex-shrink-0 group-hover/item:text-gold">
                     {s.price}
                   </span>
-                </div>
+                </button>
               ))}
             </div>
             <button
@@ -464,7 +476,7 @@ function CorridorArch({
                 e.stopPropagation();
                 if (onSelect) onSelect();
               }}
-              className="w-full mt-2 bg-blush-gold-gradient py-1.5 rounded-sm text-[0.5rem] font-semibold tracking-[0.25em] text-[oklch(0.14_0.005_60)] uppercase hover:brightness-110 shadow-soft transition-all duration-300"
+              className="w-full mt-1 bg-blush-gold-gradient py-1.5 rounded-xs text-[0.45rem] font-semibold tracking-[0.2em] text-[oklch(0.14_0.005_60)] uppercase hover:brightness-110 shadow-soft transition-all duration-300 cursor-pointer"
             >
               Book Atelier
             </button>
@@ -878,17 +890,17 @@ export default function SalonScene({
   scroll,
   activeRoom,
   onHotspot,
+  onSelectService,
 }: SalonSceneProps) {
   // Door opening logic as camera moves past street segment (scroll 0..0.25, t = 0..1.8)
-  const doorOpenProgress = Math.min(1, Math.max(0, (scroll * 7) / 1.8));
+  const doorOpenProgress = Math.min(1, Math.max(0, scroll * 7.5));
   const doorEase = doorOpenProgress * doorOpenProgress; // quadratic ease
   const leftDoorAngle = -doorEase * Math.PI * 0.55;
   const rightDoorAngle = doorEase * Math.PI * 0.55;
 
   return (
     <Canvas
-      shadows
-      dpr={[1, 1.8]}
+      dpr={[1, 1.2]}
       gl={{ antialias: true, powerPreference: "high-performance" }}
     >
       <PerspectiveCamera makeDefault fov={45} position={[0, 2.0, 13.0]} />
@@ -903,14 +915,12 @@ export default function SalonScene({
           position={[5, 10, 5]}
           intensity={0.5}
           color="#ffeef0"
-          castShadow
         />
         {/* Front-facing facade light to illuminate the pink storefront and doors */}
         <directionalLight
           position={[0, 2.0, 15.0]}
           intensity={2.2}
           color="#ffeef0"
-          castShadow
         />
         {/* Close-up point light right in front of the storefront for a rich luxury glow */}
         <pointLight
@@ -999,6 +1009,7 @@ export default function SalonScene({
           id="hair"
           active={activeRoom === "hair"}
           onSelect={() => onHotspot("hair")}
+          onSelectService={onSelectService}
         />
         <CorridorArch
           position={[2.5, 0, 6.5]}
@@ -1007,6 +1018,7 @@ export default function SalonScene({
           id="nails"
           active={activeRoom === "nails"}
           onSelect={() => onHotspot("nails")}
+          onSelectService={onSelectService}
         />
 
         <CorridorArch
@@ -1016,6 +1028,7 @@ export default function SalonScene({
           id="facial"
           active={activeRoom === "facial"}
           onSelect={() => onHotspot("facial")}
+          onSelectService={onSelectService}
         />
         <CorridorArch
           position={[2.5, 0, 0.5]}
@@ -1024,6 +1037,7 @@ export default function SalonScene({
           id="product"
           active={activeRoom === "product"}
           onSelect={() => onHotspot("product")}
+          onSelectService={onSelectService}
         />
 
         <CorridorArch
@@ -1033,6 +1047,7 @@ export default function SalonScene({
           id="treatment"
           active={activeRoom === "treatment"}
           onSelect={() => onHotspot("treatment")}
+          onSelectService={onSelectService}
         />
         <CorridorArch
           position={[2.5, 0, -5.5]}
@@ -1041,6 +1056,7 @@ export default function SalonScene({
           id="vip"
           active={activeRoom === "vip"}
           onSelect={() => onHotspot("vip")}
+          onSelectService={onSelectService}
         />
 
         {/* Circular LED lighting rings suspended along the corridor */}
