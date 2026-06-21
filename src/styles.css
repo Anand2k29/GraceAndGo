@@ -197,6 +197,26 @@
   animation: float-y 6s ease-in-out infinite;
 }
 
+@keyframes premium-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 10px rgba(244, 194, 194, 0.15),
+      var(--shadow-luxe);
+    border-color: rgba(244, 194, 194, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 20px rgba(244, 194, 194, 0.35),
+      var(--shadow-luxe);
+    border-color: rgba(244, 194, 194, 0.6);
+  }
+}
+
+.premium-card-anim {
+  animation: premium-glow 3s ease-in-out infinite;
+}
+
 /* Scroll Reveal and Staggered Animations */
 .reveal {
   opacity: 0;

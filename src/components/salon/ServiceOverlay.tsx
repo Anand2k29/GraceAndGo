@@ -67,6 +67,55 @@ const DATA: Record<
       { name: "Rose Quartz Mist", duration: "100 ml", price: "₹2,800" },
     ],
   },
+  treatment: {
+    title: "Therapy Sanctuary",
+    tagline:
+      "Rejuvenating head spas, scalp detox rituals, and organic oil infusions.",
+    services: [
+      {
+        name: "Signature Hair Spa Treatment",
+        duration: "90 min",
+        price: "₹5,800",
+      },
+      {
+        name: "Scalp Detoxification Ritual",
+        duration: "60 min",
+        price: "₹4,200",
+      },
+      {
+        name: "Ayurvedic Hair & Scalp Therapy",
+        duration: "75 min",
+        price: "₹4,800",
+      },
+      {
+        name: "Keratin Restorative Treatment",
+        duration: "120 min",
+        price: "₹8,500",
+      },
+    ],
+  },
+  vip: {
+    title: "VIP Suite",
+    tagline:
+      "A private studio suite for exclusive foot therapy, pedicures, and custom styling.",
+    services: [
+      {
+        name: "Royal Pedicure & Manicure Duo",
+        duration: "90 min",
+        price: "₹7,500",
+      },
+      {
+        name: "Private Suite Custom Styling",
+        duration: "120 min",
+        price: "₹12,000",
+      },
+      {
+        name: "VIP Champagne Grooming Experience",
+        duration: "150 min",
+        price: "₹15,000",
+      },
+    ],
+  },
 };
 
 const ARTISANS: Record<HotspotId, string[]> = {
@@ -91,6 +140,16 @@ const ARTISANS: Record<HotspotId, string[]> = {
     "Any Perfumer",
     "Pierre (House Alchemist)",
     "Sophie (Apothecary Curator)",
+  ],
+  treatment: [
+    "Any Therapy Specialist",
+    "Siddharth (Ayurvedic Master)",
+    "Priya (Scalp Therapist)",
+  ],
+  vip: [
+    "Any VIP Artisan",
+    "Rohan (Celebrity Stylist)",
+    "Ananya (Executive Pedicurist)",
   ],
 };
 

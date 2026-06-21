@@ -10,7 +10,13 @@ import {
 } from "@react-three/drei";
 import * as THREE from "three";
 
-export type HotspotId = "hair" | "nails" | "facial" | "product";
+export type HotspotId =
+  | "hair"
+  | "nails"
+  | "facial"
+  | "product"
+  | "treatment"
+  | "vip";
 
 interface SalonSceneProps {
   scroll: number; // 0..1
@@ -27,6 +33,8 @@ const HOTSPOTS: {
   { id: "nails", pos: [2.2, 1.6, 6.5], label: "Nails Bar" },
   { id: "facial", pos: [-2.2, 1.6, 0.5], label: "Facial Suite" },
   { id: "product", pos: [2.2, 1.6, 0.5], label: "Apothecary Showcase" },
+  { id: "treatment", pos: [-2.2, 1.6, -5.5], label: "Therapy Sanctuary" },
+  { id: "vip", pos: [2.2, 1.6, -5.5], label: "VIP Suite" },
 ];
 
 const ROOM_SERVICES: Record<HotspotId, { name: string; price: string }[]> = {
@@ -45,6 +53,14 @@ const ROOM_SERVICES: Record<HotspotId, { name: string; price: string }[]> = {
   product: [
     { name: "Radiance Serum", price: "₹5,500" },
     { name: "Velours Hair Oil", price: "₹3,800" },
+  ],
+  treatment: [
+    { name: "Signature Hair Spa", price: "₹5,800" },
+    { name: "Scalp Detoxification", price: "₹4,200" },
+  ],
+  vip: [
+    { name: "Royal Pedicure", price: "₹7,500" },
+    { name: "Private Custom Style", price: "₹12,000" },
   ],
 };
 
@@ -300,8 +316,14 @@ function CorridorArch({
     const dz = state.camera.position.z - position[2];
     const distXZ = Math.sqrt(dx * dx + dz * dz);
 
-    // Auto open door and show card if camera is within 3.3 units and inside the corridor (Z < 9.5)
-    const isNear = distXZ < 3.3 && state.camera.position.z < 9.5;
+    // 2. Determine if the camera is looking towards this side of the corridor
+    const dir = new THREE.Vector3();
+    state.camera.getWorldDirection(dir);
+    const isLookingCorrectWay = left ? dir.x < -0.15 : dir.x > 0.15;
+
+    // Auto open door and show card if camera is within 3.3 units, inside the corridor, and looking at this arch
+    const isNear =
+      distXZ < 3.3 && state.camera.position.z < 9.5 && isLookingCorrectWay;
     const shouldOpen = hovered || active || isNear;
 
     if (doorRef.current) {
@@ -396,7 +418,7 @@ function CorridorArch({
       {/* Room signage above Arch */}
       {showSignage && (
         <Html position={[0, 3.9, 0.1]} center distanceFactor={7}>
-          <div className="whitespace-nowrap px-2 py-0.5 font-[Cormorant_Garamond] text-[0.65rem] tracking-[0.3em] uppercase text-blush text-shadow-luxe">
+          <div className="whitespace-nowrap px-3 py-1 rounded-full bg-black/75 backdrop-blur-sm border border-blush-pink/30 font-[Cormorant_Garamond] text-[0.7rem] tracking-[0.25em] uppercase text-white font-semibold text-shadow-tight">
             {label}
           </div>
         </Html>
@@ -411,10 +433,10 @@ function CorridorArch({
           zIndexRange={[20, 10]}
         >
           <div
-            className={`w-48 bg-black/95 backdrop-blur-md rounded-sm border border-blush-pink/40 p-3 shadow-luxe transition-all duration-500 ease-out text-left space-y-2 select-none ${
+            className={`w-44 bg-black/95 backdrop-blur-md rounded-sm border border-blush-pink/30 p-3.5 shadow-luxe transition-all duration-700 ease-out text-left space-y-2.5 select-none premium-card-anim ${
               autoOpen || hovered || active
-                ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
-                : "opacity-0 scale-95 translate-y-2 pointer-events-none"
+                ? "opacity-100 [transform:perspective(600px)_rotateY(0deg)_scale(1)_translateY(0)] pointer-events-auto"
+                : "opacity-0 [transform:perspective(600px)_rotateY(-15deg)_scale(0.95)_translateY(10px)] pointer-events-none"
             }`}
           >
             <p className="text-[0.5rem] tracking-[0.25em] text-blush uppercase font-bold">
@@ -736,23 +758,45 @@ function CameraRig({
   const { camera } = useThree();
   const target = useRef(new THREE.Vector3(0, 1.5, 0));
 
-  // Path: Smooth, linear cinematic glide down the center of the corridor looking straight ahead
-  const waypoints = useMemo<{ p: THREE.Vector3; l: THREE.Vector3 }[]>(
+  // Path: Smooth, linear cinematic glide down the center of the corridor aligned with the 9 chapters
+  const waypoints = useMemo<{ p: THREE.Vector3; d: THREE.Vector3 }[]>(
     () => [
-      { p: new THREE.Vector3(0, 2.0, 13.0), l: new THREE.Vector3(0, 1.9, 8.0) }, // 0: Street outside doors
-      { p: new THREE.Vector3(0, 1.9, 10.5), l: new THREE.Vector3(0, 1.8, 5.0) }, // 1: Approaching doors
-      { p: new THREE.Vector3(0, 1.8, 8.5), l: new THREE.Vector3(0, 1.7, 3.0) }, // 2: Passing doors
-      { p: new THREE.Vector3(0, 1.8, 6.5), l: new THREE.Vector3(0, 1.7, 1.0) }, // 3: Hair/Nails segment (arches at z=6.5)
-      { p: new THREE.Vector3(0, 1.8, 3.5), l: new THREE.Vector3(0, 1.7, -2.0) }, // 4: Middle corridor
-      { p: new THREE.Vector3(0, 1.8, 0.5), l: new THREE.Vector3(0, 1.7, -5.0) }, // 5: Facial/Apothecary segment (arches at z=0.5)
       {
-        p: new THREE.Vector3(0, 1.8, -2.5),
-        l: new THREE.Vector3(0, 1.7, -8.0),
-      }, // 6: Approaching lounge
+        p: new THREE.Vector3(0, 2.0, 13.0),
+        d: new THREE.Vector3(0, -0.05, -1).normalize(),
+      }, // Chapter I: Entrance Facade (scroll 0.0)
       {
-        p: new THREE.Vector3(0, 1.7, -4.5),
-        l: new THREE.Vector3(0, 1.6, -9.0),
-      }, // 7: Lounge end
+        p: new THREE.Vector3(0, 1.9, 10.5),
+        d: new THREE.Vector3(0, -0.05, -1).normalize(),
+      }, // Chapter II: Passage Start (scroll 0.125)
+      {
+        p: new THREE.Vector3(0.4, 1.8, 7.2),
+        d: new THREE.Vector3(-0.97, -0.1, -0.23).normalize(),
+      }, // Chapter III: Hair Atelier (scroll 0.25, looks left-forward)
+      {
+        p: new THREE.Vector3(-0.4, 1.8, 5.8),
+        d: new THREE.Vector3(0.97, -0.1, 0.23).normalize(),
+      }, // Chapter IV: Nails Bar (scroll 0.375, looks right-backward)
+      {
+        p: new THREE.Vector3(0.4, 1.8, 1.2),
+        d: new THREE.Vector3(-0.97, -0.1, -0.23).normalize(),
+      }, // Chapter V: Facial Suite (scroll 0.5, looks left-forward)
+      {
+        p: new THREE.Vector3(-0.4, 1.8, -0.2),
+        d: new THREE.Vector3(0.97, -0.1, 0.23).normalize(),
+      }, // Chapter VI: Apothecary Showcase (scroll 0.625, looks right-backward)
+      {
+        p: new THREE.Vector3(0.4, 1.8, -4.8),
+        d: new THREE.Vector3(-0.97, -0.1, -0.23).normalize(),
+      }, // Chapter VII: Therapy Sanctuary (scroll 0.75, looks left-forward)
+      {
+        p: new THREE.Vector3(-0.4, 1.8, -6.2),
+        d: new THREE.Vector3(0.97, -0.1, 0.23).normalize(),
+      }, // Chapter VIII: VIP Suite (scroll 0.875, looks right-backward)
+      {
+        p: new THREE.Vector3(0, 1.7, -9.5),
+        d: new THREE.Vector3(0, -0.05, -1).normalize(),
+      }, // Chapter IX: Lounge (scroll 1.0, looks straight)
     ],
     [],
   );
@@ -778,6 +822,14 @@ function CameraRig({
         p: new THREE.Vector3(3.4, 1.6, 0.5),
         l: new THREE.Vector3(4.8, 1.5, 0.5),
       },
+      treatment: {
+        p: new THREE.Vector3(-3.4, 1.6, -5.5),
+        l: new THREE.Vector3(-5.2, 1.5, -5.5),
+      },
+      vip: {
+        p: new THREE.Vector3(3.4, 1.6, -5.5),
+        l: new THREE.Vector3(5.2, 1.5, -5.5),
+      },
     }),
     [],
   );
@@ -799,7 +851,11 @@ function CameraRig({
       const b = waypoints[Math.min(i + 1, waypoints.length - 1)];
       const ease = f < 0.5 ? 2 * f * f : 1 - Math.pow(-2 * f + 2, 2) / 2;
       pos = a.p.clone().lerp(b.p, ease);
-      look = a.l.clone().lerp(b.l, ease);
+
+      // Interpolate the look direction vector and normalize it
+      const dir = a.d.clone().lerp(b.d, ease).normalize();
+      // Look target is pos + dir * 5 (to look 5 units ahead/sideways)
+      look = pos.clone().add(dir.multiplyScalar(5));
     }
 
     // Interactive pointer look-around (parallax mouse-sway look)
@@ -894,10 +950,10 @@ export default function SalonScene({
         {/* 3D Storefront Branding */}
         <Html position={[0, 4.0, 9.96]} center distanceFactor={6}>
           <div className="text-center select-none pointer-events-none whitespace-nowrap">
-            <h2 className="font-display text-[0.62rem] tracking-[0.35em] uppercase text-blush text-shadow-luxe">
+            <h2 className="font-display text-[0.7rem] tracking-[0.35em] uppercase text-[#1c0b0e] font-bold">
               GraceAndGo
             </h2>
-            <p className="font-[Cormorant_Garamond] text-[0.4rem] tracking-[0.2em] uppercase text-muted-foreground text-shadow-luxe">
+            <p className="font-[Cormorant_Garamond] text-[0.45rem] tracking-[0.25em] uppercase text-[#422125] font-bold mt-0.5">
               Salon
             </p>
           </div>
@@ -919,19 +975,19 @@ export default function SalonScene({
         <Door left={false} angle={rightDoorAngle} />
 
         {/* --- THE GRAND PASSAGE CORRIDOR --- */}
-        {/* Left Side corridor panels */}
-        <mesh position={[-2.55, 2.0, 1.0]} receiveShadow>
-          <boxGeometry args={[0.1, 4.0, 18.0]} />
+        {/* Left Side corridor panels (extended to 24.0 length) */}
+        <mesh position={[-2.55, 2.0, -1.0]} receiveShadow>
+          <boxGeometry args={[0.1, 4.0, 24.0]} />
           <meshStandardMaterial color="#0e0c0b" roughness={0.9} />
         </mesh>
-        {/* Right Side corridor panels */}
-        <mesh position={[2.55, 2.0, 1.0]} receiveShadow>
-          <boxGeometry args={[0.1, 4.0, 18.0]} />
+        {/* Right Side corridor panels (extended to 24.0 length) */}
+        <mesh position={[2.55, 2.0, -1.0]} receiveShadow>
+          <boxGeometry args={[0.1, 4.0, 24.0]} />
           <meshStandardMaterial color="#0e0c0b" roughness={0.9} />
         </mesh>
-        {/* Ceiling */}
-        <mesh position={[0, 4.0, 1.0]} rotation={[Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[5.2, 18.0]} />
+        {/* Ceiling (extended to 24.0 length) */}
+        <mesh position={[0, 4.0, -1.0]} rotation={[Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[5.2, 24.0]} />
           <meshStandardMaterial color="#0e0c0b" roughness={1} />
         </mesh>
 
@@ -973,12 +1029,18 @@ export default function SalonScene({
         <CorridorArch
           position={[-2.5, 0, -5.5]}
           left={true}
-          label="Treatment Room"
+          label="Therapy Sanctuary"
+          id="treatment"
+          active={activeRoom === "treatment"}
+          onSelect={() => onHotspot("treatment")}
         />
         <CorridorArch
           position={[2.5, 0, -5.5]}
           left={false}
-          label="VIP Cabin"
+          label="VIP Suite"
+          id="vip"
+          active={activeRoom === "vip"}
+          onSelect={() => onHotspot("vip")}
         />
 
         {/* Circular LED lighting rings suspended along the corridor */}
@@ -986,12 +1048,15 @@ export default function SalonScene({
         <CeilingRingLight position={[0, 3.8, 3.5]} />
         <CeilingRingLight position={[0, 3.8, -0.5]} />
         <CeilingRingLight position={[0, 3.8, -4.5]} />
+        <CeilingRingLight position={[0, 3.8, -8.5]} />
 
         {/* Enclosed Room Chambers behind each archway */}
         <RoomChamber position={[-2.5, 0, 6.5]} left={true} />
         <RoomChamber position={[2.5, 0, 6.5]} left={false} />
         <RoomChamber position={[-2.5, 0, 0.5]} left={true} />
         <RoomChamber position={[2.5, 0, 0.5]} left={false} />
+        <RoomChamber position={[-2.5, 0, -5.5]} left={true} />
+        <RoomChamber position={[2.5, 0, -5.5]} left={false} />
 
         {/* --- ATELIER PREVIEW ROOM DETAILS --- */}
         {/* Hair Atelier Room Details (Left side Arch 1) */}
@@ -1043,9 +1108,27 @@ export default function SalonScene({
         <ReceptionDesk position={[4.8, 0, 0.5]} rotation={-Math.PI / 2} />
         <HoloProduct position={[4.8, 1.8, 0.5]} />
 
-        {/* --- LOUNGE AREA (Corridor end, z = -7.5) --- */}
-        <LoungeSofa position={[0, 0, -7.5]} rotation={0} />
-        <LoungeSofa position={[-6.0, 0, -5.5]} rotation={Math.PI / 2} />
+        {/* Therapy Sanctuary Room Details (Left side Arch 3) */}
+        <mesh position={[-4.8, 0.5, -5.5]} castShadow>
+          <boxGeometry args={[1.0, 0.5, 2.0]} />
+          <meshStandardMaterial color="#1f1a1d" roughness={0.9} />
+        </mesh>
+        <mesh position={[-4.8, 0.85, -5.5]} castShadow>
+          <boxGeometry args={[1.0, 0.2, 2.0]} />
+          <meshStandardMaterial color="#f4c2c2" roughness={0.8} />
+        </mesh>
+
+        {/* VIP Cabin Room Details (Right side Arch 3) */}
+        <Vanity position={[5.0, 0, -5.5]} rotation={-Math.PI / 2} />
+        <VelvetChair
+          position={[3.8, 0, -5.5]}
+          rotation={-Math.PI / 2}
+          color="#3a1a22"
+        />
+
+        {/* --- LOUNGE AREA (Corridor end, z = -11.5) --- */}
+        <LoungeSofa position={[0, 0, -11.5]} rotation={0} />
+        <LoungeSofa position={[-4.5, 0, -9.5]} rotation={Math.PI / 2} />
 
         {/* Interactive Hotspots (Only visible when user scrolled past entrance facade) */}
         {scroll > 0.2 &&

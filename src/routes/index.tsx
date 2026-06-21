@@ -50,8 +50,23 @@ const CHAPTERS = [
   },
   {
     eyebrow: "Chapter VI",
-    title: "The Lounge & Apothecary",
-    body: "A quiet sanctuary at the end of the passage. Serums, oils & elixirs orbit a cozy velvet sofa.",
+    title: "Apothecary Showcase",
+    body: "A holographic vitrine of Provence botanical elixirs, serums, and oils on your right.",
+  },
+  {
+    eyebrow: "Chapter VII",
+    title: "Therapy Sanctuary",
+    body: "Rejuvenating head spas, scalp detox rituals, and organic oil infusions behind the third left arch.",
+  },
+  {
+    eyebrow: "Chapter VIII",
+    title: "VIP Suite",
+    body: "A private studio suite for exclusive foot therapy, pedicures, and custom styling on your right.",
+  },
+  {
+    eyebrow: "Chapter IX",
+    title: "The Lounge & Rituals",
+    body: "A quiet sanctuary at the end of the passage. Unwind on a plush velvet sofa with house elixirs.",
   },
 ];
 
@@ -178,13 +193,13 @@ function Index() {
                 <p className="text-[0.6rem] tracking-[0.4em] uppercase text-gold">
                   {c.eyebrow}
                 </p>
-                <h2 className="mt-3 font-display text-4xl text-foreground">
+                <h2 className="mt-3 font-display text-4xl text-white">
                   {c.title}
                 </h2>
-                <p className="mt-4 text-xs sm:text-sm leading-relaxed text-foreground/85">
+                <p className="mt-4 text-xs sm:text-sm leading-relaxed text-white/95">
                   {c.body}
                 </p>
-                <div className="hairline mt-6 pt-4 text-[0.6rem] tracking-[0.35em] uppercase text-muted-foreground">
+                <div className="hairline mt-6 pt-4 text-[0.6rem] tracking-[0.35em] uppercase text-white/70">
                   {String(i + 1).padStart(2, "0")} /{" "}
                   {String(CHAPTERS.length).padStart(2, "0")}
                 </div>
@@ -206,64 +221,83 @@ function Index() {
               Rituals of the house.
             </h2>
             <p className="mt-4 max-w-xl text-sm text-muted-foreground reveal delay-200">
-              Four ateliers, one philosophy: time, taken slowly. Tap any room
+              Six ateliers, one philosophy: time, taken slowly. Tap any room
               above, or browse below.
             </p>
 
             <div className="mt-16 grid gap-px bg-blush-pink/20 sm:grid-cols-2">
-              {(["hair", "nails", "facial", "product"] as HotspotId[]).map(
-                (id, idx) => {
-                  const meta = {
-                    hair: {
-                      t: "Hair Atelier",
-                      s: "From ₹4,500",
-                      d: "Cuts, color, blow-outs.",
-                    },
-                    nails: {
-                      t: "Nails Bar",
-                      s: "From ₹2,200",
-                      d: "Manicure, pedicure, art.",
-                    },
-                    facial: {
-                      t: "Facial Suite",
-                      s: "From ₹6,500",
-                      d: "Bespoke skincare protocols.",
-                    },
-                    product: {
-                      t: "Apothecary",
-                      s: "From ₹2,800",
-                      d: "Serums, oils, elixirs.",
-                    },
-                  }[id];
-                  const delayClass = [
-                    "",
-                    "delay-100",
-                    "delay-200",
-                    "delay-300",
-                  ][idx];
-                  return (
-                    <button
-                      key={id}
-                      onClick={() => setOpen(id)}
-                      className={`group relative bg-[oklch(0.12_0.005_60)] p-10 text-left transition hover:bg-[oklch(0.16_0.006_60)] hover:-translate-y-1 hover:shadow-luxe reveal ${delayClass}`}
-                    >
-                      <p className="text-[0.6rem] tracking-[0.4em] uppercase text-blush">
-                        {meta.s}
-                      </p>
-                      <h3 className="mt-3 font-display text-3xl">{meta.t}</h3>
-                      <p className="mt-2 text-sm text-muted-foreground">
-                        {meta.d}
-                      </p>
-                      <span className="mt-8 inline-flex items-center gap-2 text-[0.65rem] tracking-[0.35em] uppercase text-foreground transition group-hover:text-blush">
-                        View & Book{" "}
-                        <span className="transition-transform group-hover:translate-x-1">
-                          →
-                        </span>
+              {(
+                [
+                  "hair",
+                  "nails",
+                  "facial",
+                  "product",
+                  "treatment",
+                  "vip",
+                ] as HotspotId[]
+              ).map((id, idx) => {
+                const meta = {
+                  hair: {
+                    t: "Hair Atelier",
+                    s: "From ₹4,500",
+                    d: "Cuts, color, blow-outs.",
+                  },
+                  nails: {
+                    t: "Nails Bar",
+                    s: "From ₹2,200",
+                    d: "Manicure, pedicure, art.",
+                  },
+                  facial: {
+                    t: "Facial Suite",
+                    s: "From ₹6,500",
+                    d: "Bespoke skincare protocols.",
+                  },
+                  product: {
+                    t: "Apothecary",
+                    s: "From ₹2,800",
+                    d: "Serums, oils, elixirs.",
+                  },
+                  treatment: {
+                    t: "Therapy Sanctuary",
+                    s: "From ₹4,200",
+                    d: "Rejuvenating head spa & oil therapies.",
+                  },
+                  vip: {
+                    t: "VIP Suite",
+                    s: "From ₹7,500",
+                    d: "Private pedicure & exclusive styling.",
+                  },
+                }[id];
+                const delayClass = [
+                  "",
+                  "delay-100",
+                  "delay-200",
+                  "delay-300",
+                  "delay-150",
+                  "delay-250",
+                ][idx];
+                return (
+                  <button
+                    key={id}
+                    onClick={() => setOpen(id)}
+                    className={`group relative bg-[oklch(0.12_0.005_60)] p-10 text-left transition hover:bg-[oklch(0.16_0.006_60)] hover:-translate-y-1 hover:shadow-luxe reveal ${delayClass}`}
+                  >
+                    <p className="text-[0.6rem] tracking-[0.4em] uppercase text-blush">
+                      {meta.s}
+                    </p>
+                    <h3 className="mt-3 font-display text-3xl">{meta.t}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      {meta.d}
+                    </p>
+                    <span className="mt-8 inline-flex items-center gap-2 text-[0.65rem] tracking-[0.35em] uppercase text-foreground transition group-hover:text-blush">
+                      View & Book{" "}
+                      <span className="transition-transform group-hover:translate-x-1">
+                        →
                       </span>
-                    </button>
-                  );
-                },
-              )}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </section>
