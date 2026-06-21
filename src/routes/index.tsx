@@ -25,33 +25,33 @@ export const Route = createFileRoute("/")({
 const CHAPTERS = [
   {
     eyebrow: "Chapter I",
-    title: "Approach",
-    body: "Brushed brass doors part to reveal a sanctuary cast in candlelight and marble.",
+    title: "The Entrance",
+    body: "Double pink doors swing inward, welcoming you from the street into a realm of luxury.",
   },
   {
     eyebrow: "Chapter II",
-    title: "Foyer",
-    body: "Hand-bottled elixirs orbit the reception in a quiet, holographic ballet.",
+    title: "The Grand Passage",
+    body: "Wander down the long corridor, cast in warm light rings and polished white marble.",
   },
   {
     eyebrow: "Chapter III",
     title: "Hair Atelier",
-    body: "Master stylists at private velvet vanities. A scissor's hush, a couture finish.",
+    body: "Master stylists at private vanities behind the first glass archway. A scissor's hush, a couture finish.",
   },
   {
     eyebrow: "Chapter IV",
     title: "Nails Bar",
-    body: "Pastel rose lacquer, hand-painted on a champagne-marble counter.",
+    body: "Pastel rose lacquer, hand-painted on a champagne-marble counter behind the opposite arch.",
   },
   {
     eyebrow: "Chapter V",
     title: "Facial Suite",
-    body: "Bespoke protocols beneath warm gold light. Skin, restored to first light.",
+    body: "Bespoke protocols beneath warm pink light. Skin, restored to first light.",
   },
   {
     eyebrow: "Chapter VI",
-    title: "VIP Chamber",
-    body: "By appointment only. A private apothecary, your name etched in brass.",
+    title: "The Lounge & Apothecary",
+    body: "A quiet sanctuary at the end of the passage. Serums, oils & elixirs orbit a cozy velvet sofa.",
   },
 ];
 
@@ -90,11 +90,15 @@ function Index() {
             </div>
           }
         >
-          <SalonScene scroll={cameraScroll} onHotspot={setOpen} />
+          <SalonScene
+            scroll={cameraScroll}
+            activeRoom={open}
+            onHotspot={setOpen}
+          />
         </Suspense>
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,oklch(0.08_0.005_60/0.9))]" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+        {/* Soft centered vignette and subtle top/bottom gradients for contrast */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(14,12,11,0.65))]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/50" />
       </div>
 
       {/* Top nav */}
@@ -129,36 +133,28 @@ function Index() {
       {/* Scroll content overlays */}
       <main className="relative z-10">
         {/* HERO */}
-        <section className="relative flex min-h-screen items-end px-6 pb-28 sm:px-16">
-          <div className="max-w-xl">
-            <p className="text-[0.7rem] tracking-[0.5em] uppercase text-gold reveal-instant text-shadow-luxe">
-              A Virtual Salon
+        <section className="relative flex min-h-screen items-center justify-center text-center px-6 pb-16 sm:px-16">
+          <div className="max-w-2xl flex flex-col items-center">
+            <p className="text-[0.65rem] tracking-[0.5em] uppercase text-blush reveal-instant text-shadow-luxe font-semibold">
+              GraceAndGo Salon
             </p>
-            <h1 className="mt-6 font-display text-5xl leading-[1.05] sm:text-7xl reveal-instant delay-instant-100 text-shadow-luxe">
-              An hour inside{" "}
-              <span className="italic text-blush-gold-gradient">
-                GraceAndGo
-              </span>
-              .
+            <h1 className="mt-6 font-display text-6xl leading-[1.05] sm:text-8xl reveal-instant delay-instant-100 text-shadow-luxe tracking-[0.05em]">
+              GRACE <span className="italic text-blush-gold-gradient">&</span>{" "}
+              GO
             </h1>
-            <p className="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base reveal-instant delay-instant-200 text-shadow-luxe">
-              Step from the street into our atelier. Wander the floor, meet the
-              artisans, and reserve your ritual — all without leaving your seat.
+            <p className="mt-4 text-[0.7rem] tracking-[0.6em] uppercase text-muted-foreground reveal-instant delay-instant-200 text-shadow-luxe font-medium">
+              PARIS · TOKYO · NEW YORK
             </p>
-            <div className="mt-10 flex flex-wrap items-center gap-4 reveal-instant delay-instant-300">
+            <div className="mt-12 reveal-instant delay-instant-300">
               <a
                 href="#tour"
-                className="group inline-flex items-center gap-3 rounded-sm bg-blush-gold-gradient px-6 py-3 text-xs tracking-[0.35em] uppercase text-[oklch(0.14_0.005_60)] shadow-soft transition hover:brightness-110"
+                className="group inline-flex items-center justify-center gap-2 rounded-full border border-blush-pink/60 bg-black/40 hover:bg-blush-pink/15 px-8 py-3.5 text-xs font-semibold tracking-[0.4em] uppercase text-blush shadow-luxe transition-all duration-300 hover:scale-105"
               >
-                Begin the Tour
-                <span className="transition group-hover:translate-x-1">↓</span>
+                STEP INSIDE
+                <span className="transition-transform duration-300 group-hover:translate-y-0.5">
+                  ✧
+                </span>
               </a>
-              <button
-                onClick={() => setOpen("product")}
-                className="text-xs tracking-[0.35em] uppercase text-muted-foreground transition hover:text-gold text-shadow-luxe"
-              >
-                View Apothecary →
-              </button>
             </div>
           </div>
 
