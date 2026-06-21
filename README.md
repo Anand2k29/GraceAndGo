@@ -1,4 +1,4 @@
-# ✨ Maison Lumière — Virtual Luxury Beauty Salon
+# ✨ GraceAndGo — Virtual Luxury Beauty Salon
 
 > An immersive 3D virtual tour of a five-star beauty salon. Wander the floor, meet the artisans, and book your ritual — all from your browser.
 
@@ -12,42 +12,42 @@
 
 ## 🏛️ Overview
 
-**Maison Lumière** is a cinematic, scroll-driven virtual salon experience built with modern web technologies. Users explore a fully 3D-rendered luxury beauty salon, browse services across four ateliers, and complete a multi-step booking flow — all within a single-page application.
+**GraceAndGo** is a cinematic, scroll-driven virtual salon experience built with modern web technologies. Users explore a fully 3D-rendered luxury beauty salon, browse services across four ateliers, and complete a multi-step booking flow — all within a single-page application.
 
 ### Key Features
 
-| Feature | Description |
-|---|---|
-| 🎥 **3D Virtual Tour** | Scroll-driven camera rig navigates through a complete salon scene built with React Three Fiber & Drei |
-| 💫 **Cinematic Animations** | Scroll-reveal transitions, staggered fades, and a gentle camera sway for a premium feel |
-| 💇 **Four Ateliers** | Hair Atelier · Nails Bar · Facial Suite · Apothecary — each with curated service menus |
-| 📋 **Multi-Step Booking** | Select a service → pick date, time & artisan → enter contact info → receive confirmation |
-| 📱 **Fully Responsive** | Mobile-first design with scrollable modals and touch-friendly interactions |
-| 🔔 **Toast Notifications** | Real-time feedback via Sonner toasts on booking success/errors |
-| ⚡ **SSR + Edge Ready** | TanStack Start with Nitro for server-side rendering, deployed to Vercel |
+| Feature                     | Description                                                                                           |
+| --------------------------- | ----------------------------------------------------------------------------------------------------- |
+| 🎥 **3D Virtual Tour**      | Scroll-driven camera rig navigates through a complete salon scene built with React Three Fiber & Drei |
+| 💫 **Cinematic Animations** | Scroll-reveal transitions, staggered fades, and a gentle camera sway for a premium feel               |
+| 💇 **Four Ateliers**        | Hair Atelier · Nails Bar · Facial Suite · Apothecary — each with curated service menus                |
+| 📋 **Multi-Step Booking**   | Select a service → pick date, time & artisan → enter contact info → receive confirmation              |
+| 📱 **Fully Responsive**     | Mobile-first design with scrollable modals and touch-friendly interactions                            |
+| 🔔 **Toast Notifications**  | Real-time feedback via Sonner toasts on booking success/errors                                        |
+| ⚡ **SSR + Edge Ready**     | TanStack Start with Nitro for server-side rendering, deployed to Vercel                               |
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Layer | Technology |
-|---|---|
-| **Framework** | [TanStack Start](https://tanstack.com/start) (React meta-framework) |
-| **UI Library** | [React 19](https://react.dev) |
-| **3D Engine** | [Three.js](https://threejs.org) via [@react-three/fiber](https://docs.pmnd.rs/react-three-fiber) & [@react-three/drei](https://github.com/pmndrs/drei) |
-| **Styling** | [Tailwind CSS v4](https://tailwindcss.com) + custom OKLCH design tokens |
-| **UI Components** | [Radix UI](https://www.radix-ui.com) primitives (shadcn/ui pattern) |
-| **Bundler** | [Vite 8](https://vite.dev) |
-| **Server** | [Nitro](https://nitro.unjs.io) (Vercel preset) |
-| **Notifications** | [Sonner](https://sonner.emilkowal.ski) |
-| **Typography** | Cormorant Garamond + Inter (Google Fonts) |
+| Layer             | Technology                                                                                                                                             |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Framework**     | [TanStack Start](https://tanstack.com/start) (React meta-framework)                                                                                    |
+| **UI Library**    | [React 19](https://react.dev)                                                                                                                          |
+| **3D Engine**     | [Three.js](https://threejs.org) via [@react-three/fiber](https://docs.pmnd.rs/react-three-fiber) & [@react-three/drei](https://github.com/pmndrs/drei) |
+| **Styling**       | [Tailwind CSS v4](https://tailwindcss.com) + custom OKLCH design tokens                                                                                |
+| **UI Components** | [Radix UI](https://www.radix-ui.com) primitives (shadcn/ui pattern)                                                                                    |
+| **Bundler**       | [Vite 8](https://vite.dev)                                                                                                                             |
+| **Server**        | [Nitro](https://nitro.unjs.io) (Vercel preset)                                                                                                         |
+| **Notifications** | [Sonner](https://sonner.emilkowal.ski)                                                                                                                 |
+| **Typography**    | Cormorant Garamond + Inter (Google Fonts)                                                                                                              |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-d:\Beauty
+GraceAndGo/
 ├── src/
 │   ├── components/
 │   │   ├── salon/
@@ -90,8 +90,8 @@ d:\Beauty
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
-cd Beauty
+git clone https://github.com/Anand2k29/GraceAndGo.git
+cd GraceAndGo
 
 # Install dependencies
 npm install
@@ -109,7 +109,7 @@ The app will be available at **http://localhost:8080/**
 ### Production Build
 
 ```bash
-# Build for production (outputs to .output/)
+# Build for production (outputs to .vercel/output/)
 npm run build
 
 # Preview the production build locally
@@ -144,7 +144,7 @@ vercel
 
 ### Option 2: Git Integration
 
-1. Push your code to a GitHub/GitLab/Bitbucket repository
+1. Push your code to GitHub: [github.com/Anand2k29/GraceAndGo](https://github.com/Anand2k29/GraceAndGo)
 2. Go to [vercel.com/new](https://vercel.com/new)
 3. Import your repository
 4. Vercel will auto-detect the configuration from `vercel.json`
@@ -171,6 +171,7 @@ The booking system is a 3-step wizard inside the `ServiceOverlay` modal:
 ```
 
 Accessible from:
+
 - **"Book Now"** button inside any service overlay
 - **"Reserve"** button in the top navigation bar
 - **Service cards** in the Services grid section
@@ -183,13 +184,13 @@ Accessible from:
 
 The visual identity uses a carefully curated **OKLCH color palette**:
 
-| Token | Value | Usage |
-|---|---|---|
-| `--background` | `oklch(0.14 0.005 60)` | Onyx base |
-| `--foreground` | `oklch(0.96 0.01 80)` | Warm white text |
-| `--primary` | `oklch(0.82 0.09 85)` | Champagne gold — CTAs, accents |
-| `--accent` | `oklch(0.88 0.05 25)` | Pastel rose — highlights |
-| `--muted-foreground` | `oklch(0.72 0.015 70)` | Secondary text |
+| Token                | Value                  | Usage                          |
+| -------------------- | ---------------------- | ------------------------------ |
+| `--background`       | `oklch(0.14 0.005 60)` | Onyx base                      |
+| `--foreground`       | `oklch(0.96 0.01 80)`  | Warm white text                |
+| `--primary`          | `oklch(0.82 0.09 85)`  | Champagne gold — CTAs, accents |
+| `--accent`           | `oklch(0.88 0.05 25)`  | Pastel rose — highlights       |
+| `--muted-foreground` | `oklch(0.72 0.015 70)` | Secondary text                 |
 
 Custom utilities: `.text-gold`, `.bg-gold-gradient`, `.shadow-luxe`, `.hairline`, `.grain`, `.shimmer`, `.float`, `.reveal`
 
@@ -202,5 +203,5 @@ This project is private and not licensed for redistribution.
 ---
 
 <p align="center">
-  <em>Maison Lumière — Where every detail is a ritual.</em>
+  <em>GraceAndGo — Your Beauty, Our Passion.</em>
 </p>

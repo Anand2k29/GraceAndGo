@@ -10,7 +10,7 @@ const SalonScene = lazy(() => import("@/components/salon/SalonScene"));
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Maison Lumière — Virtual Luxury Beauty Salon" },
+      { title: "GraceAndGo — Virtual Luxury Beauty Salon" },
       {
         name: "description",
         content:
@@ -86,7 +86,7 @@ function Index() {
         <Suspense
           fallback={
             <div className="flex h-full items-center justify-center text-xs tracking-[0.3em] uppercase text-muted-foreground">
-              Entering Maison Lumière…
+              Entering GraceAndGo…
             </div>
           }
         >
@@ -99,10 +99,10 @@ function Index() {
       <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-6 py-5 sm:px-12">
         <div>
           <p className="font-display text-xl tracking-wide text-foreground">
-            Maison <span className="text-gold">Lumière</span>
+            Grace<span className="text-gold">AndGo</span>
           </p>
           <p className="text-[0.55rem] tracking-[0.4em] uppercase text-muted-foreground">
-            Est. Paris · MMXIV
+            Your Beauty, Our Passion
           </p>
         </div>
         <nav className="hidden items-center gap-8 text-[0.65rem] tracking-[0.35em] uppercase text-muted-foreground sm:flex">
@@ -134,7 +134,7 @@ function Index() {
             </p>
             <h1 className="mt-6 font-display text-5xl leading-[1.05] sm:text-7xl reveal delay-100">
               An hour inside{" "}
-              <span className="italic text-gold-gradient">Maison Lumière</span>.
+              <span className="italic text-gold-gradient">GraceAndGo</span>.
             </h1>
             <p className="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base reveal delay-200">
               Step from the street into our atelier. Wander the floor, meet the
@@ -334,13 +334,13 @@ function Index() {
           <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">
             <div>
               <p className="font-display text-2xl">
-                Maison <span className="text-gold">Lumière</span>
+                Grace<span className="text-gold">AndGo</span>
               </p>
               <p className="mt-2 text-xs tracking-[0.3em] uppercase text-muted-foreground">
-                14 Rue de Sèvres · Paris VI
+                Premium Virtual Salon Experience
               </p>
               <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground">
-                By appointment · +33 1 42 22 00 00
+                By appointment · hello@graceandgo.com
               </p>
             </div>
             <p className="text-[0.6rem] tracking-[0.4em] uppercase text-muted-foreground">

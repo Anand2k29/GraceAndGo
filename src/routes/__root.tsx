@@ -86,13 +86,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         {
           name: "description",
           content:
-            "Step inside Maison Lumière: an immersive 3D virtual tour of a five-star beauty salon. Book hair, nails, and skincare with cinematic ease.",
+            "Step inside GraceAndGo: an immersive 3D virtual tour of a five-star beauty salon. Book hair, nails, and skincare with cinematic ease.",
         },
         { property: "og:title", content: "Grace And Go" },
         {
           property: "og:description",
           content:
-            "Step inside Maison Lumière: an immersive 3D virtual tour of a five-star beauty salon. Book hair, nails, and skincare with cinematic ease.",
+            "Step inside GraceAndGo: an immersive 3D virtual tour of a five-star beauty salon. Book hair, nails, and skincare with cinematic ease.",
         },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
@@ -100,7 +100,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         {
           name: "twitter:description",
           content:
-            "Step inside Maison Lumière: an immersive 3D virtual tour of a five-star beauty salon. Book hair, nails, and skincare with cinematic ease.",
+            "Step inside GraceAndGo: an immersive 3D virtual tour of a five-star beauty salon. Book hair, nails, and skincare with cinematic ease.",
         },
         {
           property: "og:image",

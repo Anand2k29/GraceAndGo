@@ -32,9 +32,9 @@ const DATA: Record<
     title: "Nails Bar",
     tagline: "Hand-painted artistry on champagne-marble manicure stations.",
     services: [
-      { name: "Maison Manicure", duration: "45 min", price: "$75" },
+      { name: "Grace Manicure", duration: "45 min", price: "$75" },
       { name: "Gel Sculpture", duration: "75 min", price: "$120" },
-      { name: "Pedicure Lumière", duration: "60 min", price: "$95" },
+      { name: "Pedicure Grace", duration: "60 min", price: "$95" },
       { name: "Crystal Couture Set", duration: "120 min", price: "$220" },
     ],
   },
@@ -42,7 +42,7 @@ const DATA: Record<
     title: "Facial Suite",
     tagline: "Bespoke skincare protocols in a private VIP chamber.",
     services: [
-      { name: "Lumière Glow Facial", duration: "60 min", price: "$220" },
+      { name: "Glow Facial", duration: "60 min", price: "$220" },
       { name: "Diamond Microdermabrasion", duration: "75 min", price: "$320" },
       {
         name: "LED & Cryo Ritual",
@@ -54,7 +54,7 @@ const DATA: Record<
     ],
   },
   product: {
-    title: "Maison Apothecary",
+    title: "GraceAndGo Apothecary",
     tagline: "Curated serums, oils & elixirs — bottled by hand in Provence.",
     services: [
       { name: "No.07 Radiance Serum", duration: "30 ml", price: "$185" },
@@ -225,7 +225,7 @@ export default function ServiceOverlay({
         <div className="flex items-center justify-between border-b border-[oklch(0.82_0.09_85)]/10 px-8 py-5">
           <div>
             <p className="text-[0.65rem] tracking-[0.4em] uppercase text-gold">
-              Maison Lumière
+              GraceAndGo
             </p>
             <h3 className="font-display text-2xl text-foreground mt-1">
               {d.title}
