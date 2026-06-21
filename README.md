@@ -21,9 +21,11 @@
 | 🎥 **3D Virtual Tour**      | Scroll-driven camera rig navigates through a complete salon scene built with React Three Fiber & Drei |
 | 💫 **Cinematic Animations** | Scroll-reveal transitions, staggered fades, and a gentle camera sway for a premium feel               |
 | 💇 **Four Ateliers**        | Hair Atelier · Nails Bar · Facial Suite · Apothecary — each with curated service menus                |
-| 📋 **Multi-Step Booking**   | Select a service → pick date, time & artisan → enter contact info → receive confirmation              |
+| 📋 **Multi-Step Booking**   | Select a service → pick date, time & artisan card (with roles & specialties) → confirm booking        |
+| ✍️ **Guest Ledger Reviews** | Interactive testimonials section to read reflections or submit custom star-rated reviews              |
+| 🚪 **Symmetric Facade**    | Real salon doors matching photorealistic reference details with G monogram medallion, columns, and transoms |
 | 📱 **Fully Responsive**     | Mobile-first design with scrollable modals and touch-friendly interactions                            |
-| 🔔 **Toast Notifications**  | Real-time feedback via Sonner toasts on booking success/errors                                        |
+| 🔔 **Toast Notifications**  | Real-time feedback via Sonner toasts on booking/review success & errors                               |
 | ⚡ **SSR + Edge Ready**     | TanStack Start with Nitro for server-side rendering, deployed to Vercel                               |
 
 ---
@@ -156,8 +158,9 @@ No environment variables are required for the base deployment. The app is fully 
 
 ---
 
-## 📱 Booking Flow
+## 📱 Booking & Reviews Flow
 
+### Booking Wizard
 The booking system is a 3-step wizard inside the `ServiceOverlay` modal:
 
 ```
@@ -165,18 +168,16 @@ The booking system is a 3-step wizard inside the `ServiceOverlay` modal:
 │  1. SELECT       │ ──→ │  2. DETAILS      │ ──→ │  3. CONFIRMED    │
 │                 │     │                 │     │                 │
 │  Browse & pick  │     │  Date / Time /  │     │  Confirmation   │
-│  a ritual from  │     │  Artisan select │     │  code + summary │
+│  a ritual from  │     │  Artisan Cards  │     │  code + summary │
 │  the menu       │     │  + Contact info │     │  + toast notif  │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
 ```
 
-Accessible from:
+- **Artisan Cards**: Replaced basic dropdown selects with premium selectable cards displaying employee names, roles (e.g. *Atelier Director*), and their specific specialization/specialty (e.g. *Couture precision cuts*).
+- **Access Points**: Triggered from "Book Now" buttons, navigation "Reserve" buttons, 3D hotspots, or the Services grid.
 
-- **"Book Now"** button inside any service overlay
-- **"Reserve"** button in the top navigation bar
-- **Service cards** in the Services grid section
-- **Hotspot labels** in the 3D scene
-- **Apothecary product list** items
+### Guest Ledger (Reviews)
+Guests can access the Ledger from the top navigation to read testimonials or write their own reflection (name, city, 1-5 star ratings, and review description). Submissions immediately append to the list of reflections dynamically.
 
 ---
 

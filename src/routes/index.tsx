@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { lazy, Suspense, useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 import ServiceOverlay from "@/components/salon/ServiceOverlay";
 import StorefrontOverlay from "@/components/salon/StorefrontOverlay";
 
@@ -77,6 +78,65 @@ function Index() {
   const [initialService, setInitialService] = useState<string | null>(null);
   const [isStorefrontOpen, setIsStorefrontOpen] = useState(false);
   const [hasEntered, setHasEntered] = useState(false);
+
+  // Guest Ledger State
+  const [reviews, setReviews] = useState([
+    {
+      name: "Sophia L.",
+      city: "Mumbai",
+      rating: 5,
+      comment: "An absolute sanctuary in the heart of the city. Jean-Luc's styling is pure couture.",
+      date: "Jun 2026",
+    },
+    {
+      name: "Aria M.",
+      city: "Bangalore",
+      rating: 5,
+      comment: "The Facial Suite left my skin restored to first light. The 24K Gold treatment is worth every rupee.",
+      date: "May 2026",
+    },
+    {
+      name: "Rohan D.",
+      city: "Delhi",
+      rating: 5,
+      comment: "Unparalleled nail artistry by Chloe. The crystal couture manicure was stunning.",
+      date: "Apr 2026",
+    },
+  ]);
+
+  const [newReviewName, setNewReviewName] = useState("");
+  const [newReviewCity, setNewReviewCity] = useState("");
+  const [newReviewRating, setNewReviewRating] = useState(5);
+  const [newReviewComment, setNewReviewComment] = useState("");
+
+  const handleAddReview = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newReviewName.trim() || !newReviewComment.trim()) {
+      toast.error("Please provide both your name and reflection comment.");
+      return;
+    }
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const d = new Date();
+    const dateStr = `${months[d.getMonth()]} ${d.getFullYear()}`;
+
+    setReviews([
+      {
+        name: newReviewName,
+        city: newReviewCity || "Guest",
+        rating: newReviewRating,
+        comment: newReviewComment,
+        date: dateStr,
+      },
+      ...reviews,
+    ]);
+
+    setNewReviewName("");
+    setNewReviewCity("");
+    setNewReviewRating(5);
+    setNewReviewComment("");
+
+    toast.success("Thank you! Your reflection has been recorded in our guest ledger.");
+  };
 
   const handleEnter = () => {
     setIsStorefrontOpen(true);
@@ -165,6 +225,9 @@ function Index() {
           <a className="transition hover:text-blush" href="#services">
             Services
           </a>
+          <a className="transition hover:text-blush" href="#reviews">
+            Ledger
+          </a>
           <a className="transition hover:text-blush" href="#apothecary">
             Apothecary
           </a>
@@ -178,9 +241,9 @@ function Index() {
       </header>
 
       {/* Scroll content overlays */}
-      <main className="relative z-10">
+      <main className="relative z-10 pointer-events-none">
         {/* HERO */}
-        <section className={`relative flex min-h-screen items-center justify-center text-center px-6 pb-16 sm:px-16 transition-all duration-700 ${hasEntered ? "hidden" : ""}`}>
+        <section className={`relative flex min-h-screen items-center justify-center text-center px-6 pb-16 sm:px-16 transition-all duration-700 ${hasEntered ? "hidden" : ""} pointer-events-auto`}>
           <div className="max-w-2xl flex flex-col items-center">
             <p className="text-[0.65rem] tracking-[0.5em] uppercase text-white reveal-instant text-shadow-tight font-semibold">
               GraceAndGo Salon
@@ -190,7 +253,7 @@ function Index() {
               GO
             </h1>
             <p className="mt-4 text-[0.7rem] tracking-[0.5em] uppercase text-white reveal-instant delay-instant-200 text-shadow-tight font-bold">
-              BANGLORE · MUMBAI · DELHI
+              BANGALORE · MUMBAI · DELHI
             </p>
             <div className="mt-12 reveal-instant delay-instant-300">
               <a
@@ -221,7 +284,7 @@ function Index() {
               key={c.title}
               className={`flex min-h-screen items-center px-6 sm:px-16 ${i % 2 === 0 ? "justify-start" : "justify-end"}`}
             >
-              <div className="max-w-xs sm:max-w-sm rounded-sm border border-blush-pink/20 bg-[oklch(0.12_0.005_60)]/90 p-6 sm:p-8 backdrop-blur-md shadow-luxe reveal">
+              <div className="max-w-xs sm:max-w-sm rounded-sm border border-blush-pink/20 bg-[oklch(0.12_0.005_60)]/90 p-6 sm:p-8 backdrop-blur-md shadow-luxe reveal pointer-events-auto">
                 <p className="text-[0.6rem] tracking-[0.4em] uppercase text-gold">
                   {c.eyebrow}
                 </p>
@@ -243,7 +306,7 @@ function Index() {
         {/* SERVICES GRID */}
         <section
           id="services"
-          className="relative min-h-screen bg-[oklch(0.1_0.005_60)]/85 px-6 py-32 backdrop-blur-md sm:px-16"
+          className="relative min-h-screen bg-[oklch(0.1_0.005_60)]/85 px-6 py-32 backdrop-blur-md sm:px-16 pointer-events-auto"
         >
           <div className="mx-auto max-w-5xl">
             <p className="text-[0.65rem] tracking-[0.5em] uppercase text-gold reveal">
@@ -334,10 +397,147 @@ function Index() {
           </div>
         </section>
 
+        {/* REVIEWS & GUEST LEDGER */}
+        <section
+          id="reviews"
+          className="relative min-h-screen bg-[oklch(0.12_0.005_60)]/75 px-6 py-32 backdrop-blur-md sm:px-16 border-t border-blush-pink/20 pointer-events-auto"
+        >
+          <div className="mx-auto max-w-5xl">
+            <p className="text-[0.65rem] tracking-[0.5em] uppercase text-gold reveal">
+              Guest Ledger
+            </p>
+            <h2 className="mt-4 font-display text-5xl sm:text-6xl reveal delay-100">
+              Reflections of our guests.
+            </h2>
+            <p className="mt-4 max-w-xl text-sm text-muted-foreground reveal delay-200">
+              Read experiences from those who have stepped inside GraceAndGo, or share your own reflection below.
+            </p>
+
+            <div className="mt-16 grid gap-8 md:grid-cols-2">
+              {/* Existing Reviews */}
+              <div className="space-y-6 max-h-[500px] overflow-y-auto pr-2 scrollbar-thin reveal">
+                {reviews.map((r, index) => (
+                  <div
+                    key={index}
+                    className="p-6 rounded-sm border border-blush-pink/15 bg-black/20 backdrop-blur-sm space-y-3.5 transition hover:border-gold/30 hover:bg-[oklch(0.15_0.006_60)]/40"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex gap-1">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <span
+                            key={i}
+                            className={`text-sm ${
+                              i < r.rating ? "text-[#ffd700]" : "text-muted-foreground/30"
+                            }`}
+                          >
+                            ★
+                          </span>
+                        ))}
+                      </div>
+                      <span className="text-[0.6rem] tracking-[0.2em] uppercase text-muted-foreground">
+                        {r.date}
+                      </span>
+                    </div>
+                    <p className="font-display italic text-base text-foreground leading-relaxed">
+                      "{r.comment}"
+                    </p>
+                    <p className="text-[0.65rem] tracking-[0.25em] uppercase text-gold font-semibold">
+                      — {r.name}, {r.city}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Leave a Review Form */}
+              <div className="p-8 rounded-sm border border-blush-pink/20 bg-black/30 backdrop-blur-sm shadow-soft reveal delay-150">
+                <p className="text-[0.65rem] tracking-[0.3em] uppercase text-gold mb-6 block font-semibold">
+                  Add Your Reflection
+                </p>
+                <form onSubmit={handleAddReview} className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-[0.55rem] tracking-[0.2em] uppercase text-muted-foreground block mb-1.5 font-bold">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Your Name"
+                        value={newReviewName}
+                        onChange={(e) => setNewReviewName(e.target.value)}
+                        className="w-full bg-black/20 border border-blush-pink/15 rounded-sm p-3 text-xs tracking-wider text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-gold"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[0.55rem] tracking-[0.2em] uppercase text-muted-foreground block mb-1.5 font-bold">
+                        City
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Bangalore"
+                        value={newReviewCity}
+                        onChange={(e) => setNewReviewCity(e.target.value)}
+                        className="w-full bg-black/20 border border-blush-pink/15 rounded-sm p-3 text-xs tracking-wider text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-gold"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[0.55rem] tracking-[0.2em] uppercase text-muted-foreground block mb-1.5 font-bold">
+                      Rating
+                    </label>
+                    <div className="flex gap-2.5">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setNewReviewRating(star)}
+                          className="text-2xl transition hover:scale-110 focus:outline-none cursor-pointer"
+                        >
+                          <span
+                            className={
+                              star <= newReviewRating ? "text-[#ffd700]" : "text-muted-foreground/30"
+                            }
+                          >
+                            ★
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[0.55rem] tracking-[0.2em] uppercase text-muted-foreground block mb-1.5 font-bold">
+                      Your Reflection
+                    </label>
+                    <textarea
+                      required
+                      rows={3}
+                      placeholder="Share your experience at GraceAndGo..."
+                      value={newReviewComment}
+                      onChange={(e) => setNewReviewComment(e.target.value)}
+                      className="w-full bg-black/20 border border-blush-pink/15 rounded-sm p-3 text-xs tracking-wider text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-gold resize-none"
+                    />
+                  </div>
+
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      className="w-full overflow-hidden rounded-sm bg-gold-gradient py-3.5 text-xs font-semibold tracking-[0.3em] uppercase text-[oklch(0.14_0.005_60)] hover:brightness-110 shadow-soft cursor-pointer transition-all duration-300"
+                    >
+                      Publish Reflection
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* APOTHECARY */}
         <section
           id="apothecary"
-          className="relative min-h-screen px-6 py-32 sm:px-16"
+          className="relative min-h-screen px-6 py-32 sm:px-16 pointer-events-auto"
         >
           <div className="mx-auto grid max-w-5xl items-center gap-16 sm:grid-cols-2">
             <div className="reveal">
@@ -397,7 +597,7 @@ function Index() {
         </section>
 
         {/* FOOTER */}
-        <footer className="relative border-t border-blush-pink/20 bg-[oklch(0.09_0.005_60)] px-6 py-16 sm:px-16 reveal">
+        <footer className="relative border-t border-blush-pink/20 bg-[oklch(0.09_0.005_60)] px-6 py-16 sm:px-16 reveal pointer-events-auto">
           <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">
             <div>
               <p className="font-display text-2xl">

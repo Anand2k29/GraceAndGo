@@ -118,38 +118,44 @@ const DATA: Record<
   },
 };
 
-const ARTISANS: Record<HotspotId, string[]> = {
+interface Artisan {
+  name: string;
+  role: string;
+  specialty: string;
+}
+
+const ARTISANS: Record<HotspotId, Artisan[]> = {
   hair: [
-    "Any Master Stylist",
-    "Jean-Luc (Atelier Director)",
-    "Elise (Senior Colorist)",
-    "Marc (Creative Designer)",
+    { name: "Any Master Stylist", role: "Unassigned", specialty: "Best available artisan for selected service" },
+    { name: "Jean-Luc", role: "Atelier Director", specialty: "Couture precision cuts & styling" },
+    { name: "Elise", role: "Senior Colorist", specialty: "Balayage composition & color transformations" },
+    { name: "Marc", role: "Creative Designer", specialty: "Avant-garde design & bridal packages" },
   ],
   nails: [
-    "Any Nail Artisan",
-    "Chloe (Senior Tech)",
-    "Sasha (Nail Artist)",
-    "Lili (Manicurist)",
+    { name: "Any Nail Artisan", role: "Unassigned", specialty: "Best available artisan for selected service" },
+    { name: "Chloe", role: "Senior Nail Tech", specialty: "Crystal couture & gel sculptures" },
+    { name: "Sasha", role: "Nail Artist", specialty: "Hand-painted organic art & decals" },
+    { name: "Lili", role: "Manicurist", specialty: "Grace signature manicure & pedicure" },
   ],
   facial: [
-    "Any Esthetician",
-    "Madame Renée (Skin Therapist)",
-    "Dr. Aris (Bespoke Protocols)",
+    { name: "Any Esthetician", role: "Unassigned", specialty: "Best available artisan for selected service" },
+    { name: "Madame Renée", role: "Senior Esthetician", specialty: "24K Gold renewal & LED cryo lifting" },
+    { name: "Dr. Aris", role: "Skin Specialist", specialty: "Bespoke skincare protocols & microdermabrasion" },
   ],
   product: [
-    "Any Perfumer",
-    "Pierre (House Alchemist)",
-    "Sophie (Apothecary Curator)",
+    { name: "Any Perfumer", role: "Unassigned", specialty: "Best available expert" },
+    { name: "Pierre", role: "House Alchemist", specialty: "Provence botanical blending & serums" },
+    { name: "Sophie", role: "Apothecary Curator", specialty: "Organic oil infusions & quartz mists" },
   ],
   treatment: [
-    "Any Therapy Specialist",
-    "Siddharth (Ayurvedic Master)",
-    "Priya (Scalp Therapist)",
+    { name: "Any Therapy Specialist", role: "Unassigned", specialty: "Best available artisan for selected service" },
+    { name: "Siddharth", role: "Ayurvedic Master", specialty: "Scalp detox & restorative herb infusions" },
+    { name: "Priya", role: "Scalp Therapist", specialty: "Signature head spas & head relaxation" },
   ],
   vip: [
-    "Any VIP Artisan",
-    "Rohan (Celebrity Stylist)",
-    "Ananya (Executive Pedicurist)",
+    { name: "Any VIP Artisan", role: "Unassigned", specialty: "Best available artisan for selected service" },
+    { name: "Rohan", role: "Celebrity Stylist", specialty: "VIP Champagne styling & custom cuts" },
+    { name: "Ananya", role: "Executive Pedicurist", specialty: "Royal pedicure & manicure duo rituals" },
   ],
 };
 
@@ -239,7 +245,7 @@ export default function ServiceOverlay({
         setSelectedService(found);
         setSelectedDate(localDays[0]?.raw || "");
         setSelectedTime(TIME_SLOTS[0] || "");
-        setSelectedArtisan(localArtisans[0] || "");
+        setSelectedArtisan(localArtisans[0]?.name || "");
         setBookingStep("details");
         return;
       }
@@ -271,7 +277,7 @@ export default function ServiceOverlay({
     if (selectedService) {
       setSelectedDate(days[0].raw);
       setSelectedTime(TIME_SLOTS[0]);
-      setSelectedArtisan(artisansList[0]);
+      setSelectedArtisan(artisansList[0]?.name || "");
       setBookingStep("details");
     }
   };
@@ -475,24 +481,39 @@ export default function ServiceOverlay({
 
               {/* 3. Artisan Selection */}
               <div className="space-y-2">
-                <label className="text-[0.65rem] tracking-[0.3em] uppercase text-gold">
+                <label className="text-[0.65rem] tracking-[0.3em] uppercase text-gold block">
                   3. Select Preferred Artisan
                 </label>
-                <select
-                  value={selectedArtisan}
-                  onChange={(e) => setSelectedArtisan(e.target.value)}
-                  className="w-full bg-black/30 border border-blush-pink/20 rounded-sm p-3 text-xs tracking-wider text-foreground focus:outline-none focus:border-gold"
-                >
-                  {artisansList.map((artisan) => (
-                    <option
-                      key={artisan}
-                      value={artisan}
-                      className="bg-[oklch(0.14_0.005_60)] text-foreground"
-                    >
-                      {artisan}
-                    </option>
-                  ))}
-                </select>
+                <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1 scrollbar-thin">
+                  {artisansList.map((artisan) => {
+                    const isSelected = selectedArtisan === artisan.name;
+                    return (
+                      <button
+                        key={artisan.name}
+                        type="button"
+                        onClick={() => setSelectedArtisan(artisan.name)}
+                        className={`w-full text-left flex flex-col p-3 rounded-sm border transition-all duration-300 cursor-pointer ${
+                          isSelected
+                            ? "border-gold bg-blush-pink/15 text-foreground shadow-soft"
+                            : "border-blush-pink/10 bg-black/20 hover:border-gold/30 hover:bg-black/30"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between w-full">
+                          <span className="font-display text-sm text-foreground font-semibold flex items-center gap-2">
+                            {isSelected && <span className="text-gold text-[10px]">●</span>}
+                            {artisan.name}
+                          </span>
+                          <span className="text-[0.55rem] tracking-wider uppercase text-gold font-bold">
+                            {artisan.role}
+                          </span>
+                        </div>
+                        <p className="text-[0.65rem] text-muted-foreground mt-1">
+                          {artisan.specialty}
+                        </p>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* 4. Client Information */}

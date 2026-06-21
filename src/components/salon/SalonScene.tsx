@@ -149,9 +149,9 @@ function Door({ left, angle }: { left: boolean; angle: number }) {
     <meshStandardMaterial color="#ffd700" metalness={0.95} roughness={0.05} />
   );
 
-  // Rich rose-pink door material with satin sheen
+  // Rich rose-pink door material matching the landing page door top gradient pink
   const blushPinkMaterial = (
-    <meshStandardMaterial color="#d4707b" metalness={0.15} roughness={0.35} />
+    <meshStandardMaterial color="#f5b0bc" metalness={0.15} roughness={0.35} />
   );
 
   return (
@@ -214,27 +214,73 @@ function Door({ left, angle }: { left: boolean; angle: number }) {
         {goldMaterial}
       </mesh>
 
-      {/* Ornate Gold Medallion / Center Scroll (placed at the bottom of the upper panel) */}
-      <mesh position={[pivotOffset, 1.3, 0.062]}>
-        <boxGeometry args={[0.3, 0.1, 0.01]} />
+      {/* Ornate Top Crest (Baroque scroll above upper frame) */}
+      <mesh position={[pivotOffset, 3.36, 0.06]}>
+        <boxGeometry args={[0.4, 0.04, 0.015]} />
         {goldMaterial}
       </mesh>
-      <mesh position={[pivotOffset, 1.3, 0.067]} rotation={[0, 0, Math.PI / 4]}>
-        <boxGeometry args={[0.12, 0.12, 0.01]} />
+      <mesh position={[pivotOffset, 3.42, 0.065]} rotation={[0, 0, Math.PI / 4]}>
+        <boxGeometry args={[0.08, 0.08, 0.015]} />
+        {goldMaterial}
+      </mesh>
+      <mesh position={[pivotOffset - 0.2, 3.36, 0.06]} rotation={[0, 0, -Math.PI / 12]}>
+        <boxGeometry args={[0.15, 0.02, 0.015]} />
+        {goldMaterial}
+      </mesh>
+      <mesh position={[pivotOffset + 0.2, 3.36, 0.06]} rotation={[0, 0, Math.PI / 12]}>
+        <boxGeometry args={[0.15, 0.02, 0.015]} />
+        {goldMaterial}
+      </mesh>
+
+      {/* Ornate Bottom Crest (Baroque scroll below upper frame) */}
+      <mesh position={[pivotOffset, 1.24, 0.06]}>
+        <boxGeometry args={[0.4, 0.04, 0.015]} />
+        {goldMaterial}
+      </mesh>
+      <mesh position={[pivotOffset, 1.18, 0.065]} rotation={[0, 0, Math.PI / 4]}>
+        <boxGeometry args={[0.08, 0.08, 0.015]} />
+        {goldMaterial}
+      </mesh>
+      <mesh position={[pivotOffset - 0.2, 1.24, 0.06]} rotation={[0, 0, Math.PI / 12]}>
+        <boxGeometry args={[0.15, 0.02, 0.015]} />
+        {goldMaterial}
+      </mesh>
+      <mesh position={[pivotOffset + 0.2, 1.24, 0.06]} rotation={[0, 0, -Math.PI / 12]}>
+        <boxGeometry args={[0.15, 0.02, 0.015]} />
+        {goldMaterial}
+      </mesh>
+
+      {/* Ornate Middle Medallion (above lower frame) */}
+      <mesh position={[pivotOffset, 1.05, 0.06]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.08, 0.08, 0.02, 16]} />
+        {goldMaterial}
+      </mesh>
+      <mesh position={[pivotOffset, 1.05, 0.07]}>
+        <sphereGeometry args={[0.04, 16, 16]} />
+        {goldMaterial}
+      </mesh>
+
+      {/* Split Monogram Medallion on Center Seam */}
+      <mesh position={[left ? 1.25 : -1.25, 3.42, 0.042]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.12, 0.12, 0.02, 32]} />
+        <meshStandardMaterial color="#1a1412" metalness={0.5} roughness={0.5} />
+      </mesh>
+      <mesh position={[left ? 1.25 : -1.25, 3.42, 0.053]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.10, 0.10, 0.01, 32]} />
         {goldMaterial}
       </mesh>
 
       {/* Gold Handles */}
-      <mesh position={[left ? 1.15 : -1.15, 1.8, 0.08]} castShadow>
+      <mesh position={[left ? 1.18 : -1.18, 1.8, 0.08]} castShadow>
         <cylinderGeometry args={[0.02, 0.02, 0.7, 16]} />
         {goldMaterial}
       </mesh>
       {/* Handle brackets */}
-      <mesh position={[left ? 1.15 : -1.15, 2.1, 0.045]} rotation={[Math.PI / 2, 0, 0]}>
+      <mesh position={[left ? 1.18 : -1.18, 2.1, 0.045]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[0.015, 0.015, 0.08, 8]} />
         {goldMaterial}
       </mesh>
-      <mesh position={[left ? 1.15 : -1.15, 1.5, 0.045]} rotation={[Math.PI / 2, 0, 0]}>
+      <mesh position={[left ? 1.18 : -1.18, 1.5, 0.045]} rotation={[Math.PI / 2, 0, 0]}>
         <cylinderGeometry args={[0.015, 0.015, 0.08, 8]} />
         {goldMaterial}
       </mesh>
@@ -248,16 +294,16 @@ function Door({ left, angle }: { left: boolean; angle: number }) {
         distanceFactor={1.5}
       >
         <div 
-          className="font-display select-none font-bold tracking-[0.15em] text-center"
+          className="font-display select-none font-medium tracking-[0.1em] text-center italic"
           style={{
-            color: "#d4af37",
+            color: "#dfba59",
             fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "24px",
-            textShadow: "1px 1px 2px rgba(0,0,0,0.35), 0 0 8px rgba(212,175,55,0.45)",
+            fontSize: "26px",
+            textShadow: "1px 1px 2px rgba(0,0,0,0.25), 0 0 4px rgba(223,186,89,0.3)",
             whiteSpace: "nowrap"
           }}
         >
-          {left ? "GRACE" : "& GO"}
+          {left ? "Grace" : "& Go"}
         </div>
       </Html>
     </group>
