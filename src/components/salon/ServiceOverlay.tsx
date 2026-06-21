@@ -17,50 +17,54 @@ const DATA: Record<
     title: "Hair Atelier",
     tagline: "Couture cuts, color & ceremonial blow-outs by master stylists.",
     services: [
-      { name: "Signature Cut & Style", duration: "75 min", price: "$185" },
+      { name: "Signature Cut & Style", duration: "75 min", price: "₹4,500" },
       {
         name: "Balayage Composition",
         duration: "180 min",
-        price: "$420",
+        price: "₹9,500",
         note: "Most requested",
       },
-      { name: "Silk Press Ritual", duration: "120 min", price: "$240" },
-      { name: "Bridal Atelier Package", duration: "240 min", price: "$680" },
+      { name: "Silk Press Ritual", duration: "120 min", price: "₹6,500" },
+      { name: "Bridal Atelier Package", duration: "240 min", price: "₹18,000" },
     ],
   },
   nails: {
     title: "Nails Bar",
     tagline: "Hand-painted artistry on champagne-marble manicure stations.",
     services: [
-      { name: "Grace Manicure", duration: "45 min", price: "$75" },
-      { name: "Gel Sculpture", duration: "75 min", price: "$120" },
-      { name: "Pedicure Grace", duration: "60 min", price: "$95" },
-      { name: "Crystal Couture Set", duration: "120 min", price: "$220" },
+      { name: "Grace Manicure", duration: "45 min", price: "₹2,200" },
+      { name: "Gel Sculpture", duration: "75 min", price: "₹3,500" },
+      { name: "Pedicure Grace", duration: "60 min", price: "₹2,800" },
+      { name: "Crystal Couture Set", duration: "120 min", price: "₹6,000" },
     ],
   },
   facial: {
     title: "Facial Suite",
     tagline: "Bespoke skincare protocols in a private VIP chamber.",
     services: [
-      { name: "Glow Facial", duration: "60 min", price: "$220" },
-      { name: "Diamond Microdermabrasion", duration: "75 min", price: "$320" },
+      { name: "Glow Facial", duration: "60 min", price: "₹6,500" },
+      {
+        name: "Diamond Microdermabrasion",
+        duration: "75 min",
+        price: "₹9,000",
+      },
       {
         name: "LED & Cryo Ritual",
         duration: "90 min",
-        price: "$380",
+        price: "₹11,000",
         note: "VIP exclusive",
       },
-      { name: "24K Gold Renewal", duration: "120 min", price: "$580" },
+      { name: "24K Gold Renewal", duration: "120 min", price: "₹16,500" },
     ],
   },
   product: {
     title: "GraceAndGo Apothecary",
     tagline: "Curated serums, oils & elixirs — bottled by hand in Provence.",
     services: [
-      { name: "No.07 Radiance Serum", duration: "30 ml", price: "$185" },
-      { name: "Velours Hair Oil", duration: "50 ml", price: "$125" },
-      { name: "Pearl Night Crème", duration: "50 ml", price: "$240" },
-      { name: "Rose Quartz Mist", duration: "100 ml", price: "$95" },
+      { name: "No.07 Radiance Serum", duration: "30 ml", price: "₹5,500" },
+      { name: "Velours Hair Oil", duration: "50 ml", price: "₹3,800" },
+      { name: "Pearl Night Crème", duration: "50 ml", price: "₹7,200" },
+      { name: "Rose Quartz Mist", duration: "100 ml", price: "₹2,800" },
     ],
   },
 };
@@ -203,7 +207,7 @@ export default function ServiceOverlay({
     }
 
     // Generate confirmation code
-    const code = `ML-${Math.floor(100000 + Math.random() * 900000)}`;
+    const code = `GG-${Math.floor(100000 + Math.random() * 900000)}`;
     setConfCode(code);
     toast.success(`Ritual requested successfully! Code: ${code}`);
     setBookingStep("success");

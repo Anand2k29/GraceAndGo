@@ -108,6 +108,11 @@
   .hairline {
     border-top: 1px solid oklch(0.82 0.09 85 / 0.25);
   }
+  .text-shadow-luxe {
+    text-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.8),
+      0 4px 16px rgba(0, 0, 0, 0.6);
+  }
   .grain::before {
     content: "";
     position: absolute;

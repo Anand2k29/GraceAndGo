@@ -92,20 +92,22 @@ function Index() {
         >
           <SalonScene scroll={cameraScroll} onHotspot={setOpen} />
         </Suspense>
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,oklch(0.08_0.005_60/0.85))]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,oklch(0.08_0.005_60/0.9))]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
       </div>
 
       {/* Top nav */}
-      <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-6 py-5 sm:px-12">
+      <header className="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-6 py-5 sm:px-12 bg-gradient-to-b from-black/85 via-black/35 to-transparent backdrop-blur-[1px]">
         <div>
-          <p className="font-display text-xl tracking-wide text-foreground">
+          <p className="font-display text-xl tracking-wide text-foreground text-shadow-luxe">
             Grace<span className="text-gold">AndGo</span>
           </p>
-          <p className="text-[0.55rem] tracking-[0.4em] uppercase text-muted-foreground">
+          <p className="text-[0.55rem] tracking-[0.4em] uppercase text-muted-foreground text-shadow-luxe">
             Your Beauty, Our Passion
           </p>
         </div>
-        <nav className="hidden items-center gap-8 text-[0.65rem] tracking-[0.35em] uppercase text-muted-foreground sm:flex">
+        <nav className="hidden items-center gap-8 text-[0.65rem] tracking-[0.35em] uppercase text-muted-foreground sm:flex text-shadow-luxe">
           <a className="transition hover:text-gold" href="#tour">
             Tour
           </a>
@@ -129,14 +131,14 @@ function Index() {
         {/* HERO */}
         <section className="relative flex min-h-screen items-end px-6 pb-28 sm:px-16">
           <div className="max-w-xl">
-            <p className="text-[0.7rem] tracking-[0.5em] uppercase text-gold reveal">
+            <p className="text-[0.7rem] tracking-[0.5em] uppercase text-gold reveal text-shadow-luxe">
               A Virtual Salon
             </p>
-            <h1 className="mt-6 font-display text-5xl leading-[1.05] sm:text-7xl reveal delay-100">
+            <h1 className="mt-6 font-display text-5xl leading-[1.05] sm:text-7xl reveal delay-100 text-shadow-luxe">
               An hour inside{" "}
               <span className="italic text-gold-gradient">GraceAndGo</span>.
             </h1>
-            <p className="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base reveal delay-200">
+            <p className="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base reveal delay-200 text-shadow-luxe">
               Step from the street into our atelier. Wander the floor, meet the
               artisans, and reserve your ritual — all without leaving your seat.
             </p>
@@ -150,7 +152,7 @@ function Index() {
               </a>
               <button
                 onClick={() => setOpen("product")}
-                className="text-xs tracking-[0.35em] uppercase text-muted-foreground transition hover:text-gold"
+                className="text-xs tracking-[0.35em] uppercase text-muted-foreground transition hover:text-gold text-shadow-luxe"
               >
                 View Apothecary →
               </button>
@@ -160,7 +162,7 @@ function Index() {
           {/* scroll cue */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center">
             <div className="mx-auto h-12 w-px bg-gradient-to-b from-transparent via-[oklch(0.82_0.09_85)] to-transparent" />
-            <p className="mt-3 text-[0.55rem] tracking-[0.4em] uppercase text-muted-foreground">
+            <p className="mt-3 text-[0.55rem] tracking-[0.4em] uppercase text-muted-foreground text-shadow-luxe">
               Scroll to enter
             </p>
           </div>
@@ -173,7 +175,7 @@ function Index() {
               key={c.title}
               className={`flex min-h-screen items-center px-6 sm:px-16 ${i % 2 === 0 ? "justify-start" : "justify-end"}`}
             >
-              <div className="max-w-sm rounded-sm border border-[oklch(0.82_0.09_85)]/25 bg-[oklch(0.12_0.005_60)]/70 p-8 backdrop-blur-md shadow-luxe reveal">
+              <div className="max-w-sm rounded-sm border border-[oklch(0.82_0.09_85)]/25 bg-[oklch(0.12_0.005_60)]/85 p-8 backdrop-blur-md shadow-luxe reveal">
                 <p className="text-[0.6rem] tracking-[0.4em] uppercase text-gold">
                   {c.eyebrow}
                 </p>
@@ -215,22 +217,22 @@ function Index() {
                   const meta = {
                     hair: {
                       t: "Hair Atelier",
-                      s: "From $185",
+                      s: "From ₹4,500",
                       d: "Cuts, color, blow-outs.",
                     },
                     nails: {
                       t: "Nails Bar",
-                      s: "From $75",
+                      s: "From ₹2,200",
                       d: "Manicure, pedicure, art.",
                     },
                     facial: {
                       t: "Facial Suite",
-                      s: "From $220",
+                      s: "From ₹6,500",
                       d: "Bespoke skincare protocols.",
                     },
                     product: {
                       t: "Apothecary",
-                      s: "From $95",
+                      s: "From ₹2,800",
                       d: "Serums, oils, elixirs.",
                     },
                   }[id];
@@ -295,10 +297,10 @@ function Index() {
             <div className="hairline pt-6">
               <ul className="space-y-5">
                 {[
-                  ["No.07", "Radiance Serum", "$185"],
-                  ["Velours", "Hair Oil", "$125"],
-                  ["Pearl", "Night Crème", "$240"],
-                  ["Rose Quartz", "Mist", "$95"],
+                  ["No.07", "Radiance Serum", "₹5,500"],
+                  ["Velours", "Hair Oil", "₹3,800"],
+                  ["Pearl", "Night Crème", "₹7,200"],
+                  ["Rose Quartz", "Mist", "₹2,800"],
                 ].map(([n, t, p], idx) => {
                   const delayClass = [
                     "",
