@@ -120,7 +120,7 @@ function Index() {
         </nav>
         <button
           onClick={() => setOpen("facial")}
-          className="rounded-sm border border-[oklch(0.82_0.09_85)]/50 px-4 py-2 text-[0.65rem] tracking-[0.35em] uppercase text-gold transition hover:bg-[oklch(0.82_0.09_85)]/10"
+          className="rounded-sm border border-blush-pink/50 px-4 py-2 text-[0.65rem] tracking-[0.35em] uppercase text-blush transition hover:bg-blush-pink/10"
         >
           Reserve
         </button>
@@ -136,7 +136,10 @@ function Index() {
             </p>
             <h1 className="mt-6 font-display text-5xl leading-[1.05] sm:text-7xl reveal-instant delay-instant-100 text-shadow-luxe">
               An hour inside{" "}
-              <span className="italic text-gold-gradient">GraceAndGo</span>.
+              <span className="italic text-blush-gold-gradient">
+                GraceAndGo
+              </span>
+              .
             </h1>
             <p className="mt-6 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base reveal-instant delay-instant-200 text-shadow-luxe">
               Step from the street into our atelier. Wander the floor, meet the
@@ -145,7 +148,7 @@ function Index() {
             <div className="mt-10 flex flex-wrap items-center gap-4 reveal-instant delay-instant-300">
               <a
                 href="#tour"
-                className="group inline-flex items-center gap-3 rounded-sm bg-gold-gradient px-6 py-3 text-xs tracking-[0.35em] uppercase text-[oklch(0.14_0.005_60)] shadow-soft transition hover:brightness-110"
+                className="group inline-flex items-center gap-3 rounded-sm bg-blush-gold-gradient px-6 py-3 text-xs tracking-[0.35em] uppercase text-[oklch(0.14_0.005_60)] shadow-soft transition hover:brightness-110"
               >
                 Begin the Tour
                 <span className="transition group-hover:translate-x-1">↓</span>
@@ -161,7 +164,7 @@ function Index() {
 
           {/* scroll cue */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center">
-            <div className="mx-auto h-12 w-px bg-gradient-to-b from-transparent via-[oklch(0.82_0.09_85)] to-transparent" />
+            <div className="mx-auto h-12 w-px bg-gradient-to-b from-transparent via-blush-pink to-transparent" />
             <p className="mt-3 text-[0.55rem] tracking-[0.4em] uppercase text-muted-foreground text-shadow-luxe">
               Scroll to enter
             </p>
@@ -175,7 +178,7 @@ function Index() {
               key={c.title}
               className={`flex min-h-screen items-center px-6 sm:px-16 ${i % 2 === 0 ? "justify-start" : "justify-end"}`}
             >
-              <div className="max-w-sm rounded-sm border border-[oklch(0.82_0.09_85)]/25 bg-[oklch(0.12_0.005_60)]/85 p-8 backdrop-blur-md shadow-luxe reveal">
+              <div className="max-w-sm rounded-sm border border-blush-pink/25 bg-[oklch(0.12_0.005_60)]/85 p-8 backdrop-blur-md shadow-luxe reveal">
                 <p className="text-[0.6rem] tracking-[0.4em] uppercase text-gold">
                   {c.eyebrow}
                 </p>
@@ -211,7 +214,7 @@ function Index() {
               above, or browse below.
             </p>
 
-            <div className="mt-16 grid gap-px bg-[oklch(0.82_0.09_85)]/20 sm:grid-cols-2">
+            <div className="mt-16 grid gap-px bg-blush-pink/20 sm:grid-cols-2">
               {(["hair", "nails", "facial", "product"] as HotspotId[]).map(
                 (id, idx) => {
                   const meta = {
@@ -248,14 +251,14 @@ function Index() {
                       onClick={() => setOpen(id)}
                       className={`group relative bg-[oklch(0.12_0.005_60)] p-10 text-left transition hover:bg-[oklch(0.16_0.006_60)] hover:-translate-y-1 hover:shadow-luxe reveal ${delayClass}`}
                     >
-                      <p className="text-[0.6rem] tracking-[0.4em] uppercase text-gold">
+                      <p className="text-[0.6rem] tracking-[0.4em] uppercase text-blush">
                         {meta.s}
                       </p>
                       <h3 className="mt-3 font-display text-3xl">{meta.t}</h3>
                       <p className="mt-2 text-sm text-muted-foreground">
                         {meta.d}
                       </p>
-                      <span className="mt-8 inline-flex items-center gap-2 text-[0.65rem] tracking-[0.35em] uppercase text-foreground transition group-hover:text-gold">
+                      <span className="mt-8 inline-flex items-center gap-2 text-[0.65rem] tracking-[0.35em] uppercase text-foreground transition group-hover:text-blush">
                         View & Book{" "}
                         <span className="transition-transform group-hover:translate-x-1">
                           →
@@ -276,7 +279,7 @@ function Index() {
         >
           <div className="mx-auto grid max-w-5xl items-center gap-16 sm:grid-cols-2">
             <div className="reveal">
-              <p className="text-[0.65rem] tracking-[0.5em] uppercase text-gold">
+              <p className="text-[0.65rem] tracking-[0.5em] uppercase text-blush">
                 Apothecary
               </p>
               <h2 className="mt-4 font-display text-5xl sm:text-6xl">
@@ -289,7 +292,7 @@ function Index() {
               </p>
               <button
                 onClick={() => setOpen("product")}
-                className="mt-8 inline-flex items-center gap-3 rounded-sm border border-[oklch(0.82_0.09_85)]/50 px-6 py-3 text-xs tracking-[0.35em] uppercase text-gold transition hover:bg-[oklch(0.82_0.09_85)]/10"
+                className="mt-8 inline-flex items-center gap-3 rounded-sm border border-blush-pink/50 px-6 py-3 text-xs tracking-[0.35em] uppercase text-blush transition hover:bg-blush-pink/10"
               >
                 Explore the Collection
               </button>
@@ -312,7 +315,7 @@ function Index() {
                     <li
                       key={n}
                       onClick={() => setOpen("product")}
-                      className={`flex items-baseline justify-between hover:text-gold transition-colors duration-300 cursor-pointer reveal ${delayClass}`}
+                      className={`flex items-baseline justify-between hover:text-blush transition-colors duration-300 cursor-pointer reveal ${delayClass}`}
                     >
                       <div>
                         <p className="font-display text-2xl">{n}</p>
@@ -320,7 +323,7 @@ function Index() {
                           {t}
                         </p>
                       </div>
-                      <span className="font-display text-xl text-gold">
+                      <span className="font-display text-xl text-blush">
                         {p}
                       </span>
                     </li>
@@ -332,7 +335,7 @@ function Index() {
         </section>
 
         {/* FOOTER */}
-        <footer className="relative border-t border-[oklch(0.82_0.09_85)]/20 bg-[oklch(0.09_0.005_60)] px-6 py-16 sm:px-16 reveal">
+        <footer className="relative border-t border-blush-pink/20 bg-[oklch(0.09_0.005_60)] px-6 py-16 sm:px-16 reveal">
           <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-8 sm:flex-row sm:items-end">
             <div>
               <p className="font-display text-2xl">
@@ -354,7 +357,7 @@ function Index() {
 
       {/* Progress rail */}
       <div className="pointer-events-none fixed right-6 top-1/2 z-30 hidden -translate-y-1/2 sm:block">
-        <div className="relative h-64 w-px bg-[oklch(0.82_0.09_85)]/20">
+        <div className="relative h-64 w-px bg-blush-pink/20">
           <div
             className="absolute left-0 top-0 w-px bg-gold-gradient transition-[height] duration-150"
             style={{ height: `${globalScroll * 100}%` }}

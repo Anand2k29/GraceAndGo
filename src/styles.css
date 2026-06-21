@@ -24,6 +24,9 @@
   --color-rose: var(--rose);
   --color-border: var(--border);
   --color-ring: var(--ring);
+  --color-blush-pink: var(--blush-pink);
+  --color-millennial-pink: var(--millennial-pink);
+  --color-dusty-rose: var(--dusty-rose);
 }
 
 :root {
@@ -35,28 +38,30 @@
   --card-foreground: oklch(0.96 0.01 80);
   --popover: oklch(0.16 0.006 60);
   --popover-foreground: oklch(0.96 0.01 80);
-  --primary: oklch(0.82 0.09 85); /* champagne gold */
+  --primary: #f4c2c2; /* Blush Pink */
   --primary-foreground: oklch(0.14 0.005 60);
   --secondary: oklch(0.22 0.008 60);
   --secondary-foreground: oklch(0.96 0.01 80);
   --muted: oklch(0.22 0.008 60);
   --muted-foreground: oklch(0.72 0.015 70);
-  --accent: oklch(0.88 0.05 25); /* pastel rose */
+  --accent: #f4c2c2; /* Blush Pink */
   --accent-foreground: oklch(0.14 0.005 60);
-  --rose: oklch(0.88 0.05 25);
+  --rose: #ffd1dc; /* Millennial Pink */
   --border: oklch(0.28 0.01 70 / 60%);
-  --ring: oklch(0.82 0.09 85);
+  --ring: #f4c2c2;
 
-  --gradient-gold: linear-gradient(
+  --blush-pink: #f4c2c2;
+  --millennial-pink: #ffd1dc;
+  --dusty-rose: #b76e79;
+
+  --gradient-gold: linear-gradient(135deg, #ffd1dc 0%, #b76e79 100%);
+  --gradient-blush-gold: linear-gradient(
     135deg,
-    oklch(0.88 0.1 88),
-    oklch(0.72 0.09 70)
+    #f4c2c2 0%,
+    #ffd1dc 50%,
+    #b76e79 100%
   );
-  --gradient-rose: linear-gradient(
-    135deg,
-    oklch(0.92 0.05 25),
-    oklch(0.78 0.08 20)
-  );
+  --gradient-rose: linear-gradient(135deg, #f4c2c2, #ffd1dc);
   --shadow-luxe:
     0 30px 80px -20px oklch(0 0 0 / 0.6), 0 0 0 1px oklch(0.82 0.09 85 / 0.15);
   --shadow-soft: 0 10px 40px -10px oklch(0 0 0 / 0.5);
@@ -88,7 +93,34 @@
 
 @layer utilities {
   .text-gold {
-    color: oklch(0.82 0.09 85);
+    color: var(--blush-pink);
+  }
+  .text-blush {
+    color: var(--blush-pink);
+  }
+  .text-millennial-pink {
+    color: var(--millennial-pink);
+  }
+  .text-dusty-rose {
+    color: var(--dusty-rose);
+  }
+  .bg-blush-gradient {
+    background: var(--gradient-rose);
+  }
+  .text-blush-gradient {
+    background: var(--gradient-rose);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .bg-blush-gold-gradient {
+    background: var(--gradient-blush-gold);
+  }
+  .text-blush-gold-gradient {
+    background: var(--gradient-blush-gold);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
   .bg-gold-gradient {
     background: var(--gradient-gold);

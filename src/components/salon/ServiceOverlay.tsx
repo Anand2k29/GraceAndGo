@@ -222,11 +222,11 @@ export default function ServiceOverlay({
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-lg max-h-[90vh] sm:max-h-[85vh] flex flex-col overflow-hidden rounded-sm border border-[oklch(0.82_0.09_85)]/30 bg-[oklch(0.14_0.005_60)] shadow-luxe animate-[scale-in_0.25s_ease-out]">
+      <div className="relative w-full max-w-lg max-h-[90vh] sm:max-h-[85vh] flex flex-col overflow-hidden rounded-sm border border-blush-pink/30 bg-[oklch(0.14_0.005_60)] shadow-luxe animate-[scale-in_0.25s_ease-out]">
         <div className="absolute inset-x-0 top-0 h-px bg-gold-gradient" />
 
         {/* Header (Fixed) */}
-        <div className="flex items-center justify-between border-b border-[oklch(0.82_0.09_85)]/10 px-8 py-5">
+        <div className="flex items-center justify-between border-b border-blush-pink/10 px-8 py-5">
           <div>
             <p className="text-[0.65rem] tracking-[0.4em] uppercase text-gold">
               GraceAndGo
@@ -262,8 +262,8 @@ export default function ServiceOverlay({
                       onClick={() => setSelectedService(s)}
                       className={`w-full text-left flex items-baseline justify-between gap-4 p-4 rounded-sm border transition-all duration-300 ${
                         isSelected
-                          ? "border-gold bg-[oklch(0.82_0.09_85)]/10 shadow-soft"
-                          : "border-[oklch(0.82_0.09_85)]/10 bg-black/20 hover:border-[oklch(0.82_0.09_85)]/30 hover:bg-[oklch(0.16_0.006_60)]"
+                          ? "border-gold bg-blush-pink/10 shadow-soft"
+                          : "border-blush-pink/10 bg-black/20 hover:border-blush-pink/30 hover:bg-[oklch(0.16_0.006_60)]"
                       }`}
                     >
                       <div className="pr-4">
@@ -292,7 +292,7 @@ export default function ServiceOverlay({
                 })}
               </div>
 
-              <div className="pt-4 border-t border-[oklch(0.82_0.09_85)]/10">
+              <div className="pt-4 border-t border-blush-pink/10">
                 <button
                   disabled={!selectedService}
                   onClick={handleProceedToBooking}
@@ -317,7 +317,7 @@ export default function ServiceOverlay({
           {bookingStep === "details" && selectedService && (
             <form onSubmit={handleConfirmBooking} className="space-y-6">
               {/* Back button and service summary */}
-              <div className="flex items-center gap-3 bg-black/20 p-3 rounded-sm border border-[oklch(0.82_0.09_85)]/10">
+              <div className="flex items-center gap-3 bg-black/20 p-3 rounded-sm border border-blush-pink/10">
                 <button
                   type="button"
                   onClick={() => setBookingStep("select")}
@@ -354,8 +354,8 @@ export default function ServiceOverlay({
                         onClick={() => setSelectedDate(day.raw)}
                         className={`flex-shrink-0 flex flex-col items-center justify-center p-3 rounded-sm border w-16 transition-all duration-300 cursor-pointer ${
                           isSelected
-                            ? "border-gold bg-[oklch(0.82_0.09_85)]/15 text-gold"
-                            : "border-[oklch(0.82_0.09_85)]/10 bg-black/10 hover:border-gold/30 hover:bg-black/30"
+                            ? "border-gold bg-blush-pink/15 text-gold"
+                            : "border-blush-pink/10 bg-black/10 hover:border-gold/30 hover:bg-black/30"
                         }`}
                       >
                         <span className="text-[0.55rem] tracking-wider uppercase text-muted-foreground">
@@ -385,8 +385,8 @@ export default function ServiceOverlay({
                         onClick={() => setSelectedTime(time)}
                         className={`py-2 px-1 text-center rounded-sm border text-[0.65rem] tracking-wider uppercase transition-all duration-300 cursor-pointer ${
                           isSelected
-                            ? "border-gold bg-[oklch(0.82_0.09_85)]/15 text-gold"
-                            : "border-[oklch(0.82_0.09_85)]/10 bg-black/10 hover:border-gold/30"
+                            ? "border-gold bg-blush-pink/15 text-gold"
+                            : "border-blush-pink/10 bg-black/10 hover:border-gold/30"
                         }`}
                       >
                         {time}
@@ -404,7 +404,7 @@ export default function ServiceOverlay({
                 <select
                   value={selectedArtisan}
                   onChange={(e) => setSelectedArtisan(e.target.value)}
-                  className="w-full bg-black/30 border border-[oklch(0.82_0.09_85)]/20 rounded-sm p-3 text-xs tracking-wider text-foreground focus:outline-none focus:border-gold"
+                  className="w-full bg-black/30 border border-blush-pink/20 rounded-sm p-3 text-xs tracking-wider text-foreground focus:outline-none focus:border-gold"
                 >
                   {artisansList.map((artisan) => (
                     <option
@@ -430,7 +430,7 @@ export default function ServiceOverlay({
                     placeholder="Full Name"
                     value={clientName}
                     onChange={(e) => setClientName(e.target.value)}
-                    className="w-full bg-black/20 border border-[oklch(0.82_0.09_85)]/15 rounded-sm p-3 text-xs tracking-wider text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-gold"
+                    className="w-full bg-black/20 border border-blush-pink/15 rounded-sm p-3 text-xs tracking-wider text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-gold"
                   />
                   <input
                     type="email"
@@ -438,7 +438,7 @@ export default function ServiceOverlay({
                     placeholder="Email Address"
                     value={clientEmail}
                     onChange={(e) => setClientEmail(e.target.value)}
-                    className="w-full bg-black/20 border border-[oklch(0.82_0.09_85)]/15 rounded-sm p-3 text-xs tracking-wider text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-gold"
+                    className="w-full bg-black/20 border border-blush-pink/15 rounded-sm p-3 text-xs tracking-wider text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-gold"
                   />
                   <input
                     type="tel"
@@ -446,13 +446,13 @@ export default function ServiceOverlay({
                     placeholder="Phone Number"
                     value={clientPhone}
                     onChange={(e) => setClientPhone(e.target.value)}
-                    className="w-full bg-black/20 border border-[oklch(0.82_0.09_85)]/15 rounded-sm p-3 text-xs tracking-wider text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-gold"
+                    className="w-full bg-black/20 border border-blush-pink/15 rounded-sm p-3 text-xs tracking-wider text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:border-gold"
                   />
                 </div>
               </div>
 
               {/* Submit CTA */}
-              <div className="pt-4 border-t border-[oklch(0.82_0.09_85)]/10">
+              <div className="pt-4 border-t border-blush-pink/10">
                 <button
                   type="submit"
                   className="w-full overflow-hidden rounded-sm bg-gold-gradient py-3.5 text-xs font-semibold tracking-[0.3em] uppercase text-[oklch(0.14_0.005_60)] hover:brightness-110 shadow-soft cursor-pointer transition-all duration-300"
@@ -467,7 +467,7 @@ export default function ServiceOverlay({
           {bookingStep === "success" && selectedService && (
             <div className="text-center space-y-6 py-4 animate-[fade-in_0.5s_ease-out]">
               {/* Gold wax-seal checkmark */}
-              <div className="mx-auto w-16 h-16 rounded-full border border-gold flex items-center justify-center bg-[oklch(0.82_0.09_85)]/10 text-gold shadow-luxe animate-[scale-in_0.4s_cubic-bezier(0.16,1,0.3,1)]">
+              <div className="mx-auto w-16 h-16 rounded-full border border-gold flex items-center justify-center bg-blush-pink/10 text-gold shadow-luxe animate-[scale-in_0.4s_cubic-bezier(0.16,1,0.3,1)]">
                 <span className="text-2xl font-bold font-sans">✓</span>
               </div>
 
@@ -487,7 +487,7 @@ export default function ServiceOverlay({
               </p>
 
               {/* Summary table */}
-              <div className="bg-black/35 rounded-sm border border-[oklch(0.82_0.09_85)]/15 p-5 text-left text-xs space-y-3.5 max-w-sm mx-auto">
+              <div className="bg-black/35 rounded-sm border border-blush-pink/15 p-5 text-left text-xs space-y-3.5 max-w-sm mx-auto">
                 <div className="flex justify-between items-baseline border-b border-border/10 pb-2">
                   <span className="text-muted-foreground">Service:</span>
                   <span className="font-display text-sm font-semibold text-foreground text-right">
@@ -524,11 +524,11 @@ export default function ServiceOverlay({
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-[oklch(0.82_0.09_85)]/10 max-w-sm mx-auto">
+              <div className="pt-6 border-t border-blush-pink/10 max-w-sm mx-auto">
                 <button
                   type="button"
                   onClick={handleResetClose}
-                  className="w-full overflow-hidden rounded-sm border border-[oklch(0.82_0.09_85)]/50 py-3.5 text-xs font-semibold tracking-[0.3em] uppercase text-gold hover:bg-[oklch(0.82_0.09_85)]/10 cursor-pointer transition-all duration-300"
+                  className="w-full overflow-hidden rounded-sm border border-blush-pink/50 py-3.5 text-xs font-semibold tracking-[0.3em] uppercase text-gold hover:bg-blush-pink/10 cursor-pointer transition-all duration-300"
                 >
                   Return to Salon
                 </button>

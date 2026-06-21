@@ -77,7 +77,7 @@ function Walls() {
       {/* brass trim line */}
       <mesh position={[0, 5.5, -7.95]}>
         <boxGeometry args={[24, 0.04, 0.04]} />
-        <meshStandardMaterial color="#d4af6a" metalness={1} roughness={0.25} />
+        <meshStandardMaterial color="#b76e79" metalness={1} roughness={0.25} />
       </mesh>
     </group>
   );
@@ -97,7 +97,7 @@ function VelvetChair({
       {/* base */}
       <mesh position={[0, 0.15, 0]} castShadow>
         <cylinderGeometry args={[0.45, 0.55, 0.3, 32]} />
-        <meshStandardMaterial color="#d4af6a" metalness={1} roughness={0.2} />
+        <meshStandardMaterial color="#b76e79" metalness={1} roughness={0.2} />
       </mesh>
       <mesh position={[0, 0.45, 0]} castShadow>
         <cylinderGeometry args={[0.08, 0.08, 0.4, 16]} />
@@ -116,11 +116,11 @@ function VelvetChair({
       {/* arms */}
       <mesh position={[-0.5, 1.05, 0]} castShadow>
         <boxGeometry args={[0.12, 0.18, 0.7]} />
-        <meshStandardMaterial color="#d4af6a" metalness={1} roughness={0.25} />
+        <meshStandardMaterial color="#b76e79" metalness={1} roughness={0.25} />
       </mesh>
       <mesh position={[0.5, 1.05, 0]} castShadow>
         <boxGeometry args={[0.12, 0.18, 0.7]} />
-        <meshStandardMaterial color="#d4af6a" metalness={1} roughness={0.25} />
+        <meshStandardMaterial color="#b76e79" metalness={1} roughness={0.25} />
       </mesh>
     </group>
   );
@@ -136,7 +136,7 @@ function Vanity({ position }: { position: [number, number, number] }) {
       {/* mirror */}
       <mesh position={[0, 2.2, -0.25]}>
         <ringGeometry args={[0.55, 0.7, 64]} />
-        <meshStandardMaterial color="#d4af6a" metalness={1} roughness={0.2} />
+        <meshStandardMaterial color="#b76e79" metalness={1} roughness={0.2} />
       </mesh>
       <mesh position={[0, 2.2, -0.26]}>
         <circleGeometry args={[0.55, 64]} />
@@ -164,7 +164,7 @@ function ReceptionDesk() {
       </mesh>
       <mesh position={[0, 1.22, 0]}>
         <boxGeometry args={[5.05, 0.05, 1.25]} />
-        <meshStandardMaterial color="#d4af6a" metalness={1} roughness={0.25} />
+        <meshStandardMaterial color="#b76e79" metalness={1} roughness={0.25} />
       </mesh>
     </group>
   );
@@ -187,13 +187,13 @@ function HoloProduct({ position }: { position: [number, number, number] }) {
         <mesh castShadow>
           <cylinderGeometry args={[0.18, 0.18, 0.55, 32]} />
           <meshPhysicalMaterial
-            color="#f3d6c8"
+            color="#f3d1c8"
             roughness={0.05}
             metalness={0}
             transmission={0.85}
             thickness={0.5}
             ior={1.4}
-            attenuationColor="#f4c8b3"
+            attenuationColor="#f4c2c2"
             attenuationDistance={0.6}
           />
         </mesh>
@@ -205,7 +205,7 @@ function HoloProduct({ position }: { position: [number, number, number] }) {
         <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, -0.32, 0]}>
           <ringGeometry args={[0.35, 0.4, 64]} />
           <meshBasicMaterial
-            color="#e7c98a"
+            color="#ffd1dc"
             transparent
             opacity={0.6}
             side={THREE.DoubleSide}
@@ -221,11 +221,11 @@ function Chandelier({ position }: { position: [number, number, number] }) {
     <group position={position}>
       <mesh position={[0, 0, 0]}>
         <cylinderGeometry args={[0.02, 0.02, 1.5, 8]} />
-        <meshStandardMaterial color="#d4af6a" metalness={1} roughness={0.3} />
+        <meshStandardMaterial color="#b76e79" metalness={1} roughness={0.3} />
       </mesh>
       <mesh position={[0, -0.8, 0]}>
         <torusGeometry args={[0.6, 0.02, 16, 64]} />
-        <meshStandardMaterial color="#d4af6a" metalness={1} roughness={0.25} />
+        <meshStandardMaterial color="#b76e79" metalness={1} roughness={0.25} />
       </mesh>
       {Array.from({ length: 8 }).map((_, i) => {
         const a = (i / 8) * Math.PI * 2;
@@ -236,8 +236,8 @@ function Chandelier({ position }: { position: [number, number, number] }) {
           >
             <sphereGeometry args={[0.06, 16, 16]} />
             <meshStandardMaterial
-              color="#fff1cc"
-              emissive="#f6d894"
+              color="#ffeef0"
+              emissive="#ffd1dc"
               emissiveIntensity={2}
             />
           </mesh>
@@ -246,7 +246,7 @@ function Chandelier({ position }: { position: [number, number, number] }) {
       <pointLight
         position={[0, -0.85, 0]}
         intensity={2.2}
-        color="#ffe4b5"
+        color="#ffeef0"
         distance={10}
         decay={2}
       />
@@ -274,11 +274,11 @@ function Hotspot({
           className="group relative flex items-center gap-2"
         >
           <span className="relative flex h-4 w-4">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[oklch(0.82_0.09_85)] opacity-60" />
-            <span className="relative inline-flex h-4 w-4 rounded-full bg-[oklch(0.82_0.09_85)] ring-2 ring-[oklch(0.96_0.01_80)]/40" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blush-pink opacity-60" />
+            <span className="relative inline-flex h-4 w-4 rounded-full bg-blush-pink ring-2 ring-[oklch(0.96_0.01_80)]/40" />
           </span>
           <span
-            className={`whitespace-nowrap rounded-sm border border-[oklch(0.82_0.09_85)]/40 bg-black/70 px-3 py-1 font-[Cormorant_Garamond] text-sm tracking-[0.2em] uppercase text-[oklch(0.96_0.01_80)] backdrop-blur transition-all ${
+            className={`whitespace-nowrap rounded-sm border border-blush-pink/40 bg-black/70 px-3 py-1 font-[Cormorant_Garamond] text-sm tracking-[0.2em] uppercase text-[oklch(0.96_0.01_80)] backdrop-blur transition-all ${
               hover ? "opacity-100 translate-x-0" : "opacity-80 -translate-x-1"
             }`}
           >
@@ -394,7 +394,7 @@ export default function SalonScene({ scroll, onHotspot }: SalonSceneProps) {
         <mesh position={[3.5, 0.92, -1]}>
           <boxGeometry args={[3.05, 0.04, 0.75]} />
           <meshStandardMaterial
-            color="#d4af6a"
+            color="#b76e79"
             metalness={1}
             roughness={0.25}
           />
@@ -402,12 +402,12 @@ export default function SalonScene({ scroll, onHotspot }: SalonSceneProps) {
         <VelvetChair
           position={[2.7, 0, 0.1]}
           rotation={-Math.PI}
-          color="#d9b8c2"
+          color="#f4c2c2"
         />
         <VelvetChair
           position={[4.2, 0, 0.1]}
           rotation={-Math.PI}
-          color="#d9b8c2"
+          color="#f4c2c2"
         />
 
         {/* Facial suite — back center */}
@@ -417,11 +417,11 @@ export default function SalonScene({ scroll, onHotspot }: SalonSceneProps) {
         </mesh>
         <mesh position={[0, 0.85, -6]} castShadow>
           <boxGeometry args={[2.4, 0.2, 1]} />
-          <meshStandardMaterial color="#d9b8c2" roughness={0.9} />
+          <meshStandardMaterial color="#f4c2c2" roughness={0.9} />
         </mesh>
         <mesh position={[0, 0.97, -6.4]} castShadow>
           <boxGeometry args={[0.7, 0.05, 0.2]} />
-          <meshStandardMaterial color="#f4d8c0" roughness={0.5} />
+          <meshStandardMaterial color="#f3d1c8" roughness={0.5} />
         </mesh>
 
         {/* Reception + product display */}
