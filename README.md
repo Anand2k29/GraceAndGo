@@ -14,18 +14,18 @@
 
 **GraceAndGo** is a cinematic, scroll-driven virtual salon experience built with modern web technologies. Users explore a fully 3D-rendered luxury beauty salon, browse services across four ateliers, and complete a multi-step booking flow — all within a single-page application.
 
-### Key Features
-
 | Feature                     | Description                                                                                           |
 | --------------------------- | ----------------------------------------------------------------------------------------------------- |
 | 🎥 **3D Virtual Tour**      | Scroll-driven camera rig navigates through a complete salon scene built with React Three Fiber & Drei |
 | 💫 **Cinematic Animations** | Scroll-reveal transitions, staggered fades, and a gentle camera sway for a premium feel               |
 | 💇 **Four Ateliers**        | Hair Atelier · Nails Bar · Facial Suite · Apothecary — each with curated service menus                |
-| 🖱️ **3D Interaction**       | Fully interactive buttons and "Book Atelier" CTAs directly on the 3D price cards                      |
-| ↔️ **Alternating Layout**   | Scroll-driven passage chapters automatically sit opposite their corresponding 3D room to avoid crowding|
+| 🎟️ **VIP Membership Portal**| Access dynamic vertical membership cards matching local `/card_bronze.jpeg` assets with booking & referral tracker |
+| 🧬 **AI Dermal Scanner**     | Diagnostic skin & hair spectator widget linked to Gemini AI for personalized treatment prescriptions  |
+| 🎴 **Luxury Service Cards**  | Elegant booking catalog cards featuring serif typography, bullet duration spacing, and clean borders  |
+| ⚡ **Performance Optimized** | Deferred R3F initialization during storefront entry sequence to eliminate button lag and frame drops |
 | 📋 **Multi-Step Booking**   | Select a service → pick date, time & artisan card (with roles & specialties) → confirm booking        |
-| ✍️ **Guest Ledger Reviews** | Interactive testimonials section to read reflections or submit custom star-rated reviews              |
 | 🚪 **Symmetric Facade**    | Real salon doors matching photorealistic reference details with G monogram medallion, columns, and transoms |
+| ✍️ **Guest Ledger Reviews** | Interactive testimonials section to read reflections or submit custom star-rated reviews              |
 | 📱 **Fully Responsive**     | Mobile-first design with scrollable modals and touch-friendly interactions                            |
 | 🔔 **Toast Notifications**  | Real-time feedback via Sonner toasts on booking/review success & errors                               |
 | ⚡ **SSR + Edge Ready**     | TanStack Start with Nitro for server-side rendering, deployed to Vercel                               |
@@ -175,11 +175,27 @@ The booking system is a 3-step wizard inside the `ServiceOverlay` modal:
 └─────────────────┘     └─────────────────┘     └─────────────────┘
 ```
 
-- **Artisan Cards**: Replaced basic dropdown selects with premium selectable cards displaying employee names, roles (e.g. *Atelier Director*), and their specific specialization/specialty (e.g. *Couture precision cuts*).
-- **Access Points**: Triggered from "Book Now" buttons, navigation "Reserve" buttons, 3D hotspots, or the Services grid.
+- **Artisan Cards**: Selectable employee cards featuring names, roles (e.g. *Atelier Director*), and specific specialties (e.g. *Couture precision cuts*).
+- **Access Points**: Book via direct "Book Now" buttons, header "Reserve" buttons, 3D hotspots, or the salon catalog grid.
 
 ### Guest Ledger (Reviews)
-Guests can access the Ledger from the top navigation to read testimonials or write their own reflection (name, city, 1-5 star ratings, and review description). Submissions immediately append to the list of reflections dynamically.
+Guests can access the Ledger from the top navigation to read reflections or submit their own star-rated reviews. Reviews are dynamically added to the list of reflections immediately.
+
+---
+
+## 🎟️ VIP Membership & AI Diagnostics
+
+### VIP Membership Portal (`/vip`)
+A dedicated dashboard that allows guests to register and generate a premium virtual invitation card:
+* **Vertical Orientation Card**: A portrait layout matching `/card_bronze.jpeg` assets.
+* **Smart Column Layout**: User details, phone, dob, and unique membership ID are positioned on the left side of the divider line to keep the right column's vertical `"BRONZE CARD"` background text and gold patterns completely readable.
+* **Premium QR Code Monogram**: A high-resolution `29x29` cell grid featuring a stylized gold `"G"` monogram in the center.
+* **Interactive Simulations**: Simulation controls to increment referrals or bookings to dynamically test different membership tier badge colors.
+
+### Dermal Spectator (AI Skin Scanner)
+An advanced consultancy widget embedded on the main page and VIP dashboard:
+* Integrates with the **Gemini API** for custom beauty recipe generation.
+* Guides the user through skin/hair diagnostics and lets them upload a portrait photo to run a mock spectrum laser scan before outputting recommendations.
 
 ---
 

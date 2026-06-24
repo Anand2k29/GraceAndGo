@@ -12,12 +12,10 @@ export default function StorefrontOverlay({
   onOpen,
   onOpenComplete,
 }: StorefrontOverlayProps) {
-  const [isAnimating, setIsAnimating] = useState(false);
   const [isRendered, setIsRendered] = useState(true);
 
   const handleStepInside = () => {
-    if (isOpen || isAnimating) return;
-    setIsAnimating(true);
+    if (isOpen) return;
     onOpen();
   };
 
@@ -30,7 +28,7 @@ export default function StorefrontOverlay({
       const timer = setTimeout(() => {
         setIsRendered(false);
         onOpenCompleteRef.current();
-      }, 1800); // match transition duration
+      }, 850); // match transition duration
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
@@ -104,7 +102,7 @@ export default function StorefrontOverlay({
         }
       `}} />
       <div
-        className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden transition-all duration-[1.6s] ease-in-out select-none ${
+        className={`fixed inset-0 z-50 flex items-center justify-center overflow-hidden transition-all duration-[0.8s] ease-in-out select-none ${
           isOpen ? "opacity-0 scale-[1.12] pointer-events-none" : "opacity-100 scale-100"
         }`}
         style={{
@@ -127,7 +125,7 @@ export default function StorefrontOverlay({
 
         {/* --- LUXURY MARBLE FLOOR WITH GOLD PATTERN --- */}
         <div
-          className={`absolute bottom-0 inset-x-0 h-[15vh] border-t-2 border-[#d4af37]/45 transition-all duration-[1.6s] ease-in-out ${
+          className={`absolute bottom-0 inset-x-0 h-[15vh] border-t-2 border-[#d4af37]/45 transition-all duration-[0.8s] ease-in-out ${
             isOpen ? "translate-y-full opacity-0" : "translate-y-0 opacity-100"
           }`}
           style={{
@@ -227,7 +225,7 @@ export default function StorefrontOverlay({
 
         {/* --- CENTRAL PORTAL CONTAINER --- */}
         <div
-          className={`relative w-full max-w-[580px] h-[88vh] flex flex-col justify-end items-center transition-all duration-[1.6s] ease-in-out ${
+          className={`relative w-full max-w-[580px] h-[88vh] flex flex-col justify-end items-center transition-all duration-[0.8s] ease-in-out ${
             isOpen ? "scale-[1.18] opacity-0" : "scale-100 opacity-100"
           }`}
           style={{
@@ -384,7 +382,7 @@ export default function StorefrontOverlay({
           >
             {/* LEFT DOOR */}
             <div
-              className="w-1/2 h-full border-r border-[#b76e79]/30 relative p-3 flex flex-col justify-between items-end transition-transform duration-[1.8s] ease-[cubic-bezier(0.2,0.85,0.25,1)]"
+              className="w-1/2 h-full border-r border-[#b76e79]/30 relative p-3 flex flex-col justify-between items-end transition-transform duration-[0.8s] ease-[cubic-bezier(0.2,0.85,0.25,1)]"
               style={{
                 transformOrigin: "left center",
                 transform: isOpen ? "rotateY(-110deg)" : "rotateY(0deg)",
@@ -437,7 +435,7 @@ export default function StorefrontOverlay({
 
             {/* RIGHT DOOR */}
             <div
-              className="w-1/2 h-full border-l border-[#b76e79]/30 relative p-3 flex flex-col justify-between items-start transition-transform duration-[1.8s] ease-[cubic-bezier(0.2,0.85,0.25,1)]"
+              className="w-1/2 h-full border-l border-[#b76e79]/30 relative p-3 flex flex-col justify-between items-start transition-transform duration-[0.8s] ease-[cubic-bezier(0.2,0.85,0.25,1)]"
               style={{
                 transformOrigin: "right center",
                 transform: isOpen ? "rotateY(110deg)" : "rotateY(0deg)",
@@ -490,7 +488,7 @@ export default function StorefrontOverlay({
 
             {/* --- OVERLAID BRANDING TEXT & BUTTON (FRAMED AROUND DOOR DETAILS) --- */}
             <div
-              className={`absolute inset-0 flex flex-col items-center justify-between text-center z-30 transition-all duration-[1.4s] cubic-bezier(0.16,1,0.3,1) pointer-events-none ${
+              className={`absolute inset-0 flex flex-col items-center justify-between text-center z-30 transition-all duration-[0.8s] cubic-bezier(0.16,1,0.3,1) pointer-events-none ${
                 isOpen ? "opacity-0 scale-[1.05]" : "opacity-100 scale-100"
               }`}
             >
@@ -544,7 +542,7 @@ export default function StorefrontOverlay({
               <div className="w-full max-w-lg px-6 flex flex-col items-center select-none pointer-events-auto mb-[5vh]">
                 <button
                   onClick={handleStepInside}
-                  disabled={isOpen || isAnimating}
+                  disabled={isOpen}
                   className="group inline-flex items-center justify-center gap-2.5 rounded-full border border-[#d4af37]/80 bg-gradient-to-r from-[#1c1a19]/95 to-[#2c2826]/95 hover:brightness-110 px-8 py-3 text-[0.65rem] font-semibold tracking-[0.35em] uppercase text-white text-shadow-tight shadow-luxe transition-all duration-300 hover:scale-105 active:scale-95 disabled:opacity-50 relative overflow-hidden cursor-pointer pulse-glow pointer-events-auto"
                 >
                   <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />

@@ -3,9 +3,19 @@ import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import ServiceOverlay from "@/components/salon/ServiceOverlay";
 import StorefrontOverlay from "@/components/salon/StorefrontOverlay";
-import EntranceLanding, { UserProfile } from "@/components/salon/EntranceLanding";
+import EntranceLanding from "@/components/salon/EntranceLanding";
 import AIScanHub from "@/components/salon/AIScanHub";
 import { Sparkles, Award, User, RefreshCw } from "lucide-react";
+
+export interface UserProfile {
+  name: string;
+  phone: string;
+  dob: string;
+  email: string;
+  gender: "male" | "female";
+  memberId: string;
+  joinedDate: string;
+}
 
 import { useScrollProgress } from "@/components/salon/useScrollProgress";
 import type { HotspotId } from "@/components/salon/SalonScene";
@@ -112,6 +122,11 @@ function Index() {
         console.error("Error parsing user profile:", e);
       }
     }
+
+    // Clean up body overflow when navigating away
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, []);
 
   // Guest Ledger State
@@ -174,33 +189,28 @@ function Index() {
   };
 
   const handleEnter = () => {
-    setIsStorefrontOpen(true);
-    // Lock scrolling during the entrance transition animation
+    // Lock scrolling during the entrance selection phase
     document.body.style.overflow = "hidden";
-
-    // Show the customized landing page portal once the doors open
-    setTimeout(() => {
-      setHasEntered(true);
-      setShowEntranceLanding(true);
-    }, 1800);
+    // Show selection landing page immediately on top of the closed doors
+    setShowEntranceLanding(true);
   };
 
   const handleSelectTour = (gender: "male" | "female") => {
     setSelectedGender(gender);
     setShowEntranceLanding(false);
-    document.body.style.overflow = "";
-    // Scroll AFTER overflow is restored so the browser can actually scroll
-    requestAnimationFrame(() => {
-      document.getElementById("tour")?.scrollIntoView({ behavior: "smooth" });
-    });
+    // Now trigger the storefront doors to swing open
+    setIsStorefrontOpen(true);
   };
 
   const handleOpenComplete = useCallback(() => {
-    // Scroll to tour only if the intermediate landing portal is closed
-    if (!showEntranceLanding) {
+    setHasEntered(true);
+    // Unlock scrolling once inside
+    document.body.style.overflow = "";
+    // Scroll smoothly to the tour chapter once the doors are fully open
+    requestAnimationFrame(() => {
       document.getElementById("tour")?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [showEntranceLanding]);
+    });
+  }, []);
 
   const handleOpenRoom = (id: HotspotId, serviceName?: string) => {
     setInitialService(serviceName || null);
@@ -238,12 +248,14 @@ function Index() {
             </div>
           }
         >
-          <SalonScene
-            scroll={cameraScroll}
-            activeRoom={open}
-            onHotspot={(id) => handleOpenRoom(id)}
-            onSelectService={(id, sName) => handleOpenRoom(id, sName)}
-          />
+          {(isStorefrontOpen || hasEntered) && (
+            <SalonScene
+              scroll={cameraScroll}
+              activeRoom={open}
+              onHotspot={(id) => handleOpenRoom(id)}
+              onSelectService={(id, sName) => handleOpenRoom(id, sName)}
+            />
+          )}
         </Suspense>
         {/* Soft centered vignette and subtle top/bottom gradients for contrast */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(14,12,11,0.65))]" />

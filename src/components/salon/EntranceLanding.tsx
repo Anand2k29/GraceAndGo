@@ -134,7 +134,7 @@ export default function EntranceLanding({
               {/* Option I: 3D Tour */}
               <button
                 onClick={handleSelectTour}
-                className="group p-6 rounded-sm border border-blush-pink/15 bg-black/20 hover:border-gold/45 hover:bg-[oklch(0.15_0.006_60)] text-left transition-all duration-300 flex flex-col justify-between h-48 cursor-pointer"
+                className="group p-6 rounded-sm border border-blush-pink/15 bg-black/20 hover:border-gold/45 hover:bg-[oklch(0.15_0.006_60)] text-left transition-all duration-300 flex flex-col justify-between min-h-[15.5rem] h-auto cursor-pointer"
               >
                 <div>
                   <span className="text-[0.6rem] tracking-[0.3em] uppercase text-gold font-bold mb-2.5 block">Option I</span>
@@ -153,7 +153,7 @@ export default function EntranceLanding({
               {/* Option II: VIP Portal */}
               <button
                 onClick={handleSelectVIPPortal}
-                className="group p-6 rounded-sm border border-blush-pink/15 bg-black/20 hover:border-gold/45 hover:bg-[oklch(0.15_0.006_60)] text-left transition-all duration-300 flex flex-col justify-between h-48 cursor-pointer"
+                className="group p-6 rounded-sm border border-blush-pink/15 bg-black/20 hover:border-gold/45 hover:bg-[oklch(0.15_0.006_60)] text-left transition-all duration-300 flex flex-col justify-between min-h-[15.5rem] h-auto cursor-pointer"
               >
                 <div>
                   <span className="text-[0.6rem] tracking-[0.3em] uppercase text-gold font-bold mb-2.5 block">Option II</span>

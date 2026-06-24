@@ -199,7 +199,7 @@ export default function VIPPortal() {
         pointsNeeded: 0,
         nextTier: "",
         badgeColor: "bg-slate-500/10 text-slate-300 border-slate-400/40",
-        img: "/card_platinum.jpeg"
+        img: ""
       };
     } else if (bookingCount >= 3 || referralCount >= 1) {
       return {
@@ -209,7 +209,7 @@ export default function VIPPortal() {
         pointsNeeded: 5 - bookingCount,
         nextTier: "Platinum Elite (Reach 5 Bookings or 3 Referrals)",
         badgeColor: "bg-yellow-400/10 text-yellow-100 border-yellow-400/40",
-        img: "/card_gold.jpeg"
+        img: ""
       };
     } else if (bookingCount >= 1) {
       return {
@@ -219,17 +219,17 @@ export default function VIPPortal() {
         pointsNeeded: 3 - bookingCount,
         nextTier: "Gold Member (Reach 3 Bookings or 1 Referral)",
         badgeColor: "bg-slate-400/10 text-slate-200 border-slate-400/40",
-        img: "/card_normal.jpeg"
+        img: ""
       };
     } else {
       return {
         name: "Bronze Starter",
-        class: "from-amber-800 via-[#d4a373] to-amber-950 text-white",
-        border: "border-amber-700/50 shadow-soft",
+        class: "from-[#2d1b2e] via-[#3a1f2b] to-[#1a0e1c] text-white",
+        border: "border-[#8b6914]/40 shadow-[0_0_25px_rgba(139,105,20,0.2)]",
         pointsNeeded: 1 - bookingCount,
         nextTier: "Silver Tier (Book 1 Service)",
-        badgeColor: "bg-amber-800/10 text-amber-200 border-amber-800/40",
-        img: "/card_normal.jpeg"
+        badgeColor: "bg-[#2d1b2e]/60 text-[#e8d5b0] border-[#8b6914]/40",
+        img: "/card_bronze.jpeg"
       };
     }
   };
@@ -502,61 +502,142 @@ export default function VIPPortal() {
             <div className="space-y-4">
               <span className="text-[0.6rem] tracking-[0.3em] uppercase text-gold font-bold block">Your Active Invitation Card</span>
               
-              {/* Card Container */}
+              {/* Card Container — Vertical portrait to match bronze card design */}
               <div 
                 id="vip-card-printable"
-                className={`relative w-full aspect-[1.65/1] rounded-lg border p-4 sm:p-6 flex flex-col justify-between shadow-luxe overflow-hidden select-none bg-gradient-to-br ${getTierInfo().class} ${getTierInfo().border}`}
+                className={`relative w-full max-w-[340px] mx-auto aspect-[4/5] rounded-xl border-2 p-6 sm:p-7 flex flex-col justify-between overflow-hidden select-none bg-gradient-to-br ${getTierInfo().class} ${getTierInfo().border}`}
                 style={{
                   backgroundImage: getTierInfo().img ? `url('${getTierInfo().img}')` : undefined,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
               >
-                {/* Visual Glare */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 pointer-events-none" />
-                
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h4 className="font-display text-lg sm:text-xl tracking-wider leading-none">
-                      GraceAndGo
-                    </h4>
-                    <p className="text-[0.4rem] sm:text-[0.45rem] tracking-[0.25em] uppercase opacity-75 mt-0.5">Luxury Virtual Club</p>
-                  </div>
-                  <div className={`rounded-xs border px-1.5 sm:px-2 py-0.5 text-[0.5rem] sm:text-[0.55rem] tracking-[0.2em] uppercase font-bold bg-black/40 ${getTierInfo().badgeColor}`}>
-                    {getTierInfo().name}
-                  </div>
-                </div>
+                {/* Dark overlay for readability on image backgrounds */}
+                {getTierInfo().img && (
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/20 to-black/60 pointer-events-none" />
+                )}
+                {/* Visual Glare Sweep */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/[0.05] to-white/0 pointer-events-none" />
 
-                <div className="my-1.5 sm:my-2">
-                  <p className="font-display text-xl sm:text-2xl tracking-[0.08em] uppercase truncate">
-                    {profile.name}
-                  </p>
-                  <div className="mt-1 sm:mt-2 space-y-0.5 opacity-85 text-[0.5rem] sm:text-[0.55rem] tracking-wider">
-                    <p>Phone: {profile.phone}</p>
-                    <p>DOB: {profile.dob}</p>
-                    <p>Atelier: {profile.gender === "male" ? "Gentlemen" : "Ladies"}</p>
-                  </div>
-                </div>
+                {/* Vertical layout divided into two columns */}
+                <div className="relative z-10 flex h-full w-full">
+                  {/* Left Column (60% width) - contains all details, badge and QR */}
+                  <div className="w-[60%] h-full flex flex-col justify-between pr-2 pb-14 text-left">
+                    {/* Top: Logo & Tier Badge */}
+                    <div>
+                      <h4 className="font-display text-xl sm:text-2xl tracking-wider leading-none text-white drop-shadow-lg">
+                        Grace<span className="text-[#f4c2c2]">AndGo</span>
+                      </h4>
+                      <p className="text-[0.45rem] sm:text-[0.5rem] tracking-[0.25em] uppercase text-white/60 mt-1 drop-shadow-sm">Luxury Virtual Club</p>
+                      
+                      {/* Tier Badge: Bronze Starter / Silver / Gold / Platinum */}
+                      <div className="mt-3 flex">
+                        <span className={`rounded-md border px-2 py-0.5 text-[0.45rem] sm:text-[0.5rem] tracking-[0.2em] uppercase font-bold backdrop-blur-sm ${getTierInfo().badgeColor}`}>
+                          {getTierInfo().name}
+                        </span>
+                      </div>
+                    </div>
 
-                <div className="flex justify-between items-end border-t border-black/10 pt-2 sm:pt-3">
-                  <div>
-                    <p className="text-[0.38rem] sm:text-[0.4rem] tracking-[0.1em] uppercase opacity-60">Membership Unique ID</p>
-                    <p className="font-mono text-[0.65rem] sm:text-[0.75rem] tracking-widest font-semibold">{profile.memberId}</p>
-                  </div>
+                    {/* Middle: User details */}
+                    <div className="my-auto py-2">
+                      <p className="font-display text-2xl sm:text-3xl tracking-[0.08em] uppercase text-white drop-shadow-lg leading-tight truncate">
+                        {profile.name}
+                      </p>
+                      <div className="mt-3.5 space-y-1 text-white/90 text-[0.55rem] sm:text-[0.6rem] tracking-wider drop-shadow-sm">
+                        <p className="truncate"><span className="text-[#ffd700] font-semibold">Phone:</span> {profile.phone}</p>
+                        <p className="truncate"><span className="text-[#ffd700] font-semibold">DOB:</span> {profile.dob}</p>
+                        <p className="truncate"><span className="text-[#ffd700] font-semibold">Atelier:</span> {profile.gender === "male" ? "Gentlemen" : "Ladies"}</p>
+                      </div>
+                    </div>
 
-                  {/* Mock QR */}
-                  <div className="w-[30px] h-[30px] sm:w-[38px] sm:h-[38px] bg-white p-0.5 rounded-xs flex items-center justify-center">
-                    <div className="grid grid-cols-6 gap-[1px] w-full h-full">
-                      {Array.from({ length: 36 }).map((_, i) => (
-                        <div 
-                          key={i} 
-                          className={`w-full h-full ${
-                            (i * 4 + 3) % 7 === 0 || (i + 1) % 4 === 0 ? "bg-black" : "bg-transparent"
-                          }`} 
-                        />
-                      ))}
+                    {/* Bottom: Unique ID & QR side-by-side */}
+                    <div className="border-t border-white/10 pt-3 flex items-end justify-between gap-1">
+                      <div className="flex-1 min-w-0 pr-1">
+                        <p className="text-[0.4rem] tracking-[0.15em] uppercase text-white/50">Membership ID</p>
+                        <p className="font-mono text-[0.6rem] sm:text-[0.65rem] tracking-tighter font-semibold text-[#d4af37] drop-shadow-sm mt-0.5 truncate">{profile.memberId}</p>
+                      </div>
+                      
+                      {/* Realistic High-Quality QR Code */}
+                      <div className="w-[50px] h-[50px] sm:w-[56px] sm:h-[56px] bg-white p-1 rounded-sm shadow-lg flex-shrink-0 flex items-center justify-center">
+                        <svg viewBox="0 0 29 29" className="w-full h-full" shapeRendering="crispEdges">
+                          {/* Generate a realistic 29x29 QR pattern */}
+                          {(() => {
+                            const size = 29;
+                            const cells: boolean[][] = Array.from({ length: size }, () => Array(size).fill(false));
+                            
+                            // Finder patterns (7x7 squares in 3 corners)
+                            const drawFinder = (ox: number, oy: number) => {
+                              for (let y = 0; y < 7; y++) {
+                                for (let x = 0; x < 7; x++) {
+                                  const isOuter = y === 0 || y === 6 || x === 0 || x === 6;
+                                  const isInner = x >= 2 && x <= 4 && y >= 2 && y <= 4;
+                                  cells[oy + y][ox + x] = isOuter || isInner;
+                                }
+                              }
+                            };
+                            drawFinder(0, 0);   // top-left
+                            drawFinder(22, 0);  // top-right
+                            drawFinder(0, 22);  // bottom-left
+                            
+                            // Timing patterns
+                            for (let i = 8; i < 21; i++) {
+                              cells[6][i] = i % 2 === 0;
+                              cells[i][6] = i % 2 === 0;
+                            }
+                            
+                            // Alignment pattern (5x5 at bottom-right area)
+                            const ax = 22, ay = 22;
+                            for (let y = -2; y <= 2; y++) {
+                              for (let x = -2; x <= 2; x++) {
+                                const isEdge = Math.abs(x) === 2 || Math.abs(y) === 2;
+                                const isCenter = x === 0 && y === 0;
+                                cells[ay + y][ax + x] = isEdge || isCenter;
+                              }
+                            }
+                            
+                            // Seed random numbers based on member ID
+                            const seed = (profile.memberId || "GG-VIP").split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+                            let rng = seed;
+                            const nextRng = () => { rng = (rng * 1103515245 + 12345) & 0x7fffffff; return rng; };
+                            
+                            for (let y = 0; y < size; y++) {
+                              for (let x = 0; x < size; x++) {
+                                // Skip finder areas & separators
+                                const inFinderTL = x < 8 && y < 8;
+                                const inFinderTR = x > 20 && y < 8;
+                                const inFinderBL = x < 8 && y > 20;
+                                const inAlignment = x >= 20 && x <= 24 && y >= 20 && y <= 24;
+                                const isTiming = (x === 6 || y === 6);
+                                // Skip center logo area (cutout of size 5: 12-16)
+                                const inLogo = x >= 12 && x <= 16 && y >= 12 && y <= 16;
+                                
+                                if (!inFinderTL && !inFinderTR && !inFinderBL && !inAlignment && !isTiming && !inLogo) {
+                                  cells[y][x] = nextRng() % 3 !== 0; // ~66% density
+                                }
+                              }
+                            }
+                            
+                            // Render path/rects
+                            return (
+                              <>
+                                {cells.flatMap((row, y) =>
+                                  row.map((filled, x) =>
+                                    filled ? <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill="#121212" /> : null
+                                  )
+                                )}
+                                {/* Logo center container */}
+                                <rect x="11.5" y="11.5" width="6" height="6" rx="1" fill="#1c1a19" stroke="#d4af37" strokeWidth="0.4" />
+                                <text x="14.5" y="15.8" fontFamily="'Cormorant Garamond', serif" fontSize="5.2" fontWeight="bold" fill="#ffd700" textAnchor="middle">G</text>
+                              </>
+                            );
+                          })()}
+                        </svg>
+                      </div>
                     </div>
                   </div>
+                  
+                  {/* Right Column (40% width) - kept empty to show vertical BRONZE CARD text */}
+                  <div className="w-[40%] h-full pointer-events-none" />
                 </div>
               </div>
 
@@ -769,28 +850,30 @@ export default function VIPPortal() {
                       {filteredServices.map((service, sIdx) => (
                         <div 
                           key={sIdx}
-                          className="group bg-black/20 border border-blush-pink/10 rounded-sm p-6 flex flex-col justify-between gap-5 hover:border-gold/30 hover:bg-[oklch(0.15_0.006_60)] transition-all duration-300"
+                          className="group bg-[#0c0909] border border-white/[0.04] rounded-md p-6 flex flex-col justify-between gap-6 hover:border-white/[0.1] hover:bg-[#120e0e] transition-all duration-300 shadow-soft"
                         >
-                          <div className="space-y-2">
+                          <div className="space-y-3.5">
                             <div className="flex justify-between items-start gap-2">
-                              <h4 className="font-display text-lg text-white group-hover:text-gold transition-colors">{service.name}</h4>
+                              <h4 className="font-display text-xl text-white group-hover:text-gold transition-colors leading-tight">{service.name}</h4>
                               {service.note && (
-                                <span className="text-[0.5rem] tracking-wider uppercase text-gold border border-gold/30 px-1 rounded-xs flex-shrink-0">
+                                <span className="text-[0.45rem] tracking-[0.15em] uppercase text-[#d4af37] border border-[#d4af37]/30 px-1.5 py-0.5 rounded-xs flex-shrink-0 bg-[#d4af37]/5">
                                   {service.note}
                                 </span>
                               )}
                             </div>
-                            <p className="text-[0.7rem] text-muted-foreground leading-relaxed">{service.desc}</p>
+                            <p className="text-[0.75rem] text-[#8e8585] leading-relaxed font-sans">{service.desc}</p>
                           </div>
 
-                          <div className="flex items-center justify-between pt-2 border-t border-blush-pink/5">
+                          <div className="flex items-center justify-between pt-4 border-t border-white/[0.04]">
                             <div className="text-left">
-                              <p className="text-[0.55rem] text-muted-foreground uppercase tracking-widest">Duration / Price</p>
-                              <p className="text-xs font-semibold text-white mt-0.5">{service.duration} · <span className="text-gold font-display text-sm">{service.price}</span></p>
+                              <p className="text-[0.5rem] text-[#8e8585] uppercase tracking-[0.2em] font-semibold">Duration / Price</p>
+                              <p className="text-xs font-semibold text-white mt-1">
+                                {service.duration} <span className="text-[#8e8585] mx-1">•</span> <span className="text-[#ffd700] font-display text-base">{service.price}</span>
+                              </p>
                             </div>
                             <button
                               onClick={() => handleBookServiceClick(cat.category, service.name)}
-                              className="rounded-sm border border-blush-pink/45 hover:border-gold px-4 py-2 text-[0.55rem] tracking-widest uppercase text-white hover:bg-gold hover:text-[#1c1a19] transition-all cursor-pointer"
+                              className="rounded-xs border border-white/[0.12] hover:border-[#ffd700] px-5 py-2.5 text-[0.55rem] tracking-[0.25em] uppercase text-white hover:bg-[#ffd700]/5 transition-all cursor-pointer font-bold"
                             >
                               Book Ritual
                             </button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Sparkles, Shield, Camera, Upload, AlertCircle, RefreshCw, HelpCircle } from "lucide-react";
+import { Sparkles, Shield, Camera, Upload, AlertCircle, RefreshCw, HelpCircle, Printer } from "lucide-react";
 import { toast } from "sonner";
 
 interface AIScanHubProps {
@@ -146,8 +146,10 @@ export default function AIScanHub({
 
     // Check for system API key defined in .env
     const systemApiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
+    // Only attempt live fetch if key is present and matches typical Google Studio key format (starts with AIzaSy)
+    const isValidKey = systemApiKey && systemApiKey.startsWith("AIzaSy");
 
-    if (systemApiKey) {
+    if (systemApiKey && isValidKey) {
       // 1. LIVE GEMINI API REQUEST
       try {
         const response = await fetch(
@@ -197,7 +199,7 @@ export default function AIScanHub({
           return;
         }
       } catch (err) {
-        toast.error("Gemini API connection error. Falling back to local diagnostic alchemist.");
+        console.warn("Gemini API connection error. Falling back to local diagnostic alchemist.", err);
       }
     }
 
@@ -241,6 +243,313 @@ ${recommendations.map(r => `- **${r.service}** (Available in our *${r.hotspot ==
     }
   };
 
+  const handlePrintPrescription = () => {
+    const printWindow = window.open("", "_blank");
+    if (printWindow) {
+      const recsHtml = recommendedServices.map(
+        r => `<li><strong>${r.service}</strong> (in the ${getHotspotLabel(r.hotspot)})</li>`
+      ).join("");
+
+      // Formatting helper for print view
+      const formattedReport = reportText
+        .replace(/###/g, "")
+        .replace(/####/g, "")
+        .replace(/\*\*/g, "")
+        .split("\n")
+        .filter(line => line.trim() !== "")
+        .map(line => {
+          if (line.startsWith("-")) {
+            return `<li>${line.replace("-", "").trim()}</li>`;
+          }
+          return `<p>${line}</p>`;
+        })
+        .join("\n");
+
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>GraceAndGo Diagnostic Prescription</title>
+            <style>
+              body { 
+                background: #ffffff; 
+                color: #1c1a19; 
+                font-family: 'Inter', sans-serif; 
+                padding: 40px;
+                line-height: 1.6;
+              }
+              .prescription-container {
+                max-width: 650px;
+                margin: 0 auto;
+                border: 4px double #d4af37;
+                padding: 40px;
+                background-color: #fbfaf8;
+                position: relative;
+                box-shadow: 0 0 20px rgba(0,0,0,0.05);
+              }
+              .header {
+                text-align: center;
+                border-bottom: 2px solid #d4af37;
+                padding-bottom: 20px;
+                margin-bottom: 30px;
+              }
+              .header h1 {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 32px;
+                margin: 0;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                color: #1c1a19;
+              }
+              .header p {
+                font-size: 11px;
+                text-transform: uppercase;
+                letter-spacing: 3px;
+                margin: 5px 0 0 0;
+                color: #8a7355;
+              }
+              .meta-grid {
+                display: grid;
+                grid-template-cols: 1fr 1fr;
+                gap: 15px;
+                margin-bottom: 30px;
+                font-size: 12px;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 15px;
+              }
+              .meta-item strong {
+                text-transform: uppercase;
+                font-size: 10px;
+                letter-spacing: 1px;
+                color: #8a7355;
+                display: block;
+              }
+              .content {
+                font-size: 13px;
+                margin-bottom: 30px;
+              }
+              .content h3, .content h4 {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 18px;
+                margin-top: 25px;
+                margin-bottom: 10px;
+                text-transform: uppercase;
+                color: #8a7355;
+                border-bottom: 1px dashed #d4af37;
+                padding-bottom: 3px;
+              }
+              .content ul {
+                padding-left: 20px;
+              }
+              .recommendations {
+                background: #f5f0e6;
+                border-left: 3px solid #d4af37;
+                padding: 20px;
+                margin-top: 30px;
+                font-size: 12px;
+              }
+              .recommendations h3 {
+                margin-top: 0;
+                text-transform: uppercase;
+                font-size: 12px;
+                letter-spacing: 2px;
+                color: #1c1a19;
+                border-bottom: 1px solid #d4af37;
+                padding-bottom: 5px;
+              }
+              .recommendations ul {
+                margin: 10px 0 0 0;
+                padding-left: 20px;
+              }
+              .footer {
+                margin-top: 40px;
+                text-align: center;
+                font-size: 11px;
+                color: #8a7355;
+                border-top: 1px solid #eee;
+                padding-top: 20px;
+              }
+              .crest {
+                font-family: 'Cormorant Garamond', serif;
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 10px;
+                color: #d4af37;
+              }
+            </style>
+          </head>
+          <body onload="window.print();window.close();">
+            <div class="prescription-container">
+              <div class="header">
+                <div class="crest">G</div>
+                <h1>GraceAndGo Salon</h1>
+                <p>Bespoke Aesthetic Prescription</p>
+              </div>
+              
+              <div class="meta-grid">
+                <div class="meta-item">
+                  <strong>Skin Type / Concern</strong>
+                  ${skinType.toUpperCase()} / ${skinConcern.toUpperCase()}
+                </div>
+                <div class="meta-item">
+                  <strong>Hair Type / Concern</strong>
+                  ${hairType.toUpperCase()} / ${hairConcern.toUpperCase()}
+                </div>
+                <div class="meta-item">
+                  <strong>Date of Consultation</strong>
+                  ${new Date().toLocaleDateString("en-US", { month: "long", year: "numeric", day: "numeric" })}
+                </div>
+                <div class="meta-item">
+                  <strong>House Alchemist</strong>
+                  Dr. Aris, Pharm.D.
+                </div>
+              </div>
+
+              <div class="content">
+                ${formattedReport}
+              </div>
+
+              <div class="recommendations">
+                <h3>Prescribed Salon Rituals</h3>
+                <ul>
+                  ${recsHtml}
+                </ul>
+              </div>
+
+              <div class="footer">
+                <p>GraceAndGo Ateliers — Beauty. Elegance. Confidence.</p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+    }
+  };
+
+  const parseMarkdownToReact = (text: string) => {
+    if (!text) return null;
+    
+    const lines = text.split("\n");
+    const elements: React.ReactNode[] = [];
+    
+    const parseInlineStyles = (inputText: string): React.ReactNode[] => {
+      const tokenRegex = /(\*\*.*?\*\*|\*.*?\*)/g;
+      const tokens = inputText.split(tokenRegex);
+      
+      return tokens.map((token, idx) => {
+        if (token.startsWith("**") && token.endsWith("**")) {
+          return <strong key={idx} className="font-semibold text-gold">{token.slice(2, -2)}</strong>;
+        }
+        if (token.startsWith("*") && token.endsWith("*")) {
+          return <em key={idx} className="text-blush-pink/90 italic">{token.slice(1, -1)}</em>;
+        }
+        return token;
+      });
+    };
+
+    let inList = false;
+    let listItems: React.ReactNode[] = [];
+    let listKey = 0;
+
+    const pushBufferedList = () => {
+      if (listItems.length > 0) {
+        elements.push(
+          <ul key={`list-${listKey++}`} className="list-disc pl-5 space-y-1.5 my-2 text-muted-foreground">
+            {listItems}
+          </ul>
+        );
+        listItems = [];
+        inList = false;
+      }
+    };
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const trimmed = line.trim();
+
+      if (trimmed === "---") {
+        pushBufferedList();
+        elements.push(<div key={`hr-${i}`} className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent my-4" />);
+        continue;
+      }
+
+      const headerMatch = trimmed.match(/^(#{1,6})\s+(.*)$/);
+      if (headerMatch) {
+        pushBufferedList();
+        const level = headerMatch[1].length;
+        const content = headerMatch[2];
+        
+        if (level === 1) {
+          elements.push(
+            <h1 key={`h1-${i}`} className="font-display text-xl sm:text-2xl text-gold tracking-wider mt-5 mb-3 font-semibold text-center uppercase">
+              {parseInlineStyles(content)}
+            </h1>
+          );
+        } else if (level === 2) {
+          elements.push(
+            <h2 key={`h2-${i}`} className="font-display text-lg text-white tracking-wide mt-4 mb-2 font-medium">
+              {parseInlineStyles(content)}
+            </h2>
+          );
+        } else if (level === 3) {
+          elements.push(
+            <h3 key={`h3-${i}`} className="font-display text-sm sm:text-base text-gold mt-4 mb-2 font-bold tracking-wide uppercase">
+              {parseInlineStyles(content)}
+            </h3>
+          );
+        } else {
+          elements.push(
+            <h4 key={`h4-${i}`} className="text-white font-semibold text-xs tracking-wider uppercase mt-4 mb-1.5">
+              {parseInlineStyles(content)}
+            </h4>
+          );
+        }
+        continue;
+      }
+
+      const listMatch = trimmed.match(/^[-*+]\s+(.*)$/);
+      const numListMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
+
+      if (listMatch) {
+        inList = true;
+        listItems.push(
+          <li key={`li-${i}`} className="text-muted-foreground/90 ml-1 leading-relaxed text-xs">
+            {parseInlineStyles(listMatch[1])}
+          </li>
+        );
+        continue;
+      } else if (numListMatch) {
+        pushBufferedList();
+        elements.push(
+          <div key={`num-li-${i}`} className="flex gap-3 items-start my-3 bg-black/35 border border-blush-pink/10 rounded-xs p-3">
+            <span className="flex items-center justify-center w-5 h-5 rounded-full border border-gold/45 text-[0.65rem] font-bold text-gold shrink-0 bg-gold/5 mt-0.5">
+              {numListMatch[1]}
+            </span>
+            <div className="text-white/90 leading-relaxed text-xs">
+              {parseInlineStyles(numListMatch[2])}
+            </div>
+          </div>
+        );
+        continue;
+      }
+
+      if (trimmed === "") {
+        pushBufferedList();
+        continue;
+      }
+
+      pushBufferedList();
+      elements.push(
+        <p key={`p-${i}`} className="my-2 text-muted-foreground text-xs leading-relaxed">
+          {parseInlineStyles(trimmed)}
+        </p>
+      );
+    }
+
+    pushBufferedList();
+    return elements;
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 overflow-y-auto">
       {/* Dim overlay */}
@@ -250,7 +559,7 @@ ${recommendations.map(r => `- **${r.service}** (Available in our *${r.hotspot ==
       />
 
       {/* Main Diagnostic Hub Panel */}
-      <div className="relative w-full max-w-xl rounded-sm border border-blush-pink/20 bg-[oklch(0.12_0.005_60)] shadow-luxe z-10 animate-[scale-in_0.25s_ease-out] overflow-hidden max-h-[85vh] flex flex-col">
+      <div className="relative w-full max-w-2xl rounded-sm border border-[#d4af37]/35 bg-[oklch(0.12_0.005_60)] shadow-luxe z-10 animate-[scale-in_0.25s_ease-out] overflow-hidden max-h-[88vh] flex flex-col">
         <div className="absolute inset-x-0 top-0 h-px bg-gold-gradient" />
         
         {/* Header */}
@@ -276,83 +585,136 @@ ${recommendations.map(r => `- **${r.service}** (Available in our *${r.hotspot ==
           
           {/* STEP 1: QUESTIONNAIRE */}
           {step === "questions" && (
-            <div className="space-y-6">
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Welcome to the AI Diagnostic scanner. Please answer these questions regarding your skin and scalp health so our system can craft your tailored recipe.
-              </p>
+            <div className="space-y-7">
+              {/* Elegant intro */}
+              <div className="relative rounded-lg border border-[#d4af37]/15 bg-gradient-to-br from-[#d4af37]/[0.04] to-transparent p-5 overflow-hidden">
+                <div className="absolute top-0 right-0 w-24 h-24 opacity-[0.03]">
+                  <svg viewBox="0 0 100 100" fill="currentColor" className="text-[#d4af37]">
+                    <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="1" fill="none" />
+                    <circle cx="50" cy="50" r="30" stroke="currentColor" strokeWidth="0.5" fill="none" />
+                    <circle cx="50" cy="50" r="15" stroke="currentColor" strokeWidth="0.5" fill="none" />
+                  </svg>
+                </div>
+                <p className="text-xs text-white/70 leading-relaxed relative z-10">
+                  Welcome to the <span className="text-[#d4af37] font-semibold">Grace Diagnostic Scanner</span>. Please answer these questions about your skin and scalp health so our AI alchemist can craft your bespoke prescription.
+                </p>
+              </div>
 
               {/* Skin Section */}
-              <div className="space-y-3">
-                <span className="text-[0.6rem] tracking-[0.25em] uppercase text-gold font-bold block">Part I: Skin Dynamics</span>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-[0.5rem] tracking-wider uppercase text-muted-foreground">Skin Type</label>
-                    <select
-                      value={skinType}
-                      onChange={(e) => setSkinType(e.target.value)}
-                      className="w-full bg-black/35 border border-blush-pink/15 rounded-xs p-2 text-xs text-white focus:outline-none focus:border-gold"
-                    >
-                      <option value="dry">Dry / Dehydrated</option>
-                      <option value="oily">Oily / Shiny</option>
-                      <option value="sensitive">Sensitive / Reactive</option>
-                      <option value="combination">Combination (T-Zone)</option>
-                    </select>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#ffd1dc]/20 to-[#b76e79]/10 border border-[#ffd1dc]/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-[#ffd1dc] text-xs font-bold">I</span>
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[0.5rem] tracking-wider uppercase text-muted-foreground">Skin Concern</label>
-                    <select
-                      value={skinConcern}
-                      onChange={(e) => setSkinConcern(e.target.value)}
-                      className="w-full bg-black/35 border border-blush-pink/15 rounded-xs p-2 text-xs text-white focus:outline-none focus:border-gold"
-                    >
-                      <option value="dullness">Dullness & Lack of Glow</option>
-                      <option value="acne">Acne & Clogged Pores</option>
-                      <option value="aging">Fine Lines & Sagging</option>
-                      <option value="redness">Redness & Irritation</option>
-                    </select>
+                  <div>
+                    <span className="text-[0.6rem] tracking-[0.25em] uppercase text-[#d4af37] font-bold block">Part I</span>
+                    <span className="text-xs text-white/60 tracking-wide">Skin Dynamics</span>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-[0.52rem] tracking-[0.15em] uppercase text-white/40 font-semibold block">Skin Type</label>
+                    <div className="relative group/sel">
+                      <select
+                        value={skinType}
+                        onChange={(e) => setSkinType(e.target.value)}
+                        className="w-full appearance-none bg-[#1a1614] border border-white/[0.08] hover:border-[#d4af37]/40 focus:border-[#d4af37]/60 rounded-lg px-4 py-3 text-xs text-white/90 focus:outline-none transition-colors duration-300 cursor-pointer pr-10"
+                        style={{ colorScheme: "dark" }}
+                      >
+                        <option value="dry">Dry / Dehydrated</option>
+                        <option value="oily">Oily / Shiny</option>
+                        <option value="sensitive">Sensitive / Reactive</option>
+                        <option value="combination">Combination (T-Zone)</option>
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-white/30 group-hover/sel:text-[#d4af37]/60 transition-colors">
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[0.52rem] tracking-[0.15em] uppercase text-white/40 font-semibold block">Skin Concern</label>
+                    <div className="relative group/sel">
+                      <select
+                        value={skinConcern}
+                        onChange={(e) => setSkinConcern(e.target.value)}
+                        className="w-full appearance-none bg-[#1a1614] border border-white/[0.08] hover:border-[#d4af37]/40 focus:border-[#d4af37]/60 rounded-lg px-4 py-3 text-xs text-white/90 focus:outline-none transition-colors duration-300 cursor-pointer pr-10"
+                        style={{ colorScheme: "dark" }}
+                      >
+                        <option value="dullness">Dullness &amp; Lack of Glow</option>
+                        <option value="acne">Acne &amp; Clogged Pores</option>
+                        <option value="aging">Fine Lines &amp; Sagging</option>
+                        <option value="redness">Redness &amp; Irritation</option>
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-white/30 group-hover/sel:text-[#d4af37]/60 transition-colors">
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Hair Section */}
-              <div className="space-y-3">
-                <span className="text-[0.6rem] tracking-[0.25em] uppercase text-gold font-bold block">Part II: Hair & Scalp Ateliers</span>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <label className="text-[0.5rem] tracking-wider uppercase text-muted-foreground">Scalp Type</label>
-                    <select
-                      value={hairType}
-                      onChange={(e) => setHairType(e.target.value)}
-                      className="w-full bg-black/35 border border-blush-pink/15 rounded-xs p-2 text-xs text-white focus:outline-none focus:border-gold"
-                    >
-                      <option value="dry">Dry & Itchy</option>
-                      <option value="oily">Oily & Heavy</option>
-                      <option value="normal">Normal / Balanced</option>
-                      <option value="treated">Color / Keratin Treated</option>
-                    </select>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#d4af37]/15 to-[#b8860b]/10 border border-[#d4af37]/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-[#d4af37] text-xs font-bold">II</span>
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[0.5rem] tracking-wider uppercase text-muted-foreground">Hair Concern</label>
-                    <select
-                      value={hairConcern}
-                      onChange={(e) => setHairConcern(e.target.value)}
-                      className="w-full bg-black/35 border border-blush-pink/15 rounded-xs p-2 text-xs text-white focus:outline-none focus:border-gold"
-                    >
-                      <option value="hairfall">Hairfall & Volume Loss</option>
-                      <option value="dryness">Frizz & Split Ends</option>
-                      <option value="dandruff">Dandruff & Flaking</option>
-                      <option value="thinning">Limp & Thinning Strands</option>
-                    </select>
+                  <div>
+                    <span className="text-[0.6rem] tracking-[0.25em] uppercase text-[#d4af37] font-bold block">Part II</span>
+                    <span className="text-xs text-white/60 tracking-wide">Hair &amp; Scalp Ateliers</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-[0.52rem] tracking-[0.15em] uppercase text-white/40 font-semibold block">Scalp Type</label>
+                    <div className="relative group/sel">
+                      <select
+                        value={hairType}
+                        onChange={(e) => setHairType(e.target.value)}
+                        className="w-full appearance-none bg-[#1a1614] border border-white/[0.08] hover:border-[#d4af37]/40 focus:border-[#d4af37]/60 rounded-lg px-4 py-3 text-xs text-white/90 focus:outline-none transition-colors duration-300 cursor-pointer pr-10"
+                        style={{ colorScheme: "dark" }}
+                      >
+                        <option value="dry">Dry &amp; Itchy</option>
+                        <option value="oily">Oily &amp; Heavy</option>
+                        <option value="normal">Normal / Balanced</option>
+                        <option value="treated">Color / Keratin Treated</option>
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-white/30 group-hover/sel:text-[#d4af37]/60 transition-colors">
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[0.52rem] tracking-[0.15em] uppercase text-white/40 font-semibold block">Hair Concern</label>
+                    <div className="relative group/sel">
+                      <select
+                        value={hairConcern}
+                        onChange={(e) => setHairConcern(e.target.value)}
+                        className="w-full appearance-none bg-[#1a1614] border border-white/[0.08] hover:border-[#d4af37]/40 focus:border-[#d4af37]/60 rounded-lg px-4 py-3 text-xs text-white/90 focus:outline-none transition-colors duration-300 cursor-pointer pr-10"
+                        style={{ colorScheme: "dark" }}
+                      >
+                        <option value="hairfall">Hairfall &amp; Volume Loss</option>
+                        <option value="dryness">Frizz &amp; Split Ends</option>
+                        <option value="dandruff">Dandruff &amp; Flaking</option>
+                        <option value="thinning">Limp &amp; Thinning Strands</option>
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-white/30 group-hover/sel:text-[#d4af37]/60 transition-colors">
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-blush-pink/10 flex justify-end">
+              <div className="pt-5 border-t border-white/[0.06] flex justify-end">
                 <button
                   onClick={() => setStep("photo")}
-                  className="rounded-sm bg-gold-gradient px-8 py-3 text-xs font-semibold tracking-[0.3em] uppercase text-[#1c1a19] hover:brightness-110 shadow-soft cursor-pointer transition-all duration-300"
+                  className="group relative rounded-lg bg-gradient-to-r from-[#d4af37] to-[#c4a030] px-10 py-3.5 text-xs font-semibold tracking-[0.25em] uppercase text-[#1c1a19] hover:brightness-110 shadow-[0_4px_20px_rgba(212,175,55,0.25)] cursor-pointer transition-all duration-300 overflow-hidden"
                 >
-                  Proceed to Scan →
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                  <span className="relative z-10">Proceed to Scan →</span>
                 </button>
               </div>
             </div>
@@ -500,7 +862,7 @@ ${recommendations.map(r => `- **${r.service}** (Available in our *${r.hotspot ==
 
           {/* STEP 4: DIAGNOSTIC REPORT */}
           {step === "report" && (
-            <div className="space-y-6">
+            <div className="space-y-5">
               <div className="flex items-center gap-2 border-b border-blush-pink/10 pb-3">
                 <button 
                   onClick={() => setStep("photo")} 
@@ -513,36 +875,23 @@ ${recommendations.map(r => `- **${r.service}** (Available in our *${r.hotspot ==
                 </span>
               </div>
 
-              {/* Scrollable Report Content */}
-              <div className="bg-black/30 rounded-sm border border-blush-pink/15 p-5 text-xs text-left leading-relaxed space-y-4 max-h-[300px] overflow-y-auto pr-1 scrollbar-thin">
-                <div className="prose prose-invert prose-xs text-white/90">
-                  {reportText.split("\n").map((line, idx) => {
-                    if (line.startsWith("###")) {
-                      return <h3 key={idx} className="font-display text-xl text-gold mt-4 mb-2">{line.replace("###", "").trim()}</h3>;
-                    }
-                    if (line.startsWith("####")) {
-                      return <h4 key={idx} className="text-white font-semibold text-xs tracking-wider uppercase mt-4 mb-1.5">{line.replace("####", "").trim()}</h4>;
-                    }
-                    if (line.startsWith("-")) {
-                      return <li key={idx} className="list-disc list-inside text-muted-foreground ml-2 my-1">{line.replace("-", "").trim()}</li>;
-                    }
-                    if (line.trim() === "---") {
-                      return <div key={idx} className="h-px bg-blush-pink/10 my-3" />;
-                    }
-                    return <p key={idx} className="my-1.5 text-muted-foreground">{line}</p>;
-                  })}
+              {/* Scrollable Report Content - Made larger and fully custom styled */}
+              <div className="bg-black/45 rounded-sm border border-[#d4af37]/25 p-6 text-left relative overflow-hidden backdrop-blur-md max-h-[400px] overflow-y-auto pr-2 scrollbar-thin shadow-inner">
+                <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-[#d4af37]/35 to-transparent" />
+                <div className="prose prose-invert prose-xs text-white/95 space-y-3">
+                  {parseMarkdownToReact(reportText)}
                 </div>
               </div>
 
               {/* Recommendations CTAs */}
-              <div className="space-y-3">
-                <span className="text-[0.55rem] tracking-[0.25em] uppercase text-muted-foreground font-bold block">Prescribed Ritual Bookings</span>
+              <div className="space-y-2.5">
+                <span className="text-[0.55rem] tracking-[0.25em] uppercase text-gold font-bold block">Prescribed Ritual Bookings</span>
                 
                 <div className="grid gap-2">
                   {recommendedServices.map((rec, idx) => (
                     <div 
                       key={idx}
-                      className="flex items-center justify-between p-3.5 rounded-sm border border-blush-pink/10 bg-black/25 hover:border-gold/30 transition-all duration-300"
+                      className="flex items-center justify-between p-3 rounded-sm border border-blush-pink/10 bg-black/25 hover:border-gold/30 transition-all duration-300"
                     >
                       <div>
                         <p className="text-[0.5rem] tracking-wider uppercase text-gold">{getHotspotLabel(rec.hotspot)}</p>
@@ -553,7 +902,7 @@ ${recommendations.map(r => `- **${r.service}** (Available in our *${r.hotspot ==
                           onBookService(rec.hotspot, rec.service);
                           onClose();
                         }}
-                        className="rounded-sm border border-gold/60 px-3 py-1.5 text-[0.55rem] tracking-widest uppercase text-white hover:bg-gold hover:text-black transition-all cursor-pointer"
+                        className="rounded-sm border border-gold/60 px-3.5 py-1.5 text-[0.55rem] tracking-widest uppercase text-white hover:bg-gold hover:text-black transition-all cursor-pointer"
                       >
                         Book Ritual
                       </button>
@@ -562,10 +911,16 @@ ${recommendations.map(r => `- **${r.service}** (Available in our *${r.hotspot ==
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-blush-pink/10 flex justify-end">
+              <div className="pt-4 border-t border-blush-pink/10 flex gap-3 justify-end">
+                <button
+                  onClick={handlePrintPrescription}
+                  className="rounded-sm border border-gold/60 px-5 py-3 text-xs font-semibold tracking-[0.25em] uppercase text-gold hover:bg-gold/15 transition-all duration-300 flex items-center gap-2 cursor-pointer"
+                >
+                  <Printer className="w-4 h-4" /> Print Prescription
+                </button>
                 <button
                   onClick={onClose}
-                  className="rounded-sm bg-gold-gradient px-8 py-3.5 text-xs font-semibold tracking-[0.3em] uppercase text-[#1c1a19] hover:brightness-110 shadow-soft cursor-pointer transition-all duration-300"
+                  className="rounded-sm bg-gold-gradient px-8 py-3 text-xs font-semibold tracking-[0.25em] uppercase text-[#1c1a19] hover:brightness-110 shadow-soft cursor-pointer transition-all duration-300"
                 >
                   Return to Salon
                 </button>
