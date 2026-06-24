@@ -3,6 +3,9 @@ import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import ServiceOverlay from "@/components/salon/ServiceOverlay";
 import StorefrontOverlay from "@/components/salon/StorefrontOverlay";
+import EntranceLanding, { UserProfile } from "@/components/salon/EntranceLanding";
+import AIScanHub from "@/components/salon/AIScanHub";
+import { Sparkles, Award, User, RefreshCw } from "lucide-react";
 
 import { useScrollProgress } from "@/components/salon/useScrollProgress";
 import type { HotspotId } from "@/components/salon/SalonScene";
@@ -91,6 +94,26 @@ function Index() {
   const [isStorefrontOpen, setIsStorefrontOpen] = useState(false);
   const [hasEntered, setHasEntered] = useState(false);
 
+  // New States
+  const [selectedGender, setSelectedGender] = useState<"male" | "female" | null>(null);
+  const [showEntranceLanding, setShowEntranceLanding] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [showAIScanHub, setShowAIScanHub] = useState(false);
+
+  // Sync profile on mount
+  useEffect(() => {
+    const rawProfile = localStorage.getItem("gg_user_profile");
+    if (rawProfile) {
+      try {
+        const profile = JSON.parse(rawProfile);
+        setUserProfile(profile);
+        setSelectedGender(profile.gender || "female");
+      } catch (e) {
+        console.error("Error parsing user profile:", e);
+      }
+    }
+  }, []);
+
   // Guest Ledger State
   const [reviews, setReviews] = useState([
     {
@@ -155,20 +178,29 @@ function Index() {
     // Lock scrolling during the entrance transition animation
     document.body.style.overflow = "hidden";
 
-    // After the door animation completes, unlock scroll and navigate to the tour
+    // Show the customized landing page portal once the doors open
     setTimeout(() => {
       setHasEntered(true);
-      document.body.style.overflow = "";
-      // Scroll AFTER overflow is restored so the browser can actually scroll
-      requestAnimationFrame(() => {
-        document.getElementById("tour")?.scrollIntoView({ behavior: "smooth" });
-      });
+      setShowEntranceLanding(true);
     }, 1800);
   };
 
+  const handleSelectTour = (gender: "male" | "female") => {
+    setSelectedGender(gender);
+    setShowEntranceLanding(false);
+    document.body.style.overflow = "";
+    // Scroll AFTER overflow is restored so the browser can actually scroll
+    requestAnimationFrame(() => {
+      document.getElementById("tour")?.scrollIntoView({ behavior: "smooth" });
+    });
+  };
+
   const handleOpenComplete = useCallback(() => {
-    document.getElementById("tour")?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+    // Scroll to tour only if the intermediate landing portal is closed
+    if (!showEntranceLanding) {
+      document.getElementById("tour")?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [showEntranceLanding]);
 
   const handleOpenRoom = (id: HotspotId, serviceName?: string) => {
     setInitialService(serviceName || null);
@@ -218,9 +250,17 @@ function Index() {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/50" />
       </div>
 
+      {/* Runway Rewards Ticker Banner */}
+      {hasEntered && (
+        <div className="fixed inset-x-0 top-0 z-40 bg-gradient-to-r from-[#b76e79] via-[#d4af37] to-[#b76e79] text-[#1c1a19] text-[0.52rem] sm:text-[0.58rem] tracking-[0.25em] uppercase font-bold py-1.5 px-4 text-center shadow-md flex items-center justify-center gap-2 select-none border-b border-[#d4af37]/20">
+          <Award className="w-3.5 h-3.5 animate-pulse text-[#1c1a19]" />
+          <span>Wednesday & Friday Runway Rewards: 11% Off all treatments before 2:00 PM!</span>
+        </div>
+      )}
+
       {/* Top nav */}
-      <header className={`fixed inset-x-0 top-0 z-40 flex items-center justify-between px-6 py-4 sm:px-12 bg-black/60 backdrop-blur-md border-b border-blush-pink/10 transition-all duration-1000 ${
-        hasEntered ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+      <header className={`fixed inset-x-0 z-40 flex items-center justify-between px-6 py-4 sm:px-12 bg-black/60 backdrop-blur-md border-b border-blush-pink/10 transition-all duration-1000 ${
+        hasEntered ? "opacity-100 translate-y-0 top-[28px]" : "opacity-0 -translate-y-4 pointer-events-none top-0"
       }`}>
         <div>
           <p className="font-display text-xl tracking-wide text-white text-shadow-tight">
@@ -237,6 +277,18 @@ function Index() {
           <a className="transition hover:text-blush" href="#services">
             Services
           </a>
+          <button 
+            onClick={() => setShowAIScanHub(true)} 
+            className="transition hover:text-blush uppercase tracking-[0.35em] text-[0.65rem] bg-transparent border-none cursor-pointer"
+          >
+            AI Scan
+          </button>
+          <button 
+            onClick={() => setShowEntranceLanding(true)} 
+            className="transition hover:text-blush uppercase tracking-[0.35em] text-[0.65rem] bg-transparent border-none cursor-pointer flex items-center gap-1 text-[#ffd700]"
+          >
+            <User className="w-3 h-3 text-[#ffd700]" /> VIP Card
+          </button>
           <a className="transition hover:text-blush" href="#reviews">
             Ledger
           </a>
@@ -650,10 +702,23 @@ function Index() {
       <ServiceOverlay
         id={open}
         initialServiceName={initialService}
+        gender={selectedGender}
         onClose={() => {
           setOpen(null);
           setInitialService(null);
         }}
+      />
+
+      <EntranceLanding
+        isOpen={showEntranceLanding}
+        onClose={() => setShowEntranceLanding(false)}
+        onSelectTour={handleSelectTour}
+      />
+
+      <AIScanHub
+        isOpen={showAIScanHub}
+        onClose={() => setShowAIScanHub(false)}
+        onBookService={(hId, sName) => handleOpenRoom(hId as HotspotId, sName)}
       />
     </div>
   );

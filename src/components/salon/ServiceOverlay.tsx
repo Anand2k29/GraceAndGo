@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import type { HotspotId } from "./SalonScene";
+import ScratchCard from "./ScratchCard";
+import { Gift, Award, Percent, Calendar } from "lucide-react";
 
 interface Service {
   name: string;
   duration: string;
   price: string;
   note?: string;
+  gender?: "male" | "female" | "both";
 }
 
 const DATA: Record<
@@ -17,54 +20,73 @@ const DATA: Record<
     title: "Hair Atelier",
     tagline: "Couture cuts, color & ceremonial blow-outs by master stylists.",
     services: [
-      { name: "Signature Cut & Style", duration: "75 min", price: "₹4,500" },
+      // Female Services
+      { name: "Signature Cut & Style", duration: "75 min", price: "₹4,500", gender: "female" },
       {
         name: "Balayage Composition",
         duration: "180 min",
         price: "₹9,500",
         note: "Most requested",
+        gender: "female",
       },
-      { name: "Silk Press Ritual", duration: "120 min", price: "₹6,500" },
-      { name: "Bridal Atelier Package", duration: "240 min", price: "₹18,000" },
+      { name: "Silk Press Ritual", duration: "120 min", price: "₹6,500", gender: "female" },
+      { name: "Bridal Atelier Package", duration: "240 min", price: "₹18,000", gender: "female" },
+      // Male Services
+      { name: "Classic Contour Cut & Shave", duration: "60 min", price: "₹3,000", gender: "male" },
+      { name: "Beard Grooming Ritual", duration: "45 min", price: "₹2,200", gender: "male" },
+      { name: "Scalp Detox & Cut", duration: "75 min", price: "₹4,500", gender: "male" },
+      { name: "Groom's Atelier Styling", duration: "150 min", price: "₹12,000", gender: "male" },
     ],
   },
   nails: {
     title: "Nails Bar",
     tagline: "Hand-painted artistry on champagne-marble manicure stations.",
     services: [
-      { name: "Grace Manicure", duration: "45 min", price: "₹2,200" },
-      { name: "Gel Sculpture", duration: "75 min", price: "₹3,500" },
-      { name: "Pedicure Grace", duration: "60 min", price: "₹2,800" },
-      { name: "Crystal Couture Set", duration: "120 min", price: "₹6,000" },
+      // Female Services
+      { name: "Grace Manicure", duration: "45 min", price: "₹2,200", gender: "female" },
+      { name: "Gel Sculpture", duration: "75 min", price: "₹3,500", gender: "female" },
+      { name: "Pedicure Grace", duration: "60 min", price: "₹2,800", gender: "female" },
+      { name: "Crystal Couture Set", duration: "120 min", price: "₹6,000", gender: "female" },
+      // Male Services
+      { name: "Gentleman's Hand Care & Buff", duration: "35 min", price: "₹1,800", gender: "male" },
+      { name: "Sports Pedicure & Massage", duration: "50 min", price: "₹2,400", gender: "male" },
+      { name: "Executive Hand & Foot Ritual", duration: "90 min", price: "₹3,800", gender: "male" },
     ],
   },
   facial: {
     title: "Facial Suite",
     tagline: "Bespoke skincare protocols in a private VIP chamber.",
     services: [
-      { name: "Glow Facial", duration: "60 min", price: "₹6,500" },
+      // Female Services
+      { name: "Glow Facial", duration: "60 min", price: "₹6,500", gender: "female" },
       {
         name: "Diamond Microdermabrasion",
         duration: "75 min",
         price: "₹9,000",
+        gender: "female",
       },
       {
         name: "LED & Cryo Ritual",
         duration: "90 min",
         price: "₹11,000",
         note: "VIP exclusive",
+        gender: "female",
       },
-      { name: "24K Gold Renewal", duration: "120 min", price: "₹16,500" },
+      { name: "24K Gold Renewal", duration: "120 min", price: "₹16,500", gender: "female" },
+      // Male Services
+      { name: "Active Charcoal Facial", duration: "60 min", price: "₹5,500", gender: "male" },
+      { name: "Skin Hydrating Beard Facial", duration: "70 min", price: "₹6,000", gender: "male" },
+      { name: "Gentleman's Pore Refining Detox", duration: "90 min", price: "₹8,000", gender: "male" },
     ],
   },
   product: {
     title: "GraceAndGo Apothecary",
     tagline: "Curated serums, oils & elixirs — bottled by hand in Provence.",
     services: [
-      { name: "No.07 Radiance Serum", duration: "30 ml", price: "₹5,500" },
-      { name: "Velours Hair Oil", duration: "50 ml", price: "₹3,800" },
-      { name: "Pearl Night Crème", duration: "50 ml", price: "₹7,200" },
-      { name: "Rose Quartz Mist", duration: "100 ml", price: "₹2,800" },
+      { name: "No.07 Radiance Serum", duration: "30 ml", price: "₹5,500", gender: "both" },
+      { name: "Velours Hair Oil", duration: "50 ml", price: "₹3,800", gender: "both" },
+      { name: "Pearl Night Crème", duration: "50 ml", price: "₹7,200", gender: "both" },
+      { name: "Rose Quartz Mist", duration: "100 ml", price: "₹2,800", gender: "both" },
     ],
   },
   treatment: {
@@ -72,25 +94,49 @@ const DATA: Record<
     tagline:
       "Rejuvenating head spas, scalp detox rituals, and organic oil infusions.",
     services: [
+      // Female Services
       {
         name: "Signature Hair Spa Treatment",
         duration: "90 min",
         price: "₹5,800",
+        gender: "female",
       },
       {
         name: "Scalp Detoxification Ritual",
         duration: "60 min",
         price: "₹4,200",
+        gender: "female",
       },
       {
         name: "Ayurvedic Hair & Scalp Therapy",
         duration: "75 min",
         price: "₹4,800",
+        gender: "female",
       },
       {
         name: "Keratin Restorative Treatment",
         duration: "120 min",
         price: "₹8,500",
+        gender: "female",
+      },
+      // Male Services
+      {
+        name: "Gentleman's Scalp Oil Infusion",
+        duration: "60 min",
+        price: "₹3,800",
+        gender: "male",
+      },
+      {
+        name: "Deep-Tissue Head & Shoulder Massage",
+        duration: "75 min",
+        price: "₹4,500",
+        gender: "male",
+      },
+      {
+        name: "Activated Charcoal Scalp Spa",
+        duration: "90 min",
+        price: "₹5,200",
+        gender: "male",
       },
     ],
   },
@@ -99,20 +145,43 @@ const DATA: Record<
     tagline:
       "A private studio suite for exclusive foot therapy, pedicures, and custom styling.",
     services: [
+      // Female Services
       {
         name: "Royal Pedicure & Manicure Duo",
         duration: "90 min",
         price: "₹7,500",
+        gender: "female",
       },
       {
         name: "Private Suite Custom Styling",
         duration: "120 min",
         price: "₹12,000",
+        gender: "female",
       },
       {
         name: "VIP Champagne Grooming Experience",
         duration: "150 min",
         price: "₹15,000",
+        gender: "female",
+      },
+      // Male Services
+      {
+        name: "The Royal Executive Grooming",
+        duration: "90 min",
+        price: "₹8,500",
+        gender: "male",
+      },
+      {
+        name: "Private Styling & Beard Spa",
+        duration: "120 min",
+        price: "₹10,000",
+        gender: "male",
+      },
+      {
+        name: "Elite Groom & Champagne Ritual",
+        duration: "150 min",
+        price: "₹14,000",
+        gender: "male",
       },
     ],
   },
@@ -207,15 +276,33 @@ export default function ServiceOverlay({
   id,
   onClose,
   initialServiceName,
+  gender,
 }: {
   id: HotspotId | null;
   onClose: () => void;
   initialServiceName?: string | null;
+  gender?: "male" | "female" | null;
 }) {
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [bookingStep, setBookingStep] = useState<
     "select" | "details" | "success"
   >("select");
+
+  // Gender filter for catalog services
+  const [genderFilter, setGenderFilter] = useState<"male" | "female">("female");
+
+  // Scratch card state
+  const [showScratchCard, setShowScratchCard] = useState(false);
+  const [scratchDiscountPercent, setScratchDiscountPercent] = useState(0);
+  const [scratchCode, setScratchCode] = useState("");
+
+  // Referral discount state
+  const [referralDiscountUnlocked, setReferralDiscountUnlocked] = useState(false);
+  const [applyReferralDiscount, setApplyReferralDiscount] = useState(false);
+
+  // Birthday discount state
+  const [isBirthdayMonth, setIsBirthdayMonth] = useState(false);
+  const [applyBirthdayDiscount, setApplyBirthdayDiscount] = useState(false);
 
   // Form fields
   const [selectedDate, setSelectedDate] = useState<string>("");
@@ -225,6 +312,43 @@ export default function ServiceOverlay({
   const [clientEmail, setClientEmail] = useState<string>("");
   const [clientPhone, setClientPhone] = useState<string>("");
   const [confCode, setConfCode] = useState<string>("");
+
+  // Sync profile details if logged in
+  useEffect(() => {
+    const rawProfile = localStorage.getItem("gg_user_profile");
+    if (rawProfile) {
+      try {
+        const profile = JSON.parse(rawProfile);
+        setClientName(profile.name || "");
+        setClientEmail(profile.email || "");
+        setClientPhone(profile.phone || "");
+
+        // Check if DOB month is current month
+        if (profile.dob) {
+          const dobDate = new Date(profile.dob);
+          const currentMonth = new Date().getMonth();
+          if (dobDate.getMonth() === currentMonth) {
+            setIsBirthdayMonth(true);
+          }
+        }
+      } catch (e) {
+        console.error("Error reading profile:", e);
+      }
+    }
+
+    // Check referrals (3 referrals unlocks 50% discount)
+    const referralCount = parseInt(localStorage.getItem("gg_referral_count") || "0", 10);
+    if (referralCount >= 3) {
+      setReferralDiscountUnlocked(true);
+    }
+  }, [id, bookingStep]);
+
+  // Sync gender filter
+  useEffect(() => {
+    if (gender) {
+      setGenderFilter(gender);
+    }
+  }, [gender]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) =>
@@ -246,6 +370,13 @@ export default function ServiceOverlay({
         setSelectedDate(localDays[0]?.raw || "");
         setSelectedTime(TIME_SLOTS[0] || "");
         setSelectedArtisan(localArtisans[0]?.name || "");
+        
+        // Reset discounts
+        setScratchDiscountPercent(0);
+        setScratchCode("");
+        setApplyReferralDiscount(false);
+        setApplyBirthdayDiscount(false);
+        
         setBookingStep("details");
         return;
       }
@@ -255,9 +386,12 @@ export default function ServiceOverlay({
     setBookingStep("select");
     setSelectedDate("");
     setSelectedTime("");
-    setClientName("");
-    setClientEmail("");
-    setClientPhone("");
+    
+    // Reset discounts
+    setScratchDiscountPercent(0);
+    setScratchCode("");
+    setApplyReferralDiscount(false);
+    setApplyBirthdayDiscount(false);
   }, [id, initialServiceName]);
 
   if (!id) return null;
@@ -273,8 +407,72 @@ export default function ServiceOverlay({
     }, 300);
   };
 
+  const parsePrice = (priceStr: string) => {
+    const num = parseInt(priceStr.replace(/[^0-9]/g, ""), 10);
+    return isNaN(num) ? 0 : num;
+  };
+
+  const calculatePricing = () => {
+    if (!selectedService) return { original: 0, final: 0, scratchAmt: 0, runwayAmt: 0, refAmt: 0, bdayAmt: 0, totalDiscount: 0, isRunwayActive: false };
+    const original = parsePrice(selectedService.price);
+    
+    // Check Runway Rewards
+    let runwayPercent = 0;
+    const isWedOrFri = selectedDate.startsWith("Wed") || selectedDate.startsWith("Fri");
+    const isBefore2PM = selectedTime && ["09:30 AM", "11:00 AM", "01:00 PM"].includes(selectedTime);
+    if (isWedOrFri && isBefore2PM) {
+      runwayPercent = 11;
+    }
+
+    // Calculations
+    const scratchAmt = Math.round(original * (scratchDiscountPercent / 100));
+    const runwayAmt = Math.round((original - scratchAmt) * (runwayPercent / 100));
+    
+    let refAmt = 0;
+    if (applyReferralDiscount) {
+      refAmt = Math.round((original - scratchAmt - runwayAmt) * 0.5);
+    }
+    
+    let bdayAmt = 0;
+    if (applyBirthdayDiscount) {
+      bdayAmt = Math.round((original - scratchAmt - runwayAmt - refAmt) * 0.15);
+    }
+
+    const final = original - scratchAmt - runwayAmt - refAmt - bdayAmt;
+    const totalDiscount = original - final;
+
+    return {
+      original,
+      final,
+      scratchAmt,
+      runwayAmt,
+      refAmt,
+      bdayAmt,
+      totalDiscount,
+      isRunwayActive: runwayPercent > 0,
+    };
+  };
+
+  const handleScratchReveal = (pct: number, code: string) => {
+    setScratchDiscountPercent(pct);
+    setScratchCode(code);
+    
+    // Once scratch completes, close scratch and proceed to details
+    setSelectedDate(days[0].raw);
+    setSelectedTime(TIME_SLOTS[0]);
+    setSelectedArtisan(artisansList[0]?.name || "");
+    setBookingStep("details");
+    setShowScratchCard(false);
+  };
+
   const handleProceedToBooking = () => {
     if (selectedService) {
+      const priceVal = parsePrice(selectedService.price);
+      // High-value check: Price >= ₹6,000
+      if (priceVal >= 6000 && scratchDiscountPercent === 0) {
+        setShowScratchCard(true);
+        return;
+      }
       setSelectedDate(days[0].raw);
       setSelectedTime(TIME_SLOTS[0]);
       setSelectedArtisan(artisansList[0]?.name || "");
@@ -336,43 +534,79 @@ export default function ServiceOverlay({
                 {d.tagline}
               </p>
 
+              {/* Gender selector for catalog inside booking overlay */}
+              {id !== "product" && (
+                <div className="flex p-0.5 rounded-full border border-blush-pink/15 bg-black/45 w-fit">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setGenderFilter("female");
+                      setSelectedService(null);
+                    }}
+                    className={`px-4 py-1.5 rounded-full text-[0.6rem] tracking-[0.2em] uppercase transition-all duration-300 font-semibold cursor-pointer ${
+                      genderFilter === "female"
+                        ? "bg-gradient-to-r from-[#ffd1dc] to-[#b76e79] text-[#1c1a19] shadow-soft"
+                        : "text-white/60 hover:text-white"
+                    }`}
+                  >
+                    Ladies' Rituals
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setGenderFilter("male");
+                      setSelectedService(null);
+                    }}
+                    className={`px-4 py-1.5 rounded-full text-[0.6rem] tracking-[0.2em] uppercase transition-all duration-300 font-semibold cursor-pointer ${
+                      genderFilter === "male"
+                        ? "bg-gradient-to-r from-[#b76e79] to-[#d4af37] text-[#1c1a19] shadow-soft"
+                        : "text-white/60 hover:text-white"
+                    }`}
+                  >
+                    Gentlemen's Rituals
+                  </button>
+                </div>
+              )}
+
               <div className="space-y-3">
-                {d.services.map((s) => {
-                  const isSelected = selectedService?.name === s.name;
-                  return (
-                    <button
-                      key={s.name}
-                      onClick={() => setSelectedService(s)}
-                      className={`w-full text-left flex items-baseline justify-between gap-4 p-4 rounded-sm border transition-all duration-300 ${
-                        isSelected
-                          ? "border-gold bg-blush-pink/10 shadow-soft"
-                          : "border-blush-pink/10 bg-black/20 hover:border-blush-pink/30 hover:bg-[oklch(0.16_0.006_60)]"
-                      }`}
-                    >
-                      <div className="pr-4">
-                        <span className="font-display text-lg text-foreground flex items-center gap-2">
-                          {isSelected && (
-                            <span className="text-gold text-xs">●</span>
-                          )}
-                          {s.name}
-                          {s.note && (
-                            <span className="ml-1 text-[0.55rem] tracking-[0.2em] uppercase text-[oklch(0.88_0.05_25)] border border-[oklch(0.88_0.05_25)]/20 px-1 rounded-sm">
-                              {s.note}
-                            </span>
-                          )}
-                        </span>
-                        <p className="text-[0.65rem] tracking-widest uppercase text-muted-foreground mt-1">
-                          {s.duration}
-                        </p>
-                      </div>
-                      <span
-                        className={`font-display text-lg ${isSelected ? "text-gold" : "text-muted-foreground group-hover:text-gold"}`}
+                {d.services
+                  .filter((s) => s.gender === "both" || !s.gender || s.gender === genderFilter)
+                  .map((s) => {
+                    const isSelected = selectedService?.name === s.name;
+                    return (
+                      <button
+                        key={s.name}
+                        onClick={() => setSelectedService(s)}
+                        className={`w-full text-left flex items-baseline justify-between gap-4 p-4 rounded-sm border transition-all duration-300 ${
+                          isSelected
+                            ? "border-gold bg-blush-pink/10 shadow-soft"
+                            : "border-blush-pink/10 bg-black/20 hover:border-blush-pink/30 hover:bg-[oklch(0.16_0.006_60)]"
+                        }`}
                       >
-                        {s.price}
-                      </span>
-                    </button>
-                  );
-                })}
+                        <div className="pr-4">
+                          <span className="font-display text-lg text-foreground flex items-center gap-2">
+                            {isSelected && (
+                              <span className="text-gold text-xs">●</span>
+                            )}
+                            {s.name}
+                            {s.note && (
+                              <span className="ml-1 text-[0.55rem] tracking-[0.2em] uppercase text-[oklch(0.88_0.05_25)] border border-[oklch(0.88_0.05_25)]/20 px-1 rounded-sm">
+                                {s.note}
+                              </span>
+                            )}
+                          </span>
+                          <p className="text-[0.65rem] tracking-widest uppercase text-muted-foreground mt-1">
+                            {s.duration}
+                          </p>
+                        </div>
+                        <span
+                          className={`font-display text-lg ${isSelected ? "text-gold" : "text-muted-foreground group-hover:text-gold"}`}
+                        >
+                          {s.price}
+                        </span>
+                      </button>
+                    );
+                  })}
               </div>
 
               <div className="pt-4 border-t border-blush-pink/10">
@@ -549,13 +783,111 @@ export default function ServiceOverlay({
                 </div>
               </div>
 
+              {/* Dynamic Privileges & Discounts Selector */}
+              {(scratchDiscountPercent > 0 || referralDiscountUnlocked || isBirthdayMonth || calculatePricing().isRunwayActive) && (
+                <div className="space-y-2.5 pt-2 border-t border-blush-pink/10">
+                  <label className="text-[0.65rem] tracking-[0.3em] uppercase text-gold block">
+                    Available Privileges
+                  </label>
+                  <div className="space-y-2 bg-black/25 p-3.5 rounded-sm border border-blush-pink/10">
+                    
+                    {/* Scratch Card Discount Badge */}
+                    {scratchDiscountPercent > 0 && (
+                      <div className="flex items-center gap-2 text-xs text-foreground">
+                        <Gift className="w-4 h-4 text-gold flex-shrink-0" />
+                        <span className="text-[0.7rem]">
+                          Scratch reward applied: <strong className="text-gold">{scratchDiscountPercent}% off</strong> ({scratchCode})
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Runway Rewards active */}
+                    {calculatePricing().isRunwayActive && (
+                      <div className="flex items-center gap-2 text-xs text-foreground">
+                        <Award className="w-4 h-4 text-gold flex-shrink-0" />
+                        <span className="text-[0.7rem]">
+                          Runway Rewards active: <strong className="text-gold">11% off</strong> applied for this time slot.
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Referral Discount Toggle */}
+                    {referralDiscountUnlocked && (
+                      <label className="flex items-center gap-2 text-xs text-foreground cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={applyReferralDiscount}
+                          onChange={(e) => setApplyReferralDiscount(e.target.checked)}
+                          className="rounded-xs border border-blush-pink/20 accent-gold"
+                        />
+                        <span className="text-[0.7rem]">
+                          Apply 3-Referral Discount (<strong className="text-gold">50% off</strong> next visit)
+                        </span>
+                      </label>
+                    )}
+
+                    {/* Birthday Discount Toggle */}
+                    {isBirthdayMonth && (
+                      <label className="flex items-center gap-2 text-xs text-foreground cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={applyBirthdayDiscount}
+                          onChange={(e) => setApplyBirthdayDiscount(e.target.checked)}
+                          className="rounded-xs border border-blush-pink/20 accent-gold"
+                        />
+                        <span className="text-[0.7rem]">
+                          Apply Birthday Month Privilege (<strong className="text-gold">15% off</strong> coupon)
+                        </span>
+                      </label>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Detailed Invoice Breakdown */}
+              <div className="bg-black/35 rounded-sm border border-blush-pink/10 p-4 text-[0.65rem] space-y-2 select-none">
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Standard Price:</span>
+                  <span>{selectedService.price}</span>
+                </div>
+                {scratchDiscountPercent > 0 && (
+                  <div className="flex justify-between text-[#b76e79]">
+                    <span>Scratch-off Discount ({scratchDiscountPercent}%):</span>
+                    <span>-₹{calculatePricing().scratchAmt.toLocaleString("en-IN")}</span>
+                  </div>
+                )}
+                {calculatePricing().isRunwayActive && (
+                  <div className="flex justify-between text-[#b76e79]">
+                    <span>Runway Rewards Discount (11%):</span>
+                    <span>-₹{calculatePricing().runwayAmt.toLocaleString("en-IN")}</span>
+                  </div>
+                )}
+                {applyReferralDiscount && (
+                  <div className="flex justify-between text-[#b76e79]">
+                    <span>Referrals Promotion Discount (50%):</span>
+                    <span>-₹{calculatePricing().refAmt.toLocaleString("en-IN")}</span>
+                  </div>
+                )}
+                {applyBirthdayDiscount && (
+                  <div className="flex justify-between text-[#b76e79]">
+                    <span>Birthday Month Privilege (15%):</span>
+                    <span>-₹{calculatePricing().bdayAmt.toLocaleString("en-IN")}</span>
+                  </div>
+                )}
+                <div className="h-px bg-blush-pink/15 my-1" />
+                <div className="flex justify-between text-xs text-white font-semibold">
+                  <span className="text-gold">Estimated Total due:</span>
+                  <span className="text-gold">₹{calculatePricing().final.toLocaleString("en-IN")}</span>
+                </div>
+              </div>
+
               {/* Submit CTA */}
               <div className="pt-4 border-t border-blush-pink/10">
                 <button
                   type="submit"
                   className="w-full overflow-hidden rounded-sm bg-gold-gradient py-3.5 text-xs font-semibold tracking-[0.3em] uppercase text-[oklch(0.14_0.005_60)] hover:brightness-110 shadow-soft cursor-pointer transition-all duration-300"
                 >
-                  Request Booking
+                  Request Booking - ₹{calculatePricing().final.toLocaleString("en-IN")}
                 </button>
               </div>
             </form>
@@ -620,6 +952,12 @@ export default function ServiceOverlay({
                     {clientName}
                   </span>
                 </div>
+                <div className="flex justify-between items-baseline border-t border-border/10 pt-2 mt-2">
+                  <span className="text-gold font-bold">Price Paid:</span>
+                  <span className="text-gold font-bold">
+                    ₹{calculatePricing().final.toLocaleString("en-IN")}
+                  </span>
+                </div>
               </div>
 
               <div className="pt-6 border-t border-blush-pink/10 max-w-sm mx-auto">
@@ -635,6 +973,15 @@ export default function ServiceOverlay({
           )}
         </div>
       </div>
+
+      {showScratchCard && selectedService && (
+        <ScratchCard
+          serviceName={selectedService.name}
+          servicePrice={selectedService.price}
+          onReveal={handleScratchReveal}
+          onClose={() => setShowScratchCard(false)}
+        />
+      )}
     </div>
   );
 }
