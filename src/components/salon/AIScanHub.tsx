@@ -551,15 +551,21 @@ ${recommendations.map(r => `- **${r.service}** (Available in our *${r.hotspot ==
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8">
       {/* Dim overlay */}
       <div 
-        className="absolute inset-0 bg-black/80 backdrop-blur-md animate-[fade-in_0.3s_ease-out]"
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm animate-[fade-in_0.3s_ease-out]"
         onClick={step === "scanning" ? undefined : onClose}
       />
 
-      {/* Main Diagnostic Hub Panel */}
-      <div className="relative w-full max-w-2xl rounded-sm border border-[#d4af37]/35 bg-[oklch(0.12_0.005_60)] shadow-luxe z-10 animate-[scale-in_0.25s_ease-out] overflow-hidden max-h-[88vh] flex flex-col">
+      {/* Centered Diagnostic Panel */}
+      <div className={`relative w-full ${step === "report" ? "max-w-4xl" : "max-w-xl"} max-h-[90vh] sm:max-h-[85vh] border border-[#d4af37]/35 bg-[oklch(0.12_0.005_60)] shadow-luxe rounded-sm z-10 overflow-hidden flex flex-col transition-all duration-500 ease-out animate-[scale-in_0.3s_cubic-bezier(0.16,1,0.3,1)]`}>
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes scale-in {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+          }
+        `}} />
         <div className="absolute inset-x-0 top-0 h-px bg-gold-gradient" />
         
         {/* Header */}
@@ -581,7 +587,7 @@ ${recommendations.map(r => `- **${r.service}** (Available in our *${r.hotspot ==
         </div>
 
         {/* Dynamic Step Content */}
-        <div className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-6 grain">
+        <div className={`flex-1 ${step === 'report' ? 'overflow-hidden flex flex-col' : 'overflow-y-auto'} p-6 sm:p-8 space-y-6 grain`}>
           
           {/* STEP 1: QUESTIONNAIRE */}
           {step === "questions" && (
@@ -862,8 +868,8 @@ ${recommendations.map(r => `- **${r.service}** (Available in our *${r.hotspot ==
 
           {/* STEP 4: DIAGNOSTIC REPORT */}
           {step === "report" && (
-            <div className="space-y-5">
-              <div className="flex items-center gap-2 border-b border-blush-pink/10 pb-3">
+            <div className="flex flex-col h-full space-y-4 overflow-hidden">
+              <div className="flex items-center gap-2 border-b border-blush-pink/10 pb-3 flex-shrink-0">
                 <button 
                   onClick={() => setStep("photo")} 
                   className="text-gold text-xs tracking-wider uppercase hover:underline"
@@ -875,43 +881,49 @@ ${recommendations.map(r => `- **${r.service}** (Available in our *${r.hotspot ==
                 </span>
               </div>
 
-              {/* Scrollable Report Content - Made larger and fully custom styled */}
-              <div className="bg-black/45 rounded-sm border border-[#d4af37]/25 p-6 text-left relative overflow-hidden backdrop-blur-md max-h-[400px] overflow-y-auto pr-2 scrollbar-thin shadow-inner">
-                <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-[#d4af37]/35 to-transparent" />
-                <div className="prose prose-invert prose-xs text-white/95 space-y-3">
-                  {parseMarkdownToReact(reportText)}
+              {/* Side-by-side Layout to make report and ritual bookings visible together without extra scrolling */}
+              <div className="flex-1 flex flex-col md:flex-row gap-6 min-h-0 overflow-hidden">
+                {/* Left Side: Scrollable Report Content */}
+                <div className="flex-1 bg-black/45 rounded-sm border border-[#d4af37]/25 p-5 text-left relative overflow-hidden backdrop-blur-md flex flex-col shadow-inner min-h-0">
+                  <div className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-[#d4af37]/35 to-transparent" />
+                  <div className="flex-1 overflow-y-auto pr-2 scrollbar-thin prose prose-invert prose-xs text-white/95 space-y-3">
+                    {parseMarkdownToReact(reportText)}
+                  </div>
                 </div>
-              </div>
 
-              {/* Recommendations CTAs */}
-              <div className="space-y-2.5">
-                <span className="text-[0.55rem] tracking-[0.25em] uppercase text-gold font-bold block">Prescribed Ritual Bookings</span>
-                
-                <div className="grid gap-2">
-                  {recommendedServices.map((rec, idx) => (
-                    <div 
-                      key={idx}
-                      className="flex items-center justify-between p-3 rounded-sm border border-blush-pink/10 bg-black/25 hover:border-gold/30 transition-all duration-300"
-                    >
-                      <div>
-                        <p className="text-[0.5rem] tracking-wider uppercase text-gold">{getHotspotLabel(rec.hotspot)}</p>
-                        <p className="text-xs font-semibold text-white mt-0.5">{rec.service}</p>
-                      </div>
-                      <button
-                        onClick={() => {
-                          onBookService(rec.hotspot, rec.service);
-                          onClose();
-                        }}
-                        className="rounded-sm border border-gold/60 px-3.5 py-1.5 text-[0.55rem] tracking-widest uppercase text-white hover:bg-gold hover:text-black transition-all cursor-pointer"
+                {/* Right Side: Recommendations CTAs */}
+                <div className="w-full md:w-[340px] flex-shrink-0 flex flex-col min-h-0">
+                  <span className="text-[0.55rem] tracking-[0.25em] uppercase text-gold font-bold block mb-3 flex-shrink-0">
+                    Prescribed Ritual Bookings
+                  </span>
+                  
+                  <div className="flex-1 overflow-y-auto pr-1 scrollbar-thin space-y-2">
+                    {recommendedServices.map((rec, idx) => (
+                      <div 
+                        key={idx}
+                        className="flex items-center justify-between p-3.5 rounded-sm border border-blush-pink/10 bg-black/25 hover:border-gold/30 transition-all duration-300"
                       >
-                        Book Ritual
-                      </button>
-                    </div>
-                  ))}
+                        <div className="pr-2 min-w-0">
+                          <p className="text-[0.5rem] tracking-wider uppercase text-gold truncate">{getHotspotLabel(rec.hotspot)}</p>
+                          <p className="text-xs font-semibold text-white mt-0.5 truncate" title={rec.service}>{rec.service}</p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            onBookService(rec.hotspot, rec.service);
+                            onClose();
+                          }}
+                          className="flex-shrink-0 rounded-sm border border-gold/60 px-3.5 py-1.5 text-[0.55rem] tracking-widest uppercase text-white hover:bg-gold hover:text-black transition-all cursor-pointer"
+                        >
+                          Book Ritual
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-blush-pink/10 flex gap-3 justify-end">
+              {/* Bottom Actions Row */}
+              <div className="pt-4 border-t border-blush-pink/10 flex gap-3 justify-end flex-shrink-0">
                 <button
                   onClick={handlePrintPrescription}
                   className="rounded-sm border border-gold/60 px-5 py-3 text-xs font-semibold tracking-[0.25em] uppercase text-gold hover:bg-gold/15 transition-all duration-300 flex items-center gap-2 cursor-pointer"

@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import React, { useState, useEffect } from "react";
-import { Sparkles, Printer, User, Phone, Calendar, Mail, Share2, Award, Copy, Check, ShieldCheck, HelpCircle, ArrowLeft, Trophy } from "lucide-react";
+import { Sparkles, Printer, User, Phone, Calendar, Mail, Share2, Award, Copy, Check, ShieldCheck, HelpCircle, ArrowLeft, Trophy, Lock, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import AIScanHub from "@/components/salon/AIScanHub";
 import ServiceOverlay from "@/components/salon/ServiceOverlay";
@@ -28,6 +28,54 @@ interface UserProfile {
   memberId: string;
   joinedDate: string;
 }
+
+// Membership card tiers definitions
+const MEMBERSHIP_TIERS = [
+  { 
+    name: "Bronze Starter", 
+    req: "Register on website", 
+    priv: "Basic direct bookings & offline AI scan.", 
+    img: "/card_bronze.jpeg",
+    gradientFallback: "from-[#2d1b2e] via-[#3a1f2b] to-[#1a0e1c]",
+    borderActive: "border-[#8b6914]/70 shadow-[0_0_30px_rgba(139,105,20,0.35)]",
+    borderDefault: "border-[#8b6914]/25",
+    badgeColor: "bg-[#2d1b2e]/60 text-[#e8d5b0] border-[#8b6914]/40",
+    titleColor: "text-amber-400",
+  },
+  { 
+    name: "Silver Tier", 
+    req: "Book 1 service", 
+    priv: "Virtual scratch cards for mystery discounts.", 
+    img: "/card_silver.jpeg",
+    gradientFallback: "from-zinc-500 via-slate-400 to-zinc-600",
+    borderActive: "border-zinc-300/60 shadow-[0_0_30px_rgba(203,213,225,0.3)]",
+    borderDefault: "border-zinc-600/30",
+    badgeColor: "bg-slate-400/10 text-slate-200 border-slate-400/40",
+    titleColor: "text-zinc-300",
+  },
+  { 
+    name: "Gold Member", 
+    req: "3 bookings or 1 referral", 
+    priv: "15% Birthday coupon + live Gemini scanner.", 
+    img: "/card_gold.jpeg",
+    gradientFallback: "from-[#b8860b] via-[#e2b74c] to-[#996515]",
+    borderActive: "border-yellow-400/60 shadow-[0_0_30px_rgba(234,179,8,0.35)]",
+    borderDefault: "border-yellow-800/30",
+    badgeColor: "bg-yellow-400/10 text-yellow-100 border-yellow-400/40",
+    titleColor: "text-yellow-400",
+  },
+  { 
+    name: "Platinum Elite", 
+    req: "5 bookings or 3 referrals", 
+    priv: "50% off + VIP member night invitations.", 
+    img: "/card_platinum.jpeg",
+    gradientFallback: "from-slate-700 via-slate-500 to-zinc-800",
+    borderActive: "border-slate-400/60 shadow-[0_0_30px_rgba(148,163,184,0.35)]",
+    borderDefault: "border-slate-600/25",
+    badgeColor: "bg-slate-500/10 text-slate-300 border-slate-400/40",
+    titleColor: "text-slate-200",
+  },
+];
 
 // Services data specifically formatted for cards
 const SERVICES_CATALOG = [
@@ -380,7 +428,8 @@ export default function VIPPortal() {
 
       {/* 2. REGISTRATION GATE (IF NOT SIGNED IN) */}
       {!profile ? (
-        <div className="flex items-start justify-center p-6 pt-4 sm:pt-8 pb-16 min-h-[calc(100vh-120px)]">
+        <div className="max-w-6xl mx-auto px-6 py-12 flex flex-col lg:flex-row items-center lg:items-start justify-center gap-10 min-h-[calc(100vh-120px)] animate-[fade-in_0.4s_ease-out]">
+          {/* Left Column: Registration Form */}
           <div className="relative w-full max-w-lg rounded-sm border border-blush-pink/20 bg-[oklch(0.12_0.005_60)] shadow-luxe p-6 sm:p-8 text-center space-y-4">
             <div className="absolute inset-x-0 top-0 h-px bg-gold-gradient" />
             
@@ -398,7 +447,7 @@ export default function VIPPortal() {
 
             <form onSubmit={handleRegister} className="space-y-4 text-left">
               <div className="space-y-1">
-                <label className="text-[0.55rem] tracking-wider uppercase text-muted-foreground flex items-center gap-1.5">
+                <label className="text-[0.55rem] tracking-wider uppercase text-muted-foreground flex items-center gap-1.5 font-semibold">
                   <User className="w-3.5 h-3.5 text-gold" /> Full Name
                 </label>
                 <input
@@ -413,7 +462,7 @@ export default function VIPPortal() {
 
               <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
                 <div className="space-y-1">
-                  <label className="text-[0.55rem] tracking-wider uppercase text-muted-foreground flex items-center gap-1.5">
+                  <label className="text-[0.55rem] tracking-wider uppercase text-muted-foreground flex items-center gap-1.5 font-semibold">
                     <Phone className="w-3.5 h-3.5 text-gold" /> Phone Number
                   </label>
                   <input
@@ -426,7 +475,7 @@ export default function VIPPortal() {
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[0.55rem] tracking-wider uppercase text-muted-foreground flex items-center gap-1.5">
+                  <label className="text-[0.55rem] tracking-wider uppercase text-muted-foreground flex items-center gap-1.5 font-semibold">
                     <Calendar className="w-3.5 h-3.5 text-gold" /> Date of Birth
                   </label>
                   <input
@@ -440,7 +489,7 @@ export default function VIPPortal() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-[0.55rem] tracking-wider uppercase text-muted-foreground flex items-center gap-1.5">
+                <label className="text-[0.55rem] tracking-wider uppercase text-muted-foreground flex items-center gap-1.5 font-semibold">
                   <Mail className="w-3.5 h-3.5 text-gold" /> Email Address
                 </label>
                 <input
@@ -456,9 +505,9 @@ export default function VIPPortal() {
               {/* Gender selector in form */}
               {!hasPreselectedGender && (
                 <div className="space-y-2 pt-1">
-                  <span className="text-[0.55rem] tracking-wider uppercase text-muted-foreground block">Preferred Catalog</span>
+                  <span className="text-[0.55rem] tracking-wider uppercase text-muted-foreground block font-semibold">Preferred Catalog</span>
                   <div className="flex gap-4">
-                    <label className="flex items-center gap-2 text-xs text-white cursor-pointer">
+                    <label className="flex items-center gap-2 text-xs text-white cursor-pointer select-none">
                       <input
                         type="radio"
                         name="genderForm"
@@ -468,7 +517,7 @@ export default function VIPPortal() {
                       />
                       Ladies' Sanctuary (Women)
                     </label>
-                    <label className="flex items-center gap-2 text-xs text-white cursor-pointer">
+                    <label className="flex items-center gap-2 text-xs text-white cursor-pointer select-none">
                       <input
                         type="radio"
                         name="genderForm"
@@ -489,6 +538,89 @@ export default function VIPPortal() {
                 Register Membership
               </button>
             </form>
+          </div>
+
+          {/* Right Column: Cards Showcase - Fully Visible but Locked */}
+          <div className="w-full max-w-[340px] space-y-6 flex-shrink-0">
+            <div className="text-left space-y-1">
+              <span className="text-[0.6rem] tracking-[0.3em] uppercase text-gold font-bold block">Membership Tiers</span>
+              <h3 className="font-display text-2xl text-white">Luxury Privilege Cards</h3>
+              <p className="text-[0.65rem] text-muted-foreground leading-relaxed">
+                Preview our exclusive membership levels below. Complete your registration to unlock the Bronze level and start earning silver/gold/platinum rewards.
+              </p>
+            </div>
+            
+            <div className="space-y-6 max-h-[580px] overflow-y-auto pr-2 scrollbar-thin">
+              {MEMBERSHIP_TIERS.map((tier, idx) => (
+                <div key={idx} className="flex flex-col items-center gap-2 relative group">
+                  {/* Vertical Portrait Card */}
+                  <div 
+                    className={`relative w-full aspect-[3/4] rounded-xl border-2 overflow-hidden select-none transition-all duration-500 bg-gradient-to-br ${tier.gradientFallback} ${tier.borderDefault}`}
+                    style={{
+                      backgroundImage: `url('${tier.img}')`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  >
+                    {/* Dark gradient overlay for text readability */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/65 pointer-events-none" />
+                    
+                    {/* Glare sweep */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/[0.04] to-white/0 pointer-events-none" />
+
+                    {/* Card content — full vertical layout */}
+                    <div className="relative z-[5] flex flex-col justify-between h-full p-4 sm:p-5">
+                      {/* Top: Logo + tier badge */}
+                      <div>
+                        <h4 className="font-display text-base sm:text-lg tracking-wider leading-none text-white drop-shadow-lg">
+                          Grace<span className="text-[#f4c2c2]">AndGo</span>
+                        </h4>
+                        <p className="text-[0.35rem] sm:text-[0.4rem] tracking-[0.25em] uppercase text-white/50 mt-0.5 drop-shadow-sm">Luxury Virtual Club</p>
+                        <div className="mt-2 flex">
+                          <span className={`rounded-md border px-1.5 py-0.5 text-[0.4rem] sm:text-[0.45rem] tracking-[0.2em] uppercase font-bold backdrop-blur-sm ${tier.badgeColor}`}>
+                            {tier.name}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Middle: Requirement + benefits */}
+                      <div className="my-auto py-3 space-y-2">
+                        <div className="space-y-1">
+                          <p className="text-[0.4rem] sm:text-[0.45rem] tracking-[0.2em] uppercase text-[#ffd700] font-semibold drop-shadow-sm">Requirement</p>
+                          <p className="text-[0.55rem] sm:text-[0.6rem] text-white/90 leading-relaxed drop-shadow-sm font-medium">{tier.req}</p>
+                        </div>
+                        <div className="h-px w-8 bg-white/15" />
+                        <div className="space-y-1">
+                          <p className="text-[0.4rem] sm:text-[0.45rem] tracking-[0.2em] uppercase text-[#ffd700] font-semibold drop-shadow-sm">Benefits</p>
+                          <p className="text-[0.5rem] sm:text-[0.55rem] text-white/70 leading-relaxed drop-shadow-sm">{tier.priv}</p>
+                        </div>
+                      </div>
+
+                      {/* Bottom: Tier level + decorative bar */}
+                      <div className="border-t border-white/10 pt-2">
+                        <div className="flex items-center justify-between">
+                          <p className="text-[0.4rem] sm:text-[0.45rem] tracking-[0.2em] uppercase text-white/40 font-bold">Tier Level {idx + 1}</p>
+                          <div className="flex gap-0.5">
+                            {[0,1,2,3].map(dot => (
+                              <div key={dot} className={`w-1.5 h-1.5 rounded-full ${dot === 0 ? 'bg-[#ffd700]/80' : 'bg-white/15'}`} />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Lock overlay for locked tiers — sits on top but card remains 100% visible (very light overlay, no blur) */}
+                    <div className="absolute inset-0 z-10 bg-black/15 flex flex-col items-center justify-center gap-2 transition-all duration-500 pointer-events-none">
+                      <div className="w-10 h-10 rounded-full bg-black/75 border border-white/20 flex items-center justify-center shadow-lg">
+                        <Lock className="w-4 h-4 text-white/70" />
+                      </div>
+                      <span className="text-[0.45rem] tracking-[0.25em] uppercase text-white/80 font-bold drop-shadow-md">Locked Tier</span>
+                      <p className="text-[0.45rem] text-white/70 tracking-wider uppercase max-w-[80%] text-center leading-relaxed drop-shadow-sm">Register to activate</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       ) : (
@@ -720,59 +852,121 @@ export default function VIPPortal() {
           </section>
 
           {/* Section: Cards Showcase (All Tiers) */}
-          <section id="tiers-showcase" className="space-y-6 pt-4">
+          <section id="tiers-showcase" className="space-y-8 pt-4">
             <div className="text-center space-y-2">
               <span className="text-[0.6rem] tracking-[0.3em] uppercase text-gold font-bold">The Registry</span>
               <h2 className="font-display text-3xl text-white">Membership Card Tiers</h2>
-              <p className="text-xs text-muted-foreground max-w-sm mx-auto leading-relaxed">
-                Review all membership tiers and discover the steps required to unlock each luxury tier.
+              <p className="text-xs text-muted-foreground max-w-md mx-auto leading-relaxed">
+                Preview every card tier. Unlock higher levels through bookings and referrals.
               </p>
             </div>
 
-            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-              {[
-                { 
-                  name: "Bronze Starter", 
-                  req: "Register on website", 
-                  priv: "Unlock basic direct service bookings and offline AI scan.", 
-                  glow: "border-amber-900 bg-amber-950/20 hover:bg-amber-950/30", 
-                  titleColor: "text-amber-400"
-                },
-                { 
-                  name: "Silver Tier", 
-                  req: "Book 1 service reservation", 
-                  priv: "Unlocks virtual scratch cards for mystery discounts.", 
-                  glow: "border-zinc-700 bg-zinc-800/20 hover:bg-zinc-800/30", 
-                  titleColor: "text-zinc-300"
-                },
-                { 
-                  name: "Gold Member", 
-                  req: "3 bookings or 1 referral", 
-                  priv: "15% off Birthday Week coupon + live Gemini scanner active.", 
-                  glow: "border-yellow-800 bg-yellow-950/10 hover:bg-yellow-950/20", 
-                  titleColor: "text-yellow-400"
-                },
-                { 
-                  name: "Platinum Elite", 
-                  req: "5 bookings or 3 referrals", 
-                  priv: "50% off next booking + invitation to VIP member nights.", 
-                  glow: "border-slate-600 bg-slate-800/10 hover:bg-slate-800/20", 
-                  titleColor: "text-slate-200"
-                },
-              ].map((tier, idx) => (
-                <div 
-                  key={idx}
-                  className={`p-6 rounded-sm border bg-black/20 flex flex-col justify-between gap-4 transition-all duration-300 ${tier.glow}`}
-                >
-                  <div className="space-y-2">
-                    <span className={`font-display text-xl ${tier.titleColor}`}>{tier.name}</span>
-                    <div className="h-px bg-blush-pink/15 w-8" />
-                    <p className="text-[0.65rem] text-white font-medium uppercase tracking-wide">Req: {tier.req}</p>
-                    <p className="text-[0.65rem] text-muted-foreground leading-normal mt-1">{tier.priv}</p>
-                  </div>
-                  <span className="text-[0.55rem] tracking-wider text-muted-foreground uppercase">Tier Level {idx + 1}</span>
-                </div>
-              ))}
+            <div className="grid gap-6 grid-cols-2 lg:grid-cols-4">
+              {(() => {
+                const currentTierName = getTierInfo().name;
+                const currentTierIdx = MEMBERSHIP_TIERS.findIndex(t => t.name === currentTierName);
+
+                return MEMBERSHIP_TIERS.map((tier, idx) => {
+                  const isUnlocked = idx <= currentTierIdx;
+                  const isCurrent = idx === currentTierIdx;
+
+                  return (
+                    <div key={idx} className="flex flex-col items-center gap-3">
+                      {/* Vertical Portrait Card */}
+                      <div 
+                        className={`relative w-full aspect-[3/4] rounded-xl border-2 overflow-hidden select-none transition-all duration-500 group bg-gradient-to-br ${tier.gradientFallback} ${
+                          isCurrent 
+                            ? tier.borderActive + " ring-1 ring-white/10" 
+                            : isUnlocked 
+                              ? tier.borderDefault + " hover:brightness-110" 
+                              : tier.borderDefault
+                        }`}
+                        style={{
+                          backgroundImage: `url('${tier.img}')`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                      >
+                        {/* Dark gradient overlay for text readability */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/65 pointer-events-none" />
+                        
+                        {/* Glare sweep */}
+                        <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/[0.04] to-white/0 pointer-events-none" />
+
+                        {/* Card content — full vertical layout */}
+                        <div className="relative z-[5] flex flex-col justify-between h-full p-4 sm:p-5">
+                          {/* Top: Logo + tier badge */}
+                          <div>
+                            <h4 className="font-display text-base sm:text-lg tracking-wider leading-none text-white drop-shadow-lg">
+                              Grace<span className="text-[#f4c2c2]">AndGo</span>
+                            </h4>
+                            <p className="text-[0.35rem] sm:text-[0.4rem] tracking-[0.25em] uppercase text-white/50 mt-0.5 drop-shadow-sm">Luxury Virtual Club</p>
+                            <div className="mt-2 flex">
+                              <span className={`rounded-md border px-1.5 py-0.5 text-[0.4rem] sm:text-[0.45rem] tracking-[0.2em] uppercase font-bold backdrop-blur-sm ${tier.badgeColor}`}>
+                                {tier.name}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Middle: Requirement + benefits */}
+                          <div className="my-auto py-3 space-y-2">
+                            <div className="space-y-1">
+                              <p className="text-[0.4rem] sm:text-[0.45rem] tracking-[0.2em] uppercase text-[#ffd700] font-semibold drop-shadow-sm">Requirement</p>
+                              <p className="text-[0.55rem] sm:text-[0.6rem] text-white/90 leading-relaxed drop-shadow-sm font-medium">{tier.req}</p>
+                            </div>
+                            <div className="h-px w-8 bg-white/15" />
+                            <div className="space-y-1">
+                              <p className="text-[0.4rem] sm:text-[0.45rem] tracking-[0.2em] uppercase text-[#ffd700] font-semibold drop-shadow-sm">Benefits</p>
+                              <p className="text-[0.5rem] sm:text-[0.55rem] text-white/70 leading-relaxed drop-shadow-sm">{tier.priv}</p>
+                            </div>
+                          </div>
+
+                          {/* Bottom: Tier level + decorative bar */}
+                          <div className="border-t border-white/10 pt-2">
+                            <div className="flex items-center justify-between">
+                              <p className="text-[0.4rem] sm:text-[0.45rem] tracking-[0.2em] uppercase text-white/40 font-bold">Tier Level {idx + 1}</p>
+                              <div className="flex gap-0.5">
+                                {[0,1,2,3].map(dot => (
+                                  <div key={dot} className={`w-1.5 h-1.5 rounded-full ${dot <= idx ? 'bg-[#ffd700]/80' : 'bg-white/15'}`} />
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Lock overlay for locked tiers — sits on top but card remains 100% visible (very light overlay, no blur) */}
+                        {!isUnlocked && (
+                          <div className="absolute inset-0 z-10 bg-black/15 flex flex-col items-center justify-center gap-2 transition-all duration-500 pointer-events-none">
+                            <div className="w-10 h-10 rounded-full bg-black/75 border border-white/20 flex items-center justify-center shadow-lg">
+                              <Lock className="w-4 h-4 text-white/70" />
+                            </div>
+                            <span className="text-[0.45rem] tracking-[0.25em] uppercase text-white/80 font-bold drop-shadow-md">Locked Tier</span>
+                            <p className="text-[0.45rem] text-white/70 tracking-wider uppercase max-w-[80%] text-center leading-relaxed drop-shadow-sm">{tier.req} to unlock</p>
+                          </div>
+                        )}
+
+                        {/* Active badge */}
+                        {isCurrent && (
+                          <div className="absolute top-3 right-3 z-20">
+                            <span className="flex items-center gap-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 px-2 py-0.5 text-[0.45rem] tracking-[0.2em] uppercase text-emerald-400 font-bold backdrop-blur-sm shadow-lg">
+                              <CheckCircle2 className="w-2.5 h-2.5" /> Active
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Unlocked (past) badge */}
+                        {isUnlocked && !isCurrent && (
+                          <div className="absolute top-3 right-3 z-20">
+                            <span className="flex items-center gap-1 rounded-full bg-white/10 border border-white/15 px-2 py-0.5 text-[0.45rem] tracking-[0.15em] uppercase text-white/60 font-medium backdrop-blur-sm">
+                              <Check className="w-2.5 h-2.5" /> Done
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                });
+              })()}
             </div>
           </section>
 
