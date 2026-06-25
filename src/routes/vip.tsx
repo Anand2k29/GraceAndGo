@@ -199,7 +199,7 @@ export default function VIPPortal() {
         pointsNeeded: 0,
         nextTier: "",
         badgeColor: "bg-slate-500/10 text-slate-300 border-slate-400/40",
-        img: ""
+        img: "/card_platinum.jpeg"
       };
     } else if (bookingCount >= 3 || referralCount >= 1) {
       return {
@@ -209,7 +209,7 @@ export default function VIPPortal() {
         pointsNeeded: 5 - bookingCount,
         nextTier: "Platinum Elite (Reach 5 Bookings or 3 Referrals)",
         badgeColor: "bg-yellow-400/10 text-yellow-100 border-yellow-400/40",
-        img: ""
+        img: "/card_gold.jpeg"
       };
     } else if (bookingCount >= 1) {
       return {
@@ -219,7 +219,7 @@ export default function VIPPortal() {
         pointsNeeded: 3 - bookingCount,
         nextTier: "Gold Member (Reach 3 Bookings or 1 Referral)",
         badgeColor: "bg-slate-400/10 text-slate-200 border-slate-400/40",
-        img: ""
+        img: "/card_silver.jpeg"
       };
     } else {
       return {

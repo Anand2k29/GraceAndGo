@@ -107,7 +107,7 @@ export default function StorefrontOverlay({
         }`}
         style={{
           background: `
-            radial-gradient(circle at 50% 50%, rgba(255, 240, 230, 0.25) 0%, rgba(0, 0, 0, 0.45) 100%),
+            radial-gradient(circle at 50% 50%, rgba(10, 8, 8, 0.88) 0%, rgba(5, 5, 5, 0.98) 100%),
             url('/marble_wall.png')
           `,
           backgroundSize: "cover",
@@ -118,7 +118,7 @@ export default function StorefrontOverlay({
         <div 
           className="absolute inset-0 pointer-events-none z-0"
           style={{
-            background: "radial-gradient(circle at 50% 30%, rgba(255, 248, 240, 0.3) 0%, rgba(255, 255, 255, 0) 80%)",
+            background: "radial-gradient(circle at 50% 30%, rgba(255, 248, 240, 0.05) 0%, rgba(255, 255, 255, 0) 80%)",
             animation: "ambient-wall-shimmer 8s ease-in-out infinite",
           }}
         />
@@ -130,7 +130,8 @@ export default function StorefrontOverlay({
           }`}
           style={{
             backgroundImage: `
-              radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.9), transparent 75%),
+              radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.15), transparent 75%),
+              radial-gradient(circle at 50% 50%, rgba(15, 12, 12, 0.85) 0%, rgba(5, 5, 5, 0.98) 100%),
               url('/marble_wall.png')
             `,
             backgroundSize: "cover",
@@ -234,17 +235,17 @@ export default function StorefrontOverlay({
           }}
         >
           {/* WHITE MARBLE ARCH ARCHWAY HEADER (surrounds the transom window) */}
-          <div className="absolute top-[7vh] inset-x-0 h-[24vh] border-t-8 border-x-8 border-t-[#faecee] border-x-[#faecee] rounded-t-full bg-transparent pointer-events-none z-20 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
+          <div className="absolute top-[7vh] inset-x-0 h-[24vh] border-t-8 border-x-8 border-t-[#1c1517] border-x-[#1c1517] rounded-t-full bg-transparent pointer-events-none z-20 shadow-[0_-5px_15px_rgba(0,0,0,0.5)]">
             {/* Inner Gold trim line */}
-            <div className="w-full h-full border-t border-x border-[#d4af37]/45 rounded-t-full" />
+            <div className="w-full h-full border-t border-x border-[#d4af37]/30 rounded-t-full" />
           </div>
 
           {/* --- TRANSOM ARCH WINDOW (above doors) --- */}
           <div
-            className="absolute top-[8vh] inset-x-1.5 h-[23vh] rounded-t-full overflow-hidden flex flex-col items-center justify-center border-b border-[#d4af37]/45 z-15 shadow-[inset_0_2px_10px_rgba(0,0,0,0.15)]"
+            className="absolute top-[8vh] inset-x-1.5 h-[23vh] rounded-t-full overflow-hidden flex flex-col items-center justify-center border-b border-[#d4af37]/30 z-15 shadow-[inset_0_2px_10px_rgba(0,0,0,0.6)]"
             style={{
-              background: "linear-gradient(to bottom, #fbc5cb 0%, #e89ca9 45%, #20080d 100%)",
-              boxShadow: "0 -2px 20px rgba(255, 191, 163, 0.35)"
+              background: "linear-gradient(to bottom, #5e353b 0%, #30171a 45%, #0c0405 100%)",
+              boxShadow: "0 -2px 20px rgba(183, 110, 121, 0.15)"
             }}
           >
             {/* Sunburst Grille and Arched Text in SVG */}
@@ -285,23 +286,23 @@ export default function StorefrontOverlay({
           </div>
 
           {/* LEFT TRANSOM WINDOW */}
-          <div className="absolute -left-[114px] top-[14vh] w-[114px] h-[17vh] hidden sm:block border-4 border-[#faecee] bg-gradient-to-b from-[#ffeef0] to-[#1c0c0e]/30 overflow-hidden z-10 shadow-md">
+          <div className="absolute -left-[114px] top-[14vh] w-[114px] h-[17vh] hidden sm:block border-4 border-[#1c1517] bg-gradient-to-b from-[#3a2024] to-[#0e0506]/85 overflow-hidden z-10 shadow-md">
             <svg className="w-full h-full" viewBox="0 0 100 50">
               <path d="M 0,25 L 100,25 M 33,0 L 33,50 M 66,0 L 66,50" stroke="#d4af37" strokeWidth="0.8" />
             </svg>
-            <div className="absolute inset-1.5 border border-[#d4af37]/40 pointer-events-none" />
+            <div className="absolute inset-1.5 border border-[#d4af37]/45 pointer-events-none" />
           </div>
 
           {/* RIGHT TRANSOM WINDOW */}
-          <div className="absolute -right-[114px] top-[14vh] w-[114px] h-[17vh] hidden sm:block border-4 border-[#faecee] bg-gradient-to-b from-[#ffeef0] to-[#1c0c0e]/30 overflow-hidden z-10 shadow-md">
+          <div className="absolute -right-[114px] top-[14vh] w-[114px] h-[17vh] hidden sm:block border-4 border-[#1c1517] bg-gradient-to-b from-[#3a2024] to-[#0e0506]/85 overflow-hidden z-10 shadow-md">
             <svg className="w-full h-full" viewBox="0 0 100 50">
               <path d="M 0,25 L 100,25 M 33,0 L 33,50 M 66,0 L 66,50" stroke="#d4af37" strokeWidth="0.8" />
             </svg>
-            <div className="absolute inset-1.5 border border-[#d4af37]/40 pointer-events-none" />
+            <div className="absolute inset-1.5 border border-[#d4af37]/45 pointer-events-none" />
           </div>
 
           {/* LEFT PILLAR */}
-          <div className="absolute -left-[36px] bottom-0 w-[36px] h-[57vh] hidden sm:block bg-[#faecee] border-l border-t border-[#d4af37]/30 z-15 shadow-md">
+          <div className="absolute -left-[36px] bottom-0 w-[36px] h-[57vh] hidden sm:block bg-[#1c1517] border-l border-t border-[#b76e79]/30 z-15 shadow-md">
             {/* Pillar fluting lines */}
             <div className="absolute inset-y-0 left-2 w-px bg-[#d4af37]/20" />
             <div className="absolute inset-y-0 left-4 w-px bg-[#d4af37]/20" />
@@ -310,11 +311,11 @@ export default function StorefrontOverlay({
             {/* Gold capital at top */}
             <div className="absolute top-0 inset-x-[-2px] h-[24px] bg-gradient-to-b from-[#ffd700] to-[#b76e79] border border-[#d4af37]/70 shadow-sm" />
             {/* Base at bottom */}
-            <div className="absolute bottom-0 inset-x-[-2px] h-[30px] bg-[#faecee] border-t border-x border-[#d4af37]/45" />
+            <div className="absolute bottom-0 inset-x-[-2px] h-[30px] bg-[#1c1517] border-t border-x border-[#b76e79]/45" />
           </div>
 
           {/* RIGHT PILLAR */}
-          <div className="absolute -right-[36px] bottom-0 w-[36px] h-[57vh] hidden sm:block bg-[#faecee] border-r border-t border-[#d4af37]/30 z-15 shadow-md">
+          <div className="absolute -right-[36px] bottom-0 w-[36px] h-[57vh] hidden sm:block bg-[#1c1517] border-r border-t border-[#b76e79]/30 z-15 shadow-md">
             {/* Pillar fluting lines */}
             <div className="absolute inset-y-0 left-2 w-px bg-[#d4af37]/20" />
             <div className="absolute inset-y-0 left-4 w-px bg-[#d4af37]/20" />
@@ -323,19 +324,21 @@ export default function StorefrontOverlay({
             {/* Gold capital at top */}
             <div className="absolute top-0 inset-x-[-2px] h-[24px] bg-gradient-to-b from-[#ffd700] to-[#b76e79] border border-[#d4af37]/70 shadow-sm" />
             {/* Base at bottom */}
-            <div className="absolute bottom-0 inset-x-[-2px] h-[30px] bg-[#faecee] border-t border-x border-[#d4af37]/45" />
+            <div className="absolute bottom-0 inset-x-[-2px] h-[30px] bg-[#1c1517] border-t border-x border-[#b76e79]/45" />
           </div>
 
           {/* --- LEFT SIDELIGHT WINDOW (showing empty salon interior) --- */}
           <div
-            className="absolute -left-[114px] bottom-0 w-[78px] h-[57vh] hidden sm:block border-t-4 border-x-4 border-t-[#faecee] border-x-[#faecee] overflow-hidden sidelight-glare z-10 shadow-lg"
+            className="absolute -left-[114px] bottom-0 w-[78px] h-[57vh] hidden sm:block border-t-4 border-x-4 border-t-[#1c1517] border-x-[#1c1517] overflow-hidden sidelight-glare z-10 shadow-lg"
             style={{
               backgroundImage: "url('/salon_interior_empty.png')",
               backgroundSize: "cover",
               backgroundPosition: "left center",
-              boxShadow: "0 0 20px rgba(255,191,163,0.15)"
+              boxShadow: "0 0 20px rgba(0,0,0,0.5)"
             }}
           >
+            {/* Dark vignette overlay for side window */}
+            <div className="absolute inset-0 bg-black/40 pointer-events-none" />
             {/* Diamond leaded glass overlay */}
             <div className="absolute inset-0 opacity-40">
               <svg className="w-full h-full" width="100%" height="100%">
@@ -351,14 +354,16 @@ export default function StorefrontOverlay({
 
           {/* --- RIGHT SIDELIGHT WINDOW (showing empty salon interior) --- */}
           <div
-            className="absolute -right-[114px] bottom-0 w-[78px] h-[57vh] hidden sm:block border-t-4 border-x-4 border-t-[#faecee] border-x-[#faecee] overflow-hidden sidelight-glare z-10 shadow-lg"
+            className="absolute -right-[114px] bottom-0 w-[78px] h-[57vh] hidden sm:block border-t-4 border-x-4 border-t-[#1c1517] border-x-[#1c1517] overflow-hidden sidelight-glare z-10 shadow-lg"
             style={{
               backgroundImage: "url('/salon_interior_empty.png')",
               backgroundSize: "cover",
               backgroundPosition: "right center",
-              boxShadow: "0 0 20px rgba(255,191,163,0.15)"
+              boxShadow: "0 0 20px rgba(0,0,0,0.5)"
             }}
           >
+            {/* Dark vignette overlay for side window */}
+            <div className="absolute inset-0 bg-black/40 pointer-events-none" />
             {/* Diamond leaded glass overlay */}
             <div className="absolute inset-0 opacity-40">
               <svg className="w-full h-full" width="100%" height="100%">
@@ -374,7 +379,7 @@ export default function StorefrontOverlay({
 
           {/* --- DOUBLE DOORS FRAME & PANEL --- */}
           <div
-            className="relative w-full h-[57vh] flex bg-black/5 border-t-4 border-[#faecee] z-10"
+            className="relative w-full h-[57vh] flex bg-black/5 border-t-4 border-[#1c1517] z-10"
             style={{
               perspective: "1200px",
               transformStyle: "preserve-3d",

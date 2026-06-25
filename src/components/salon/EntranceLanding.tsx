@@ -51,15 +51,33 @@ export default function EntranceLanding({
         }}
       />
 
+      {/* Custom Styles for aesthetic animations */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes shimmer-sweep {
+          0% { transform: translateX(-100%) skewX(-15deg); }
+          100% { transform: translateX(100%) skewX(-15deg); }
+        }
+        .shimmer-sweep-effect {
+          animation: shimmer-sweep 3.5s infinite;
+        }
+        @keyframes float-icon {
+          0%, 100% { transform: translateY(0) scale(1) rotate(0deg); }
+          50% { transform: translateY(-5px) scale(1.05) rotate(5deg); }
+        }
+        .animate-float-icon {
+          animation: float-icon 4s ease-in-out infinite;
+        }
+      `}} />
+
       {/* Main Gateway Card */}
-      <div className="relative w-full max-w-2xl rounded-sm border border-blush-pink/15 bg-[oklch(0.12_0.005_60)]/90 shadow-luxe p-8 sm:p-12 z-10 text-center animate-[scale-in_0.35s_cubic-bezier(0.16,1,0.3,1)] overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-px bg-gold-gradient" />
+      <div className="relative w-full max-w-2xl rounded-xl border border-blush-pink/15 bg-[oklch(0.10_0.005_60)]/90 shadow-luxe p-8 sm:p-12 z-10 text-center animate-[scale-in_0.35s_cubic-bezier(0.16,1,0.3,1)] overflow-hidden backdrop-blur-md">
+        <div className="absolute inset-x-0 top-0 h-px bg-gold-gradient animate-pulse" />
         
         {/* VIEW 1: MEN OR WOMEN SELECTION */}
         {step === "gender" && (
           <div className="space-y-10 py-6 animate-[fade-in_0.4s_ease-out]">
             <div className="space-y-4">
-              <div className="mx-auto w-[52px] h-[52px] rounded-full bg-[#1a1412] border-2 border-[#d4af37] flex items-center justify-center shadow-lg animate-pulse">
+              <div className="mx-auto w-[52px] h-[52px] rounded-full bg-[#1a1412] border-2 border-[#d4af37] flex items-center justify-center shadow-lg shadow-gold/10">
                 <span className="font-display text-xl text-gold font-bold">G</span>
               </div>
               <p className="text-[0.6rem] tracking-[0.5em] uppercase text-gold font-semibold">Welcome to GraceAndGo</p>
@@ -77,30 +95,52 @@ export default function EntranceLanding({
               {/* Ladies Button */}
               <button
                 onClick={() => handleGenderSelect("female")}
-                className="group relative p-8 rounded-sm border border-[#ffd1dc]/25 bg-black/35 hover:border-[#ffd1dc]/60 hover:bg-[#ffd1dc]/5 transition-all duration-500 flex flex-col items-center justify-center gap-4 cursor-pointer overflow-hidden shadow-soft hover:scale-[1.03]"
+                className="group relative p-8 rounded-xl border border-[#ffd1dc]/10 bg-[#0e090a]/60 hover:border-[#ffd1dc]/45 hover:bg-[#1a1113]/85 transition-all duration-500 flex flex-col items-center justify-center gap-5 cursor-pointer overflow-hidden shadow-soft hover:scale-[1.03] backdrop-blur-md"
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-[#ffd1dc]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="w-12 h-12 rounded-full border border-[#ffd1dc]/40 flex items-center justify-center bg-[#ffd1dc]/5 text-[#ffd1dc] group-hover:scale-110 transition-transform">
-                  ✦
+                {/* Glow Border Sweep */}
+                <div className="absolute inset-0 border border-transparent group-hover:border-[#ffd1dc]/30 rounded-xl transition-all duration-500 pointer-events-none" />
+                
+                {/* Soft background light */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-[#ffd1dc]/3 blur-3xl pointer-events-none group-hover:bg-[#ffd1dc]/8 transition-colors duration-500" />
+                
+                {/* Visual Glare Sweep */}
+                <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-[#ffd1dc]/10 to-transparent -translate-x-full group-hover:shimmer-sweep-effect pointer-events-none" />
+                
+                {/* Icon Container */}
+                <div className="w-14 h-14 rounded-full border border-[#ffd1dc]/25 flex items-center justify-center bg-[#181112] text-[#ffd1dc] shadow-[0_0_15px_rgba(255,209,220,0.15)] group-hover:shadow-[0_0_25px_rgba(255,209,220,0.35)] group-hover:scale-110 transition-all duration-500 z-10 relative">
+                  <Sparkles className="w-6 h-6 animate-pulse group-hover:animate-float-icon" />
                 </div>
-                <div>
-                  <h3 className="font-display text-2xl text-white tracking-widest uppercase">LADIES</h3>
-                  <p className="text-[0.55rem] text-[#ffd1dc] tracking-wider uppercase mt-1 opacity-70">Sanctuary</p>
+                
+                <div className="z-10">
+                  <h3 className="font-display text-2xl text-white tracking-[0.2em] uppercase font-light group-hover:text-[#ffd1dc] transition-colors">LADIES</h3>
+                  <div className="h-[1px] bg-gradient-to-r from-transparent via-[#ffd1dc]/30 to-transparent w-16 mx-auto mt-2" />
+                  <p className="text-[0.6rem] text-[#ffd1dc] tracking-[0.25em] uppercase mt-2 opacity-80">Sanctuary</p>
                 </div>
               </button>
 
               {/* Gentlemen Button */}
               <button
                 onClick={() => handleGenderSelect("male")}
-                className="group relative p-8 rounded-sm border border-[#d4af37]/25 bg-black/35 hover:border-[#d4af37]/60 hover:bg-[#d4af37]/5 transition-all duration-500 flex flex-col items-center justify-center gap-4 cursor-pointer overflow-hidden shadow-soft hover:scale-[1.03]"
+                className="group relative p-8 rounded-xl border border-[#d4af37]/10 bg-[#0c0a08]/60 hover:border-[#d4af37]/50 hover:bg-[#181410]/85 transition-all duration-500 flex flex-col items-center justify-center gap-5 cursor-pointer overflow-hidden shadow-soft hover:scale-[1.03] backdrop-blur-md"
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-[#d4af37]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="w-12 h-12 rounded-full border border-[#d4af37]/40 flex items-center justify-center bg-[#d4af37]/5 text-gold group-hover:scale-110 transition-transform">
-                  ✧
+                {/* Glow Border Sweep */}
+                <div className="absolute inset-0 border border-transparent group-hover:border-[#d4af37]/35 rounded-xl transition-all duration-500 pointer-events-none" />
+                
+                {/* Soft background light */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-[#d4af37]/3 blur-3xl pointer-events-none group-hover:bg-[#d4af37]/8 transition-colors duration-500" />
+                
+                {/* Visual Glare Sweep */}
+                <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-[#d4af37]/10 to-transparent -translate-x-full group-hover:shimmer-sweep-effect pointer-events-none" />
+                
+                {/* Icon Container */}
+                <div className="w-14 h-14 rounded-full border border-[#d4af37]/25 flex items-center justify-center bg-[#14120f] text-gold shadow-[0_0_15px_rgba(212,175,55,0.15)] group-hover:shadow-[0_0_25px_rgba(212,175,55,0.35)] group-hover:scale-110 transition-all duration-500 z-10 relative">
+                  <Compass className="w-6 h-6 animate-pulse group-hover:animate-float-icon" />
                 </div>
-                <div>
-                  <h3 className="font-display text-2xl text-white tracking-widest uppercase">GENTLEMEN</h3>
-                  <p className="text-[0.55rem] text-gold tracking-wider uppercase mt-1 opacity-70">Atelier</p>
+                
+                <div className="z-10">
+                  <h3 className="font-display text-2xl text-white tracking-[0.2em] uppercase font-light group-hover:text-gold transition-colors">GENTLEMEN</h3>
+                  <div className="h-[1px] bg-gradient-to-r from-transparent via-[#d4af37]/30 to-transparent w-16 mx-auto mt-2" />
+                  <p className="text-[0.6rem] text-gold tracking-[0.25em] uppercase mt-2 opacity-80">Atelier</p>
                 </div>
               </button>
             </div>

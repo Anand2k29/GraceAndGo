@@ -319,7 +319,7 @@ function Index() {
       {/* Scroll content overlays */}
       <main className="relative z-10 pointer-events-none">
         {/* HERO */}
-        <section className={`relative flex min-h-screen items-center justify-center text-center px-6 pb-16 sm:px-16 transition-all duration-700 ${hasEntered ? "hidden" : ""} pointer-events-auto`}>
+        <section className={`relative flex min-h-screen items-center justify-center text-center px-6 pb-16 sm:px-16 transition-all duration-700 ${hasEntered || isStorefrontOpen ? "hidden" : ""} pointer-events-auto`}>
           <div className="max-w-2xl flex flex-col items-center">
             <p className="text-[0.65rem] tracking-[0.5em] uppercase text-white reveal-instant text-shadow-tight font-semibold">
               GraceAndGo Salon
